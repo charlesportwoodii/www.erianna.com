@@ -1,0 +1,3 @@
+[submodule "themes/erianna"]
+	path = themes/erianna
+	url = git@github.com:charlesportwoodii/hugo-erianna-theme.git
