@@ -14,7 +14,7 @@ before_install:
   - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version $YARN_VERSION
   - wget https://github.com/gohugoio/hugo/releases/download/v$HUGO_VERSION/hugo_${HUGO_VERSION}_Linux-64bit.tar.gz
   - mkdir -p ~/.bin
-  - tar -xfz hugo_${HUGO_VERSION}_Linux-64bit.tar.gz -C ~/.bin
+  - tar -xf hugo_${HUGO_VERSION}_Linux-64bit.tar.gz -C ~/.bin
   - export PATH="$HOME/.bin:$HOME/.yarn/bin:$PATH"
 
 install:
