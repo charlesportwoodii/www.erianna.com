@@ -30,7 +30,7 @@ script:
 
 deploy:
   provider: gcs
-  bucket: "www-erianna-com"
+  bucket: "www.erianna.com"
   skip_cleanup: true
   local-dir: public
   secret_access_key:
