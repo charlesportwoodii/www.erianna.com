@@ -20,27 +20,50 @@ docker_intro: |
 ubuntu_intro: |
     The new apt repository (apt.erianna.com) currently only supports Xenial (16.04) packages across two distributions: xenial/main and xenial/test. The test distribution contains software packages that are functional but that are not yet ready for prime time (such as PHP 7.2).
 
-        apt-get update;
-        apt-get install apt-transport-https -y;
-        sh -c 'echo "deb https://apt.erianna.com/xenial/ xenial main" > /etc/apt/sources.list.d/apt.erianna.com.list';
-        apt-get --allow-unauthenticated update;
-        apt-get --allow-unauthenticated install gnupg2 gnutls3 -y;
-        ldconfig;
-        curl -qs https://www.erianna.com/key.asc | apt-key add -;
+    ```bash
+    # Install apt-transport-https
+    apt-get update;
+    apt-get install apt-transport-https -y;
+
+    # Add the repository to sources.list.d
+    sh -c 'echo "deb https://apt.erianna.com/xenial/ xenial main" > /etc/apt/sources.list.d/apt.erianna.com.list';
+
+    # Install GnuPG2 and GnuTLS3 from the archive to allow the Ed25519 key to be authenticated
+    # This is only necessary if you do not have GnuPG2 installed
+    apt-get --allow-unauthenticated update;
+    apt-get --allow-unauthenticated install gnupg2 gnutls3 -y;
+    ldconfig;
+
+    # Import the repository GPG key
+    curl -qs https://www.erianna.com/key.asc | apt-key add -;
+
+    # Update the repository
+    apt-get update;
+    ```
 centos_intro: |
     > This is my legacy CentOS7 repository, which will soon be superceded.
 
-        sh -c 'echo -e "[erianna]\nname=Erianna RPM Repository\nbaseurl=https://rpm.erianna.com/CentOS/7/x86_64\nenabled=1\ngpgcheck=0\nprotect=1\ngpgkey=https://www.erianna.com/key.asc" > /etc/yum.repos.d/rpm.erianna.com.repo';
-        yum --enablerepo=erianna clean metadata;
-        yum clean all;
-        ldconfig;
+    ```bash
+    # Add the package
+    sh -c 'echo -e "[erianna]\nname=Erianna RPM Repository\nbaseurl=https://rpm.erianna.com/CentOS/7/x86_64\nenabled=1\ngpgcheck=0\nprotect=1\ngpgkey=https://www.erianna.com/key.asc" > /etc/yum.repos.d/rpm.erianna.com.repo';
+
+    # Enable the repo
+    yum --enablerepo=erianna clean metadata;
+    yum clean all;
+    ldconfig;
+    ```
 rhel_intro: |
     > This is my legacy RHEL repository, which will soon be superceded.
 
-        sh -c 'echo -e "[erianna]\nname=Erianna RPM Repository\nbaseurl=https://rpm.erianna.com/RHEL/7/x86_64\nenabled=1\ngpgcheck=0\nprotect=1\ngpgkey=https://www.erianna.com/key.asc" > /etc/yum.repos.d/rpm.erianna.com.repo';
-        yum --enablerepo=erianna clean metadata;
-        yum clean all;
-        ldconfig;
+    ```bash
+    # Add the package
+    sh -c 'echo -e "[erianna]\nname=Erianna RPM Repository\nbaseurl=https://rpm.erianna.com/RHEL/7/x86_64\nenabled=1\ngpgcheck=0\nprotect=1\ngpgkey=https://www.erianna.com/key.asc" > /etc/yum.repos.d/rpm.erianna.com.repo';
+
+    # Enable the repo
+    yum --enablerepo=erianna clean metadata;
+    yum clean all;
+    ldconfig;
+    ```
 
 package_list:
     - { name: "php-fpm-build" , display_name: "PHP FPM", versions: "5.6, 7.0, 7.1, 7.2" }
