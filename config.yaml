@@ -1,6 +1,5 @@
 --- 
 baseURL: "https://www.erianna.com"
-canonifyURLs: true
 enableGitInfo: true
 enableRobotsTXT: true
 languageCode: en-us
@@ -21,7 +20,6 @@ params:
     - { url: "/packages", text: "Packages" }
 permalinks: 
   post: "/:year/:month/:title/"
-relativeURLs: true
 sitemap: 
   changefreq: daily
   filename: sitemap.xml
@@ -31,4 +29,6 @@ title: "Erianna | Charles R. Portwood II"
 googleAnalytics: "UA-21577234-3"
 Paginate: 10
 PaginatePath: "blog"
-uglyurls: true
+uglyurls: false
+canonifyURLs: false
+relativeURLs: false
