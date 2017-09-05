@@ -74,7 +74,9 @@ Which will then generate the certificate for the domain in question.
 When examining your cert now (I recommend using a tool like [SSLLabs](https://www.ssllabs.com/ssltest), you should see the following details.
 
 
-![13iyP1lFRKqZSk2hTVhtrW9tw1lcd](https://cdn.ciims.io/erianna.ciims.io/13iyP1lFRKqZSk2hTVhtrW9tw1lcd.PNG)
+<span class="image featured">
+    <img src="https://s3-us-west-2.amazonaws.com/cdn.ciims.io/erianna.ciims.io/13iyP1lFRKqZSk2hTVhtrW9tw1lcd.PNG" />
+</span>
 
 ----------------
 
