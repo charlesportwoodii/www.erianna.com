@@ -25,6 +25,8 @@ install:
 script:
   - cd themes/erianna
   - yarn run build
+  - cat data/assets/main/assets.json
+  - cat data/assets/main/sri.yml
   - cd ../..
   - hugo
 
