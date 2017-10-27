@@ -1,0 +1,15 @@
+version: '3.3'
+services:
+  webpack:
+    image: node:8.8.1-alpine
+    volumes:
+      - ${PWD-.}:/var/www
+      - nodejs:/var/www/themes/erianna/node_modules
+    ports:
+      - "8080:8080"
+    command: |
+      sh -c "apk add bash --no-cache; bash -lc \"yarn install --no-progress; yarn webpack-dev-server\""
+    working_dir: /var/www/themes/erianna
+
+volumes:
+  nodejs:
