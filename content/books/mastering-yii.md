@@ -15,7 +15,7 @@ isbn13: 9781785882425
 pages: 380
 amazon: https://www.amazon.com/Mastering-Yii-Charles-R-Portwood/dp/1785882422
 packt: https://www.packtpub.com/web-development/mastering-yii
-image: https://www.packtpub.com/sites/default/files/2425OS_4894_Mastering%20Yii.jpg
+image: https://s3-us-west-2.amazonaws.com/cdn.ciims.io/erianna.ciims.io/mastering_yii_cover.jpg
 ---
 ## About this book
 - Learn to work with the key aspects of Yii Framework 2

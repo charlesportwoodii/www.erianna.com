@@ -13,7 +13,7 @@ isbn13: 139781783287734
 pages: 320
 amazon: https://www.amazon.com/Yii-Project-Blueprints-Charles-Portwood/dp/178328773X
 packt: https://www.packtpub.com/web-development/yii-project-blueprints
-image: https://www.packtpub.com/sites/default/files/7734OS_Yii%20Project%20Blueprint_Cover_0.jpg
+image: https://s3-us-west-2.amazonaws.com/cdn.ciims.io/erianna.ciims.io/yii_project_blueprints_cover.jpg
 ---
 ## About this book
 - Develop real-world web applications through easy-to-follow, step-by-step processes
