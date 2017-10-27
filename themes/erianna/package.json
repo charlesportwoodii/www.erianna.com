@@ -5,7 +5,7 @@
   "description": "Hugo theme for www.erianna.com",
   "private": true,
   "scripts": {
-    "webpack-dev-server": "webpack-dev-server --host 0.0.0.0 --port 8080 --public 127.0.0.1 --config webpack.config.local.js",
+    "webpack-dev-server": "webpack-dev-server --host 0.0.0.0 --port 8080 --public 127.0.0.1:8080 --config webpack.config.local.js",
     "sri": "echo \"---\njs: $(shasum -b -a 384 ./static/js/*.js | xxd -r -p | base64)\ncss: $(shasum -b -a 384 ./static/css/*.css | xxd -r -p | base64)\n\" > ./data/assets/main/sri.yml",
     "watch": "webpack --progress --colors --watch",
     "build": "webpack --display-error-details; yarn run sri;"

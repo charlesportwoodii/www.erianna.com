@@ -16,6 +16,7 @@ module.exports = Object.assign(config, {
     devtool: 'source-map',
     devServer: {
         hot: true,
+        inline: true,
         disableHostCheck: true,
         watchOptions: {
             aggregateTimeout: 300,

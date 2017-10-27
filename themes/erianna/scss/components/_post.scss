@@ -82,7 +82,7 @@
 		> footer {
 			@include vendor('display', 'flex');
 			@include vendor('align-items', 'center');
-
+			padding-top: 20px;
 			.actions {
 				@include vendor('flex-grow', '1');
 			}
