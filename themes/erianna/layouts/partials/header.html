@@ -1,0 +1,17 @@
+<header id="header">
+    <h1><a href="/">Erianna</a></h1>
+    <nav class="links">
+        <ul>
+            {{ range $index, $nav := .Site.Params.nav }}
+                <li><a href="{{ $nav.url }}">{{ $nav.text }}</a></li>
+            {{ end }}
+        </ul>
+    </nav>
+    <nav class="main">
+        <ul>
+            <li class="menu">
+                <a class="fa-bars" href="#menu">Menu</a>
+            </li>
+        </ul>
+    </nav>
+</header>

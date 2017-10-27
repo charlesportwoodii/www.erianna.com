@@ -1,0 +1,13 @@
+<meta charset="utf-8">
+<title>{{ .Site.Title }} - {{ .Title }}</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+{{ if (fileExists "data/assets/main/sri.yml") }}
+    <link rel="stylesheet" href="{{ .Site.Data.assets.main.assets.main.css }}" integrity="sha384-{{ .Site.Data.assets.main.sri.css }}" nonce="__CSP_NONCE__" />
+{{ else }}
+    <link rel="stylesheet" href="http://127.0.0.1:8080{{ .Site.Data.assets.main.assets.main.css }}" nonce="__CSP_NONCE__" />
+{{ end }}
+
+
+<link href="{{ .RSSLink }}" rel="alternate" type="application/rss+xml" title="{{ .Site.Title }}" />
+<link href="{{ .RSSLink }}" rel="feed" type="application/rss+xml" title="{{ .Site.Title }}" />

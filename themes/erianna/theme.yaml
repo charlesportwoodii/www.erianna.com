@@ -1,0 +1,15 @@
+---
+name: "erianna"
+license: "BSD 3-Clause"
+licenselink: "https://github.com/charlesportwoodii/hugo-erianna-theme/blob/master/LICENSE.md"
+description: "Theme for Erianna.com"
+homepage: "https://github.com/charlesportwoodii/hugo-erianna-theme"
+tags:
+features:
+min_version: "0.26"
+author:
+  name: "Charles R. Portwood II"
+  homepage: "https://www.erianna.com"
+original:
+  name: "Future Imperfect by HTML5Up"
+  homepage: "https://html5up.net/future-imperfect"

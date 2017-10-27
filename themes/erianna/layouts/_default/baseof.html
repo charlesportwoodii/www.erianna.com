@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html> 
+  <head>
+    {{ partial "head" .}}
+  </head>
+  <body>
+    {{ partial "header.html" . }}
+    {{ partial "menu.html" . }}
+    
+    <div id="wrapper">
+        <section id="sidebar" class="header">
+            {{ partial "intro.html" . }}
+        </section>
+        {{ block "main" . }} {{ end }}
+        {{ partial "sidebar.html" . }}
+    </div>
+    </body>
+    {{ partial "scripts.html" . }}
+</html>

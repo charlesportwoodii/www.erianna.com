@@ -1,0 +1,36 @@
+<article class="post" itemscope="" itemtype="http://schema.org/BlogPosting">
+    <header>
+        <div class="title">
+            <h2 itemprop="name headline"><a href="{{ .Permalink }}">{{ .Title }}</a></h2>
+            <p>{{ .Description }}</p>
+        </div>
+        <div class="meta">
+            <time class="published" itemprop="datePublished" datetime='{{ .Date.Format "2006-01-02" }}'>{{ .Date.Format "Jan 2, 2006" }}</time>
+            <a href="/about" class="author" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+                <span class="name" itemprop="name">{{ .Site.Params.Author }}</span>
+                <img src="https://www.gravatar.com/avatar/{{ md5 .Site.Params.Email }}" alt="" />
+            </a>
+        </div>
+    </header>
+    {{ if isset .Params "image" }}
+        <a href="{{ .Permalink }}" class="image featured">
+            <img src="{{ .Params.image }}" alt="" />
+        </a>
+    {{ end }}
+    <div id="content"  itemprop="articleBody">
+        {{ if .Params.summary }}
+            {{ .Params.summary }}
+        {{ else }}
+            {{ .Summary }}
+        {{ end }}
+    </div>
+    <footer>
+        <ul class="actions">
+            <li><a href="{{ .Permalink }}" class="button big">Continue Reading</a></li>
+        </ul>
+        <ul class="stats">
+                <li>{{ .WordCount }} Words</li>
+                <li>{{ .ReadingTime }} minutes</li>
+        </ul>
+    </footer>
+</article>

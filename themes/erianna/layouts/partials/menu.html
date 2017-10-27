@@ -1,0 +1,9 @@
+<section id="menu">
+    <section>
+        <ul class="links">
+            {{ range $index, $nav := .Site.Params.nav }}
+                <li><a href="{{ $nav.url }}"><h3>{{ $nav.text }}</h3></a></li>
+            {{ end }}
+        </ul>
+    </section>
+</section>

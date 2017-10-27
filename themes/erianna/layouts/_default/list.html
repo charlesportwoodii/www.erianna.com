@@ -1,0 +1,19 @@
+{{ define "main" }}
+<div id="main">
+
+	{{ $paginator := .Paginate (where .Site.Pages "Type" "blog") }}
+	{{ range $paginator.Pages }}
+		{{ partial "summary" . }}
+	{{ end }}
+
+	<ul class="actions pagination">
+		{{ if .Paginator.HasPrev }}
+			<li><a href="{{ .Paginator.Prev.URL }}" class="disabled button big previous">Previous Page</a></li>
+		{{ end }}
+		{{ if .Paginator.HasNext }}
+			<li><a href="{{ .Paginator.Next.URL }}" class="button big next">Next Page</a></li>
+		{{ end }}
+	</ul>
+</div>
+		
+{{ end }}

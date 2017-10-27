@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html> 
+  <head>
+    {{ partial "head" . }}
+  </head>
+  <body>
+    {{ partial "header.html" . }}
+    {{ partial "menu.html" . }}
+    
+    <div id="wrapper">
+        <div id="main">
+          <div class="mini-posts books">
+            {{ range first 10 (where .Site.Pages "Type" "book") }}
+              {{ partial "mini-post-books" . }}
+            {{ end }}
+          </div>
+        </div>
+    </div>
+    <section id="footer">
+        {{ partial "social.html" . }}
+        {{ partial "footer.html" . }}
+    </section>
+    </body>
+    {{ partial "scripts.html" . }}
+</html>

@@ -1,0 +1,46 @@
+<article class="post book" itemscope="" itemtype="http://schema.org/Book">
+    <header>
+        <div class="title">
+            <h2 itemprop="name headline"><a href="{{ .Permalink }}">{{ .Title }}</a></h2>
+            <p>{{ .Description }}</p>
+        </div>
+        <div class="meta">
+            <time class="published" itemprop="datePublished" datetime='{{ .Date.Format "2006-01-02" }}'>{{ .Date.Format "Jan 2, 2006" }}</time>
+            <a href="/about" class="author" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+                <span class="name" itemprop="name">{{ .Site.Params.Author }}</span>
+                <img src="https://www.gravatar.com/avatar/{{ md5 .Site.Params.Email }}" alt="" />
+            </a>
+        </div>
+    </header>
+    {{ if isset .Params "image" }}
+        <a href="{{ .Permalink }}" class="image featured" id="featured-image">
+            <img src="{{ .Params.image }}" alt="" />
+        </a>
+    {{ end }}
+    <div id="content"  itemprop="articleBody">
+        <div id="book-content">
+            {{ .Params.inline | markdownify  }}
+        </div>
+        <div id="thumbnail">
+            {{ if isset .Params "image" }}
+                <a href="{{ .Permalink }}" class="image featured">
+                    <img src="{{ .Params.image }}" alt="" />
+                </a>
+            {{ end }}
+        </div>
+        
+        {{ .Content }}
+    </div>
+    <footer>
+        <ul class="stats">
+            <li itemprop="isbn">ISBN 13 {{ .Params.isbn13 }}</li>
+            <li itemprop="numberOfPages">{{ .Params.pages }} Pages</li>
+            {{ if isset .Params "amazon" }}
+                <li><a href="{{ .Params.amazon }}">Available on Amazon</a></li>
+            {{ end }}
+            {{ if isset .Params "packt" }}
+                <li><a href="{{ .Params.packt }}">Available on Packt Publishing</a></li>
+            {{ end }}
+        </ul>        
+    </footer>
+</article>
