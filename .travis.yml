@@ -24,6 +24,7 @@ script:
   - cat data/assets/main/assets.json
   - cat data/assets/main/sri.yml
   - cd ../..
+  - export HUGO_ENV="production"
   - hugo
 
 deploy:

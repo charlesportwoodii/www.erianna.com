@@ -1,5 +1,7 @@
-{{ if (fileExists "data/assets/main/sri.yml") }}
-    <script src="{{ .Site.Data.assets.main.assets.main.js }}" integrity="sha384-{{ .Site.Data.assets.main.sri.js }}" nonce="__CSP_NONCE__"></script>
-{{ else }}
-    <script src="http://127.0.0.1:8080{{ .Site.Data.assets.main.assets.main.js }}" nonce="__CSP_NONCE__"></script>
-{{ end }}
+<script 
+    {{ if eq (getenv "HUGO_ENV") "production" }}
+        src="{{ .Site.Data.assets.main.assets.main.js }}" integrity="sha384-{{ .Site.Data.assets.main.sri.js }}"
+    {{ else }}
+        src="http://127.0.0.1:8080{{ .Site.Data.assets.main.assets.main.js }}" 
+    {{ end }}
+    nonce="__CSP_NONCE__"></script>
