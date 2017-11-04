@@ -16,7 +16,7 @@ intro: |
 docker_intro: |
     As an alternative to installing these packages directly, I also maintain a Docker registry at https://hub.docker.com/r/charlesportwoodii/, with dockerized images of many of the packages I maintain.
 
-    > While I maintain build Docker images for other platforms, currently I only maintain Ubuntu 16.04 Xenial Docker images for packages such as Nginx and PHP.
+    > These Docker images are built on top of Alpine Linux to keep image size down.
 ubuntu_intro: |
     The new apt repository (apt.erianna.com) currently only supports Xenial (16.04) packages across two distributions: xenial/main and xenial/test. The test distribution contains software packages that are functional but that are not yet ready for prime time (such as PHP 7.2).
 
@@ -79,9 +79,9 @@ package_list:
     - { name: "gnupg2-build" , display_name: "GnuPG2", versions: "2.1.x" }
 
 docker_images:
-    - { namespace: "charlesportwoodii", repo: "xenial", tag: "php70" }
-    - { namespace: "charlesportwoodii", repo: "xenial", tag: "php71" }
-    - { namespace: "charlesportwoodii", repo: "xenial-test", tag: "php72" }
-    - { namespace: "charlesportwoodii", repo: "xenial", tag: "apache2" }
-    - { namespace: "charlesportwoodii", repo: "xenial", tag: "nginx" }
+    - { namespace: "charlesportwoodii", repo: "php", tag: "7.0" }
+    - { namespace: "charlesportwoodii", repo: "php", tag: "7.1" }
+    #- { namespace: "charlesportwoodii", repo: "php", tag: "7.2" }
+    - { namespace: "charlesportwoodii", repo: "nginx", tag: "mainline" }
+    - { namespace: "charlesportwoodii", repo: "nginx", tag: "stable" }
 ---
