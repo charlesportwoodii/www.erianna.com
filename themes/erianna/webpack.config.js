@@ -1,9 +1,11 @@
 'use strict';
 let webpack = require('webpack'),
     path = require('path'),
+    glob = require('glob'),
     autoprefixer = require('autoprefixer'),
     AssetsPlugin = require('assets-webpack-plugin'),
     ExtractTextPlugin = require('extract-text-webpack-plugin'),
+    PurifyCSSPlugin = require('purifycss-webpack'),
     CleanWebpackPlugin = require('clean-webpack-plugin');
 
 module.exports = {
@@ -117,6 +119,9 @@ module.exports = {
             output: {
                 comments: false
             }
+        }),
+        new PurifyCSSPlugin({
+            paths: glob.sync(path.join(__dirname, 'layouts/*.html')),
         }),
         new webpack.DefinePlugin({
             'process.env.NODE_ENV': '"production"'

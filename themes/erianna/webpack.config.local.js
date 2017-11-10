@@ -1,7 +1,8 @@
 var webpack = require('webpack'),
     path = require('path'),
     config = require('./webpack.config.js'),
-    ExtractTextPlugin = require('extract-text-webpack-plugin'),
+    ExtractTextPlugin = require('extract-text-webpack-plugin'), 
+    WebpackMonitor = require('webpack-monitor'),
     webpath = 'webpack-dev-server';
 
 config.output.filename = 'js/[name].js';
@@ -10,6 +11,12 @@ config.plugins.push(
     new webpack.NamedModulesPlugin(),
     new webpack.HotModuleReplacementPlugin(),
     new ExtractTextPlugin({ filename: 'css/[name].css', allChunks: true}),
+    new WebpackMonitor({
+        capture: true,
+        target: 'static/stats.json',
+        launch: true,
+        port: 8081
+    })
 );
 
 module.exports = Object.assign(config, {
