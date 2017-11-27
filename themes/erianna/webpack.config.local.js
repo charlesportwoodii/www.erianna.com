@@ -10,13 +10,7 @@ config.output.filename = 'js/[name].js';
 config.plugins.push(
     new webpack.NamedModulesPlugin(),
     new webpack.HotModuleReplacementPlugin(),
-    new ExtractTextPlugin({ filename: 'css/[name].css', allChunks: true}),
-    new WebpackMonitor({
-        capture: true,
-        target: 'static/stats.json',
-        launch: true,
-        port: 8081
-    })
+    new ExtractTextPlugin({ filename: 'css/[name].css', allChunks: true})
 );
 
 module.exports = Object.assign(config, {
