@@ -81,7 +81,7 @@ package_list:
 docker_images:
     - { namespace: "charlesportwoodii", repo: "php", tag: "7.0" }
     - { namespace: "charlesportwoodii", repo: "php", tag: "7.1" }
-    #- { namespace: "charlesportwoodii", repo: "php", tag: "7.2" }
+    - { namespace: "charlesportwoodii", repo: "php", tag: "7.2" }
     - { namespace: "charlesportwoodii", repo: "nginx", tag: "mainline" }
     - { namespace: "charlesportwoodii", repo: "nginx", tag: "stable" }
 ---
