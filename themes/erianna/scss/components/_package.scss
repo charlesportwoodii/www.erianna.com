@@ -16,6 +16,15 @@
             a.image {
                 height: 225px;
             }
+
+            header {
+                padding: 1.25em;
+                h3 {
+                    &.center {
+                        text-align:center;
+                    }
+                }
+            }
         }
 
         @include breakpoint(medium) { 
