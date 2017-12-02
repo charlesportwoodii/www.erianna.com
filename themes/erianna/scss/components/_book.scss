@@ -5,7 +5,6 @@
 
     .post {
 		&.book {
-
             #featured-image {
                 display: none;
                 visibility: hidden;
@@ -49,7 +48,10 @@
 
     .mini-post {
 		&.book {
-			display: inline-table;
+			flex: 1;
+            display: flex;
+            justify-content: space-between;
+            flex-direction: column;
         }
         
 		@include breakpoint(medium) { 
@@ -63,19 +65,25 @@
 
 	.mini-posts {
 		&.books {
-			margin: 0 auto;
-			width: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: left;
+            width: 100%;
 			> * {
 				margin: _size(element-margin) _size(element-margin) 0 0;
-				width: calc(50% - #{_size(element-margin)});
+                width: calc(30% - #{_size(element-margin)});
+                min-width: 350px;
+                max-width: 350px;
 			}
-		}
+        }
 		
 		@include breakpoint(medium) { 
 			&.books {
-				width: 100%;
+                width: 100%;
 				> * {
 					width: 100%;
+                    min-width: 100%;
+                    max-width:100%;
 					margin: 0 auto;
 					margin-bottom: 20px;
 				}

@@ -1,0 +1,58 @@
+#main {
+    .mini-post {
+		&.package {
+            flex: 1;
+            display: flex;
+            justify-content: space-between;
+            flex-direction: column;
+
+            img.os-logo {
+                max-width: 100px;
+                justify-content: center;
+                margin: 0 auto;
+                padding: 50px 0;
+            }
+
+            a.image {
+                height: 225px;
+            }
+        }
+
+        @include breakpoint(medium) { 
+			&.package {
+				width: 100%;
+				margin-bottom: 20px;
+			}
+		}
+    }
+    
+    .mini-posts {
+		&.packages {
+            display: flex;
+            justify-content: center;
+            align-items: left;
+            width: 100%;
+			> * {
+				margin: _size(element-margin) _size(element-margin) 0 0;
+                width: calc(30% - #{_size(element-margin)});
+                min-height:310px;
+                height: 310px;
+                min-width: 250px;
+                max-width: 250px;
+			}
+        }
+
+        @include breakpoint(small) { 
+			&.packages {
+                width: 100%;
+				> * {
+					width: 100%;
+                    min-width: 100%;
+                    max-width:100%;
+					margin: 0 auto;
+					margin-bottom: 20px;
+				}
+			}
+        }
+    }
+}

@@ -11,91 +11,22 @@
         <div id="main">
             <article class="post">
                 <header>
-                    <div class="title">
+                    <div class="title center">
                         <h2>{{ .Title }}</h2>
-                        <p>Stay up-to-date with apt & yum packages, and Docker images.</p>
+                        <p>{{ .Params.description }}</p>
                     </div>
                 </header>
                 <div id="content">
-                    {{ .Params.intro|markdownify }}
-
-                    <h2>Package List</h2>
-                    <table>
-                        <thead>
-                            <tr>
-                                <td>Package Name</td>
-                                <td>Version(s)</td>
-                                <td>Latest Build</td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        {{ range $ind, $package := .Params.package_list }}
-                            <tr>
-                                <td><a href="https://www.github.com/charlesportwoodii/{{ $package.name }}">{{ $package.display_name }}</a></td>
-                                <td>{{ $package.versions }}</td>
-                                <td><a href="https://travis-ci.org/charlesportwoodii/{{ $package.name }}"><img src="https://img.shields.io/travis/charlesportwoodii/{{ $package.name }}.svg?style=flat-square&amp;branch=master" alt="TravisCI" title="TravisCI"  style="max-width:100%;"></a></td>
-                            </tr>
-                        {{ end }}
-                        </tbody>
-                    </table>
+                    {{ .Content|markdownify }}
                 </div>
             </article>
-            <article class="post">
-                <div class="title">
-                    <h2>Docker</h2>
-                </div>
-                <div id="content">
-                    {{ .Params.docker_intro|markdownify }}
-                    <table>
-                            <thead>
-                                <tr>
-                                    <td>Image</td>
-                                    <td>Info</td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            {{ range $ind, $image := .Params.docker_images }}
-                                <tr>
-                                    <td><a href="https://hub.docker.com/r/{{ $image.namespace }}/{{ $image.repo }}/tags">{{ $image.repo }}:{{ $image.tag }}</a></td>
-                                </td>
-                                <td>
-                                        <a href="https://microbadger.com/images/{{ $image.namespace }}/{{ $image.repo }}:{{ $image.tag }}"><img src="https://images.microbadger.com/badges/image/{{ $image.namespace }}/{{ $image.repo }}:{{ $image.tag }}.svg"></a>
-                                </td>
-                            </tr>
-                            {{ end }}
-                            </tbody>
-                        </table>
-                </div>
-            </article>
-
-            <article class="post">
-                <div class="title">
-                    <h2>Ubuntu</h2>
-                </div>
-                <div id="content">
-                    {{ .Params.ubuntu_intro|markdownify }}
-                </div>
-            </article>
-
-            <article class="post">
-                <div class="title">
-                    <h2>CentOS 7</h2>
-                </div>
-                <div id="content">
-                    {{ .Params.centos_intro|markdownify }}
-                </div>
-            </article>
-            <article class="post">
-                <div class="title">
-                    <h2>Red Hat Enterprise 7</h2>
-                </div>
-                <div id="content">
-                    {{ .Params.rhel_intro|markdownify }}
-                </div>
-            </article>
+          <div class="mini-posts books packages">
+            {{ range first 10 (where .Site.Pages "Type" "repository") }}
+              {{ partial "mini-post-packages" . }}
+            {{ end }}
+          </div>
         </div>
     </div>
-    
     <section id="footer">
         {{ partial "social.html" . }}
         {{ partial "footer.html" . }}

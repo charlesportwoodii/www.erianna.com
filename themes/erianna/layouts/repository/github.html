@@ -1,0 +1,33 @@
+{{ define "main" }}
+<div id="main">
+    <article class="post">
+        <header>
+            <div class="title center">
+                <h2 itemprop="name headline"><a href="{{ .Permalink }}">{{ .Title }}</a></h2>
+                <p>{{ .Description }}</p>
+            </div>
+        </header>
+        <div id="content">
+            <h2>Package List</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <td>Package Name</td>
+                        <td>Version(s)</td>
+                        <td>Latest Build</td>
+                    </tr>
+                </thead>
+                <tbody>
+                {{ range $ind, $package := .Params.package_list }}
+                    <tr>
+                        <td><a href="https://www.github.com/charlesportwoodii/{{ $package.name }}">{{ $package.display_name }}</a></td>
+                        <td>{{ $package.versions }}</td>
+                        <td><a href="https://travis-ci.org/charlesportwoodii/{{ $package.name }}"><img src="https://img.shields.io/travis/charlesportwoodii/{{ $package.name }}.svg?style=flat-square&amp;branch=master" alt="TravisCI" title="TravisCI"  style="max-width:100%;"></a></td>
+                    </tr>
+                {{ end }}
+                </tbody>
+            </table>
+        </div>
+    </article>
+</div>
+{{ end }}

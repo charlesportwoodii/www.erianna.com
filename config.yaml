@@ -17,7 +17,7 @@ params:
   nav:
     - { url: "/about", text: "About Me" }
     - { url: "/books", text: "Books" }
-    - { url: "/packages", text: "Packages" }
+    - { url: "/packages", text: "Repositories" }
 permalinks: 
   post: "/:year/:month/:title/"
 sitemap: 

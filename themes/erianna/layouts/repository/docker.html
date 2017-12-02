@@ -1,0 +1,33 @@
+{{ define "main" }}
+<div id="main">
+    <article class="post">
+        <header>
+            <div class="title center">
+                <h2 itemprop="name headline"><a href="{{ .Permalink }}">{{ .Title }}</a></h2>
+                <p>{{ .Description }}</p>
+            </div>
+        </header>
+        <div id="content">
+            <table>
+                <thead>
+                    <tr>
+                        <td>Image</td>
+                        <td>Info</td>
+                    </tr>
+                </thead>
+                <tbody>
+                {{ range $ind, $image := .Params.docker_images }}
+                    <tr>
+                        <td><a href="https://hub.docker.com/r/{{ $image.namespace }}/{{ $image.repo }}/tags">{{ $image.repo }}:{{ $image.tag }}</a></td>
+                    </td>
+                    <td>
+                            <a href="https://microbadger.com/images/{{ $image.namespace }}/{{ $image.repo }}:{{ $image.tag }}"><img src="https://images.microbadger.com/badges/image/{{ $image.namespace }}/{{ $image.repo }}:{{ $image.tag }}.svg"></a>
+                    </td>
+                </tr>
+                {{ end }}
+                </tbody>
+            </table>
+        </div>
+    </article>
+</div>
+{{ end }}

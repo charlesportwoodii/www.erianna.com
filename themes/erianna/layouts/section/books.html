@@ -9,6 +9,17 @@
     
     <div id="wrapper">
         <div id="main">
+            <article class="post">
+                <header>
+                    <div class="title center">
+                        <h2>{{ .Title }}</h2>
+                        <p>{{ .Params.description }}</p>
+                    </div>
+                </header>
+                <div id="content">
+                    {{ .Content|markdownify }}
+                </div>
+            </article>
           <div class="mini-posts books">
             {{ range first 10 (where .Site.Pages "Type" "book") }}
               {{ partial "mini-post-books" . }}

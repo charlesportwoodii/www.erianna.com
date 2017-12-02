@@ -1,0 +1,15 @@
+{{ define "main" }}
+<div id="main">
+    <article class="post">
+        <header>
+            <div class="title center">
+                <h2 itemprop="name headline"><a href="{{ .Permalink }}">{{ .Title }}</a></h2>
+                <p>{{ .Description }}</p>
+            </div>
+        </header>
+        <div id="content"  itemprop="articleBody">
+            {{ .Content }}
+        </div>
+    </article>
+</div>
+{{ end }}
