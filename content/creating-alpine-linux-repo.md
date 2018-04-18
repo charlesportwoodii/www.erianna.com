@@ -175,7 +175,7 @@ To get around this problem, I created a very simple PHP script that parses the p
 #!/usr/bin/env php
 <?php
 
-$path = '/apk';
+$path = '/mnt/apk.example.com';
 $directory = $argv[1] ?? 'main';
 $aVersion = $argv[2] ?? '3.6';
 $arch = $arvg[3] ?? 'x86_64';
@@ -183,34 +183,33 @@ $arch = $arvg[3] ?? 'x86_64';
 $files = \glob("$path/v$aVersion/$directory/$arch/*.apk");
 $finalList = [];
 foreach ($files as $file) {
-    $file = str_replace("$path/v$aVersion/$directory/$arch/", '', $file);
-    $v = str_replace('-', '', strrchr($file, '-'));
-    $revision = explode('~', $v)[0];
-    $architecture = explode('~', $v)[1];
-    $name = substr(str_replace($v, '', $file), 0, -1);
-    $parts = explode('-', $name);
-    $last = array_pop($parts);
-    $parts = [implode('_', $parts), $last];
+        $file = str_replace("$path/v$aVersion/$directory/$arch/", '', $file);
+        $v = str_replace('-', '', strrchr($file, '-'));
+        $revision = explode('~', $v)[0];
+        $architecture = explode('~', $v)[1];
+        $name = substr(str_replace($v, '', $file), 0, -1);
+        $parts = explode('-', $name);
+        $last = array_pop($parts);
+        $parts = [implode('_', $parts), $last];
 
-    $packageName = $parts[0];
-    $packageVersion = $parts[1];
-    $compareVersion = str_replace('.', '', $packageVersion) . $revision;
-
-    if (!isset($fileList[$packageName])) {
-        $finalList[$packageName] = [
-            'file' => $file,
-            'version' => $compareVersion,
-            'dVersion' => $packageVersion . '-' . $revision
-        ];
-    } else {
-        if ($compareVersion > $finalList[$packageName]['version']) {
-            $finalList[$packageName] = [
-                'file' => $file,
-                'version' => $compareVersion,
-                'dVersion' => $packageVersion . '-' . $revision
-            ];
+        $packageName = $parts[0];
+        $packageVersion = $parts[1];
+        $compareVersion = str_replace('.', '', $packageVersion) . $revision;
+        if (!isset($finalList[$packageName])) {
+                $finalList[$packageName] = [
+                        'file' => $file,
+                        'version' => $compareVersion,
+                        'dVersion' => $packageVersion . '-' . $revision
+                ];
+        } else {
+                if ($compareVersion > $finalList[$packageName]['version']) {
+                        $finalList[$packageName] = [
+                                'file' => $file,
+                                'version' => $compareVersion,
+                                'dVersion' => $packageVersion . '-' . $revision
+                        ];
+                }
         }
-    }
 }
 
 $packageNames = array_values(array_map(function($el) {
@@ -249,17 +248,17 @@ To deal with the fact that we need to be running these commands on an Alpine Lin
 
 ```yaml
 version: "3.3"
-services:
-  main:
+services: 
+  package: 
     command: sh -c "apk add gcc abuild --no-cache &&  cp /root/.abuild/$${KEYFILE}.pub /etc/apk/keys/ &&  echo \"$${REPOSITORY_URL}/$${REPOSITORY_VERSION}/$${REPOSITORY_NAME}\" | tee -a /etc/apk/repositories && apk index -vU -o APKINDEX.tar.gz $PACKAGES && abuild-sign -k /root/.abuild/$${KEYFILE} APKINDEX.tar.gz && apk update"
     image: alpine:3.6
-    volumes:
-      - /mnt/apk.erianna.com/v${REPOSITORY_VERSION}/${REPOSITORY_NAME)/${REPOSITORY_ARCH):/data
+    volumes: 
+      - /mnt/apk.example.com/${REPOSITORY_VERSION}/${REPOSITORY_NAME}/${REPOSITORY_ARCH}:/data
       - /home/user/.abuild:/root/.abuild
     working_dir: /data
     environment:
       - PACKAGES=$PACKAGES
-      - KEYFILE="alpine@example.com-59ea3c02.rsa
+      - KEYFILE=charlesportwoodii@erianna.com-59ea3c02.rsa
       - REPOSITORY_URL=$REPOSITORY_URL
       - REPOSITORY_VERSION=$REPOSITORY_VERSION
       - REPOSITORY_NAME=$REPOSITORY_NAME
@@ -292,10 +291,10 @@ Coupled with the previously provided `build-apk` script, it can be run as follow
 
 ```bash
 REPOSITORY_NAME=main \
-PACKAGES=$(./build-apk $REPOSITORY_NAME) \
-REPOSITORY_URL=https://apk.example.com \
 REPOSITORY_VERSION=v3.6 \
 REPOSITORY_ARCH=x86_64 \
+PACKAGES=$(./build-apk $REPOSITORY_NAME $REPOSITORY_VERSION $REPOSITORY_ARCH) \
+REPOSITORY_URL=https://apk.example.com \
 docker-compose run package
 ```
 
