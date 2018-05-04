@@ -8,11 +8,30 @@ image: https://s3-us-west-2.amazonaws.com/cdn.ciims.io/erianna.ciims.io/ubuntu.s
 description: "Software Packages for Ubuntu"
 ---
 
-The new apt repository (apt.erianna.com) currently supports Trusty (14.04) and Xenial (16.04) packages across two distributions: main and test. The test distribution contains software packages that are functional but should not be used in production.
+The new apt repository (apt.erianna.com) currently supports Trusty (14.04), Xenial (16.04),, and Bionic (18.04) packages across two distributions: main and test. The test distribution contains software packages that are functional but should not be used in production.
 
 ## Package Signing
 
 All software packages for Ubuntu are signed using an Ed25519 GnuPG key, which requires GnuPG 2.1.x. If your upstream provider does not provide support for GnuPG 2.1.x yet, it can be installed from the repository directly.
+
+## Bionic 
+
+The `Bionic` repository can be added to your system by running the following commands:
+
+```bash
+# Install dependencies
+apt updat;
+apt install gnupg2 curl wget apt-transport-https -y;
+
+# Add the repository to sources.list.d
+sh -c 'echo "deb https://apt.erianna.com/bionic/ bionic main" > /etc/apt/sources.list.d/apt.erianna.com.list';
+
+# Import the repository GPG key
+curl -qs https://www.erianna.com/key.asc | apt-key add -;
+
+# Update the repository
+apt update;
+```
 
 ## Xenial 
 
