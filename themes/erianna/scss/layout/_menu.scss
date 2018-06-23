@@ -86,6 +86,7 @@
 
 		body.is-menu-visible & {
 			@include vendor('transform', 'translateX(0)');
+			@include vendor('transition-duration', '500ms');
 			visibility: visible;
 		}
 

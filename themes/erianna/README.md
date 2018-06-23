@@ -14,7 +14,7 @@ Assets are compiled using `yarn` and `webpack`.
 
 3. Build the assets
     ```
-    yarn run build
+    yarn run dev
     ```
 
     > During development `yarn run watch` may be used to automatically build changes during runtime.

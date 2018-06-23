@@ -121,7 +121,7 @@
 						color: _palette(fg-light);
 						overflow: hidden;
 						position: relative;
-						text-indent: 4em;
+						left: -1.6em;
 						width: 4em;
 
 						&:before {
@@ -131,7 +131,6 @@
 							line-height: inherit;
 							position: absolute;
 							text-align: center;
-							text-indent: 0;
 							top: 0;
 							width: inherit;
 						}

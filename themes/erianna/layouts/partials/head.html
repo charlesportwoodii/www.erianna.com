@@ -2,7 +2,7 @@
 <title>{{ .Site.Title }} - {{ .Title }}</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=" />
-
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
 <link rel="stylesheet"
     {{ if eq (getenv "HUGO_ENV") "production" }}
         href="{{ .Site.Data.assets.main.assets.main.css }}" integrity="sha384-{{ .Site.Data.assets.main.sri.css }}" 

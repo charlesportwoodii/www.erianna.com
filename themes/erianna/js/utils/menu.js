@@ -1,7 +1,6 @@
 'use strict';
 
-export default class Menu {
-
+export class Menu {
     constructor() {
         let menu = document.querySelector("#header nav li.menu a");
             menu.addEventListener("click", e => this.showMenu());
@@ -15,4 +14,8 @@ export default class Menu {
                 document.querySelector("body").classList.remove("is-menu-visible");
             });
     }
+}
+
+if (module.hot) {
+    module.hot.accept();
 }
