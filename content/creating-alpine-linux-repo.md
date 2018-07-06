@@ -87,7 +87,7 @@ apk add gcc abuild --no-cache
 abuild-keygen -a -i
 ```
 
-`abuild-keygen` will prompt you fopr a filename to save the keypair. The standard practice for naming the key is to use the email address of the maintainer or mailing list (as an example `alpine@example.com`), as the prefix, following by an alphanumeric suffix which `abuild-keygen` automatically generates.
+`abuild-keygen` will prompt you for a filename to save the keypair. The standard practice for naming the key is to use the email address of the maintainer or mailing list (as an example `alpine@example.com`), as the prefix, following by an alphanumeric suffix which `abuild-keygen` automatically generates.
 
 This will create a public and private key.
 
