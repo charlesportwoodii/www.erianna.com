@@ -136,7 +136,7 @@ module.exports = (env = { 'NODE_ENV': process.env.NODE_ENV }) => {
       }),
       new OptimizeCssAssetsPlugin({
         cssProcessor: require('cssnano'),
-        cssProcessorOptions: { discardComments: { removeAll: true }, safe: true, reduceIdents: false },
+        cssProcessorOptions: { discardComments: { removeAll: true }, reduceIdents: false },
         canPrint: true
       }),
       new AssetsWebpackPlugin({

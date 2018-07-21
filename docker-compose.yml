@@ -1,7 +1,7 @@
 version: '3.3'
 services:
   webpack:
-    image: node:10-alpiine
+    image: node:10-alpine
     volumes:
       - ${PWD-.}:/var/www
       - nodejs:/var/www/themes/erianna/node_modules
@@ -9,7 +9,7 @@ services:
       - "8080:8080"
       - "8081:8081"
     command: |
-      sh -c "apk add bash --no-cache; curl -o- -L https://yarnpkg.com/install.sh | bash; source ~/.bashrc; bash -lc \"yarn install --no-progress; yarn webpack-dev-server\""
+      sh -c "apk add --no-cache bash curl; curl -o- -L https://yarnpkg.com/install.sh | bash; bash -lc \"yarn install --no-progress; yarn run dev\""
     working_dir: /var/www/themes/erianna
 
 volumes:

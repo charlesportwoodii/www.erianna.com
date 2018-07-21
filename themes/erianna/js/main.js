@@ -21,7 +21,7 @@ class Erianna {
         document.addEventListener('DOMContentLoaded', this.domReady.bind(this));
     }
 
-    domReady(event) {
+    domReady() {
         library.add(faBars, faEnvelope, faKey, faTwitter, faGithub, faLinkedin);
         dom.watch();
         if (document.querySelector("nav .menu")) {
