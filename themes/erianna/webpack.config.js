@@ -9,7 +9,7 @@ const AssetsWebpackPlugin = require('assets-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const extractSCSS = new ExtractTextPlugin({ filename: 'css/[name].[hash].css', allChunks: true});
-
+const Visualizer = require('webpack-visualizer-plugin');
 const configFile = path.resolve(__dirname, "../../config/config.yml");
 
 const NODE_MODULES = path.resolve(__dirname, '../../node_modules');
@@ -148,6 +148,9 @@ module.exports = (env = { 'NODE_ENV': process.env.NODE_ENV }) => {
         analyzerMode: 'static',
         openAnalyzer: false,
         reportFilename: '../report.html'
+      }),
+      new Visualizer({
+        filename: '../stats.html'
       })
     ]
   }
