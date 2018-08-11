@@ -3,7 +3,7 @@ require('style');
 require.context('img');
 
 import { library, dom } from '@fortawesome/fontawesome-svg-core';
-import { faBars, faEnvelope, faKey } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faEnvelope, faKey, faRss } from '@fortawesome/free-solid-svg-icons';
 import { faTwitter, faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons';
 
 import { Menu } from './utils/menu';
@@ -22,7 +22,7 @@ class Erianna {
     }
 
     domReady() {
-        library.add(faBars, faEnvelope, faKey, faTwitter, faGithub, faLinkedin);
+        library.add(faBars, faEnvelope, faKey, faTwitter, faGithub, faLinkedin, faRss);
         dom.watch();
         if (document.querySelector("nav .menu")) {
             new Menu();

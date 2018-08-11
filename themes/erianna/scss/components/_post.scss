@@ -28,7 +28,7 @@
 
 				h2 {
 					font-weight: _font(weight-heading-extrabold);
-					font-size: 1.5em;
+					font-size: 1.3em;
 				}
 
 				> :last-child {
@@ -81,6 +81,10 @@
 					@include vendor('transform', 'scale(1.05)');
 				}
 			}
+		}
+
+		#content p {	
+			font-size: 12pt;
 		}
 
 		> footer {
