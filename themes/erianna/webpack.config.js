@@ -18,7 +18,7 @@ module.exports = (env = { 'NODE_ENV': process.env.NODE_ENV }) => {
   return {
     mode: env.NODE_ENV,
     entry: {
-      main: ['babel-polyfill', path.resolve(__dirname, 'js/main.js')],
+      main: ['@babel/polyfill', path.resolve(__dirname, 'js/main.js')],
     },
     resolve: {
         extensions: ['.js', '.scss'],

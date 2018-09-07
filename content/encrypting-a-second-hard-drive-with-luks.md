@@ -114,10 +114,10 @@ Then, in order to automatically unlock the parition on startup, we'll need to ad
 sd?X_crypt UUID=<device UUID> /root/.keyfile luks,discard
 ```
 
-And finally, we can add our drive to `/etc/fstab` to automatically mount the disk.
+And finally, we can add our volume group to `/etc/fstab` to automatically mount the disk.
 
 ```
-/dev/mapper/sd?X_crypt  /<mount-point>   ext4    defaults        0       2
+/dev/mapper/crypt_vg-data  /<mount-point>   ext4    defaults        0       2
 ```
 
 And that's it! You now have an encrypted secondary drive setup with LVM. In the future if you ever want to expand your storage capacity, you can simply encrypt the new drive, add the same `/root/.keyfile` to it using `luksAddKey`, update your `/etc/crypttab` with the drive information, then expand your LVM drive as you would normally.
