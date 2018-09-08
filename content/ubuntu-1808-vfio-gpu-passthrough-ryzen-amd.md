@@ -82,7 +82,7 @@ To be entirely honest, WSL _works_ for the most part. Compared to dual booting o
 
 2. Filesystem support
 
-    Before [DRVFS](https://blogs.msdn.microsoft.com/wsl/2016/06/15/wsl-file-system-support/), WSL limited you to local disks (pretty much `C:` and `D:`) 
+    Before [DRVFS](https://blogs.msdn.microsoft.com/wsl/2016/06/15/wsl-file-system-support/), WSL limited you to local disks (pretty much `C:` and `D:`). DRVFS improved things somewhat by letting you mount USB drives (NTFS and ReFS volumes), but that still doesn't help access other file systems, such as smaller USB drives, and SD cards.
 
 3. Backup & upgrading
 
