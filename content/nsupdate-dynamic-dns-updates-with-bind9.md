@@ -2,6 +2,7 @@
 title: "Dynamic DNS with Bind9"
 description: "Correctly implementing Dynamic DNS updates with nsupdate and Bind9"
 date: 2013-03-18T21:29:00-05:00
+lastmod: 2018-09-08T18:01:09-05:00
 draft: false
 type: "blog"
 slug: "nsupdate-dynamic-dns-updates-with-bind9"
@@ -23,8 +24,10 @@ First, you need to move all of your zone files to `/var/lib/bind` or another fol
 
 ```bash
 ln -s /var/lib/bind /etc/bind/zones
-After doing this, you’ll need to update /etc/bind/named.conf.local so that your zone files point to /var/lib/bind.
 ```
+
+After doing this, you’ll need to update `/etc/bind/named.conf.local` so that your zone files point to `/var/lib/bind`.
+
 
 The reason we need to do this, is because when nsupdate tries to run, AppArmor will prevent the bind journal file from being created. By moving our zones files outside of /etc/bind, the system will allow our journal files to be created.
 
@@ -33,7 +36,7 @@ The reason we need to do this, is because when nsupdate tries to run, AppArmor w
 Run the following command to generate your TSIG keys. Be sure to replace example.com with your domain name and do not remove the . (period) at the end.
 
 ```bash
-dnssec-keygen -a HMAC-MD5 -b 128 -n HOST example.com.
+dnssec-keygen -a HMAC-SHA256 -b 128 -n HOST example.com.
 ```
 
 This will generate two files:
@@ -74,9 +77,9 @@ In the same file (or wherever your zone components are located at, update the zo
 
 ```bash
 zone "example.com" {
-        type master;
-        file "/var/lib/bind/example.com.db";
-        allow-update { key "example.com."; };
+    type master;
+    file "/var/lib/bind/example.com.db";
+    allow-update { key "example.com."; };
 };
 ```
 
