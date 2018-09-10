@@ -4,7 +4,7 @@ type: "repository"
 date: 2016-12-01T00:00:00-00:00
 slug: "ubuntu"
 draft: false
-image: https://s3-us-west-2.amazonaws.com/cdn.ciims.io/erianna.ciims.io/ubuntu.svg
+image: https://assets.erianna.com/ubuntu.svg
 description: "Software Packages for Ubuntu"
 ---
 

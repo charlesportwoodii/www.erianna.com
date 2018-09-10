@@ -4,7 +4,7 @@ type: "repository"
 date: 2016-12-01T00:00:00-00:00
 slug: "centos"
 draft: false
-image: https://s3-us-west-2.amazonaws.com/cdn.ciims.io/erianna.ciims.io/centos.svg
+image: https://assets.erianna.com/centos.svg
 description: "Software packages for CentOS"
 ---
 

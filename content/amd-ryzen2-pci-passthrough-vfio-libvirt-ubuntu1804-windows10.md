@@ -13,12 +13,9 @@ While planning out this process, I stumbled up [this](https://level1techs.com/ar
 
 Exhausted by the constant performance losses incurred by Spectre and Meltdown I was experiencing on my old i5-2500, and wanting to capitalize on the cost-per-core benefit Ryzen 2 offered, I decided to take the plunge into GPU passthrough and to see if it would be a viable long term solution for me, and my have I been pleased.
 
-<figure>
-    <img data-src="https://s3-us-west-2.amazonaws.com/cdn.ciims.io/erianna.ciims.io/windows10-install/windows10-vfio.PNG" class="lazy image fit">
-    <figcaption>
-        <h4 class="align-center">Virtualized Windows 10 running on Ubuntu 18.04 with GPU passthrough</h4>
-    </figcaption>
-</figure>
+<span class="image featured">
+    <img data-src="https://assets.erianna.com/windows10-install/windows10-vfio.PNG" class="lazy">
+</span>
 
 This write up details my experiences getting PCI passthrough working through Ubuntu 18.04 to Windows 10 using OVMF+VFIO and libvirt. While this document shouldn't be considered a comprehensive guide, it will cover what I needed to do to get this working (mainly so I can set it back up again if I ever need to), while also covering a few tips and tricks I've learned along the way.
 
@@ -186,7 +183,7 @@ At the end of the day, how much money you're willing to spend depends on your bu
 
 ### Memory
 
-Ryzen's performance scales well with faster memory, meaning that faster RAM kits will net you faster performance. While not critical to PCI passthrough, you will see better guest performance with faster memory. I would recommend getting at least a 3200 Mhz kit.
+Ryzen's performance scales well with faster memory, meaning that faster RAM kits will net you faster performance. While not critical to PCI passthrough, you will see better guest performance with more and faster memory. I would recommend getting at minimum 16GB of RAM, so that you can allocate 8GB directly to the guest. In terms of speed, I would recommend a 3200 Mhz kit - be sure to check your motherboard manufacturer's compatability list.
 
 ### CPU
 
@@ -388,14 +385,101 @@ Fortunatlly, this is simple enough.
 
 2. Edit `/etc/netplan/01-network-manager-all.yaml` and replace it with the following. 
 
-    {{< gist charlesportwoodii 8f6da6e274ee8c953af8f26976d86d8f "01-network-manager-all-yml" >}}
+    ```yaml
+    # Let NetworkManager manage all devices on this system
+    network:
+    version: 2
+    renderer: NetworkManager
+    ethernets:
+        enp7s0:
+        dhcp4: no
+        dhcp6: no
+
+    bridges:
+        br0:
+        interfaces: [enp7s0]
+        dhcp4: true
+    dhcp6: no
+    ```
 
     > Note that you'll need to adjusts `enp7s0` with the actual ethernet adapter on your machine.
     > Also note that YAML syntax is tab sensative. Make sure you're using 4 spaces for each element
 
 3. Run `netplan apply` to apply the network configuration. 
 
-After your network is configured, reboot to make sure everything works when you boot your OS.
+After your network is configured, reboot to make sure everything works on boot.
+
+## Hugepages
+
+When a Linux process uses memory, the CPU will mark that memory for use by that specific process. For effecincy, these _page_ sizes are 4K.
+
+When working with virtual machines, the KVM process is mapping memory to and from the guest OS to the host. When the KVM processes uses 1GB of memory, that's 262144 entries to look up (1GB / 4K). If one Page Table Entry consume 8 bytes, that's 2MB (262144 * 8) to look-up. When scaling to upwards of 8GB for guest allocation, that number skyrockets to 2097152 entries the CPU needs to look up, and costs roughly 16MB just to look up a single memory page. As you can imagine, this is _incredibly_ ineffecient for the CPU, and will cause significant performance issues inside the guest.
+
+On Linux, we can configure something called _huge pages_, which lets us increase the page size. There are two approaches to dealing with huge pages, _dynamic_ and _static_ sizing. For PCI passthrough, static huge pages are the best (and only) option since IOMMU requires the guest memory be allocated and pinned as soon as the VM starts.
+
+On a 16 GB system with an 8 GB Windows 10 VM, that means that your host system will (at all times), only have 8 GB of usable RAM, regardless of whether the VM is running or not.
+
+With the cost of RAM, this can be a pretty hefty fine for good VM performance. In general however there really isn't a "better" option and static huge pages. If you're running <= 16GB of RAM on your host system, reserving 8GB of huge pages for your VM is obviously the superior choice - and if you have 32GB+ and have RAM to spare, it's also the obvious choice _unless_ you're needing that extra RAM for host-only activities.
+
+For this guide, I'll be describing how to configure _static_ huge pages. If you're interested in _dynamic_ hugepages be sure to read the []rch Linux VFIO Wiki on the topic](https://wiki.archlinux.org/index.php/PCI_passthrough_via_OVMF#Transparent_huge_pages).
+
+1. Check if hugepages is installed by running:
+    ```
+    hugeadm --explain
+    ```
+
+    If you get `hugeadm:ERROR: No hugetlbfs mount points found` you're fine. Otherwise install hugepages:
+
+    ```
+    sudo apt install hugepages
+    ```
+
+    Then edit `/etc/default/qemu-kvm` and add (or uncomment) the following line:
+
+    ```
+    KVM_HUGEPAGES=1
+    ```
+2. Reboot your host OS.
+3. Run `hugeadm --explain` again to check your memmory page size:
+    ```
+    ```
+
+4. Next, we need to determine how much memory we want to devote to our VM. By default our page size is `2097152 bytes` or `2MB`, so if we want to allocated 8GB, or 8192MB of RAM to our guest, our huge page size would be `4096` (8192 / 2). Ideally we'd want to add 2-10% overhead on top of that. If memory is scarce, you'll probably be ok with `4300`. Simply add whatever percentage you're willing to devote to huge pages to `4096`, then update `/etc/sysctl.conf` with that value:
+
+    ```
+    vm.nr_hugepages = 4096 # Your value here
+    vm.hugetlb_shm_group = 36
+    ```
+
+    Then run `sudo systectl -p` to apply the changes
+5. Then, we need to open `/etc/security/limits.conf` and update the `soft memlock` and `hard memlock` values to our 8GB value in bytes:
+    ```
+    soft memlock 8388608
+    hard memlock 8388608 
+    ```
+6. Reboot your host OS again.
+7. Then, we need to determine our `shmmax` value by running `hugeadm --explain`
+    ```
+    ```
+
+    We're specifically looking for the section that reads:
+
+    ```
+    The recommended shmmax for your currently allocated huge pages is X bytes.
+    To make shmmax settings persistent, add the following line to /etc/sysctl.conf:
+    kernel.shmmax = X
+    ```
+
+    Do as the instructions say, and open `/etc/sysctl.conf` and apply `kernel.shmmax`.
+
+    ```
+    kernel.shmmax = X # Your value here
+    ```
+
+    Then run `sudo sysctl -p` to apply it.
+8. Finally, reboot again.
+
+Later when we're configuring our guest virtual machine we'll ensure our VM has huge pages backing.
 
 # Windows 10 guest setup
 
@@ -435,7 +519,14 @@ After your network is configured, reboot to make sure everything works when you 
 
 The following script can be used to determine your IOMMU groups. Create a file called `iommu`, then mark it as executable via `chmod +x iommu`.
 
-{{< gist charlesportwoodii 8f6da6e274ee8c953af8f26976d86d8f "iommu" >}}
+```bash
+#!/bin/bash
+for d in /sys/kernel/iommu_groups/*/devices/*; do
+  n=${d#*/iommu_groups/*}; n=${n%%/*}
+  printf 'IOMMU Group %s ' "$n"
+  lspci -nns "${d##*/}"
+done
+```
 
 The script can be then run as follows. I recommend sorting the output by group number just readability:
 
@@ -495,7 +586,14 @@ The output for an Asus Prime X470 PRO is as follows:
 
 Determining what devices exists on what USB bus and IOMMU group can be done using the following script. Create a file called `usb-bus` and mark it as executable `chmod +x usb-bus`
 
-{{< gist charlesportwoodii 8f6da6e274ee8c953af8f26976d86d8f "usb-bus" >}}
+```bash
+#!/bin/bash
+for usb_ctrl in $(find /sys/bus/usb/devices/usb* -maxdepth 0 -type l); do
+    pci_path="$(dirname "$(realpath "${usb_ctrl}")")";
+    echo "Bus $(cat "${usb_ctrl}/busnum") --> $(basename $pci_path) (IOMMU group $(basename $(realpath $pci_path/iommu_group)))"; lsusb -s "$(cat "${usb_ctrl}/busnum"):";
+    echo;
+done
+```
 
 The command can be run by calling:
 

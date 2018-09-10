@@ -21,7 +21,7 @@ On Linux, the standard set of tools of performing full disk encryption is called
 On Ubuntu 12.10 and later, encrypting your primary hard disk is as simple as selecting the "Encrypt the new Ubuntu installation for security when the installer runs.
 
 <center>
-![Ubuntu Full Disk Encryption](https://s3-us-west-2.amazonaws.com/cdn.ciims.io/erianna.ciims.io/ac8717444f85d57c67f5c4e8e0d1ff76.png)
+![Ubuntu Full Disk Encryption](https://assets.erianna.com/ac8717444f85d57c67f5c4e8e0d1ff76.png)
 </center>
 
 Secondary or external disks however, require some more manual work to get setup.
