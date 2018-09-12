@@ -423,15 +423,17 @@ With the cost of RAM, this can be a pretty hefty fine for good VM performance. I
 
 For this guide, I'll be describing how to configure _static_ huge pages. If you're interested in _dynamic_ hugepages be sure to read the []rch Linux VFIO Wiki on the topic](https://wiki.archlinux.org/index.php/PCI_passthrough_via_OVMF#Transparent_huge_pages).
 
+> Note that this configuration assumes we're running libvirt as `root`. For additional security we can restrict our hugepages to a specific group using `hugetlb_shm_group`, and configure additional limits in `/etc/security/limits.conf`.
+
 1. Check if hugepages is installed by running:
     ```
-    hugeadm --explain
-    ```
-
-    If you get `hugeadm:ERROR: No hugetlbfs mount points found` you're fine. Otherwise install hugepages:
-
-    ```
     sudo apt install hugepages
+    ```
+
+    Then run `hugeadm` to see your hugepage configuration.
+
+    ```
+    sudo hugeadm --explain
     ```
 
     Then edit `/etc/default/qemu-kvm` and add (or uncomment) the following line:
@@ -440,29 +442,41 @@ For this guide, I'll be describing how to configure _static_ huge pages. If you'
     KVM_HUGEPAGES=1
     ```
 2. Reboot your host OS.
-3. Run `hugeadm --explain` again to check your memmory page size:
-    ```
-    ```
-
-4. Next, we need to determine how much memory we want to devote to our VM. By default our page size is `2097152 bytes` or `2MB`, so if we want to allocated 8GB, or 8192MB of RAM to our guest, our huge page size would be `4096` (8192 / 2). Ideally we'd want to add 2-10% overhead on top of that. If memory is scarce, you'll probably be ok with `4300`. Simply add whatever percentage you're willing to devote to huge pages to `4096`, then update `/etc/sysctl.conf` with that value:
+3. Run `hugeadm --explain` again to check your memmory page size. The output on my system is as follows:
 
     ```
-    vm.nr_hugepages = 4096 # Your value here
-    vm.hugetlb_shm_group = 36
+    Total System Memory: 32097 MB
+
+    Mount Point          Options
+    /dev/hugepages       rw,relatime,pagesize=2M
+
+    Huge page pools:
+        Size  Minimum  Current  Maximum  Default
+    2097152     4500     4500     4500        *
+    1073741824        0        0        0         
+
+    Huge page sizes with configured pools:
+    2097152
+
+    The recommended shmmax for your currently allocated huge pages is 9437184000 bytes.
+    To make shmmax settings persistent, add the following line to /etc/sysctl.conf:
+    kernel.shmmax = 9437184000
+
+    To make your hugetlb_shm_group settings persistent, add the following line to /etc/sysctl.conf:
+    vm.hugetlb_shm_group = 0
+
+    Note: Permanent swap space should be preferred when dynamic huge page pools are used.
     ```
 
-    Then run `sudo systectl -p` to apply the changes
-5. Then, we need to open `/etc/security/limits.conf` and update the `soft memlock` and `hard memlock` values to our 8GB value in bytes:
+    There's several items we need to extract from this output to configure hugepages.
+
+    First, we need to determine how much memory we want to devote to our VM. By default our page size is `2097152 bytes` or `2MB`, so if we want to allocated 8GB, or 8192MB of RAM to our guest, our huge page size would be `4096` (8192 / 2). Ideally we'd want to add 2-10% overhead on top of that. If memory is scarce, you'll probably be ok with `4300`. Simply add whatever percentage you're willing to devote to huge pages to `4096`, then update `/etc/sysctl.conf` with that value:
+
     ```
-    soft memlock 8388608
-    hard memlock 8388608 
-    ```
-6. Reboot your host OS again.
-7. Then, we need to determine our `shmmax` value by running `hugeadm --explain`
-    ```
+    vm.nr_hugepages = 4500 # Your value here
     ```
 
-    We're specifically looking for the section that reads:
+    Next we need to determine our `shmax` value. We're specifically looking for the section that reads:
 
     ```
     The recommended shmmax for your currently allocated huge pages is X bytes.
@@ -477,13 +491,15 @@ For this guide, I'll be describing how to configure _static_ huge pages. If you'
     ```
 
     Then run `sudo sysctl -p` to apply it.
-8. Finally, reboot again.
+4. Finally, reboot again.
 
 Later when we're configuring our guest virtual machine we'll ensure our VM has huge pages backing.
 
 # Windows 10 guest setup
 
 ## Configuring KVM virtual machine
+
+### PCI passthrough
 
 ## Installing Windows 10
 
@@ -492,8 +508,6 @@ Later when we're configuring our guest virtual machine we'll ensure our VM has h
 ## Driver installation
 
 ## Remote Access
-
-## PCI passthrough
 
 # Periphials
 
