@@ -2,6 +2,7 @@
 title: "Ubuntu"
 type: "repository"
 date: 2016-12-01T00:00:00-00:00
+lastmod: 2018-09-20T00:00:00-00:00
 slug: "ubuntu"
 draft: false
 image: https://s3-us-west-2.amazonaws.com/cdn.ciims.io/erianna.ciims.io/ubuntu.svg
@@ -13,6 +14,16 @@ The new apt repository (apt.erianna.com) currently supports Trusty (14.04), Xeni
 ## Package Signing
 
 All software packages for Ubuntu are signed using an Ed25519 GnuPG key, which requires GnuPG 2.1.x. If your upstream provider does not provide support for GnuPG 2.1.x yet, it can be installed from the repository directly.
+
+## Repository Pinning
+
+As package names may conflict with existing package names provided by Ubuntu, it is advised to pin the repository by creating `/etc/apt/preferences.d/apt.erianna.com.pref` and adding the following content to the file to ensure that packages provided by Ubuntu do not overwrite packages provided by this repository.
+
+```
+Package: *
+Pin: origin apt.erianna.com
+Pin-Priority: 600
+```
 
 ## Bionic 
 
