@@ -684,7 +684,7 @@ While this may be a pain, it does make graphics card driver updates easier.
 In the event your graphics card acts up, you'll need a way to access your VM. There are a couple of options I recommend:
 
 1. NoMachine
-NoMachine has good cross-platform compatability, and is a good option in addition to any other remote desktop tools you plan to install.
+NoMachine has good cross-platform compatibility, and is a good option in addition to any other remote desktop tools you plan to install.
 
 2. Remote Desktop
 The default remote desktop is a good tool, but depending upon the state of your graphics card, may not show anything more than a black screen.
@@ -786,9 +786,10 @@ Performance issues outside of the graphics card are most likely caused by the ph
     <target dev='vda' bus='virtio'/>
 </disk>
 ```
-# Periphials
 
-There's a dozen different ways you can setup your periphials to work with this setup. I've listed a few of the options, and what my recommended approach is for each one. In general, there's almost always two options: hardware and software. Software is sometimes free and usually works well enough to get by on. Dedicated hardware will give you the best experience, but costs more.
+# Peripherals
+
+There's a dozen different ways you can setup your peripherals to work with this setup. I've listed a few of the options, and what my recommended approach is for each one. In general, there's almost always two options: hardware and software. Software is sometimes free and usually works well enough to get by on. Dedicated hardware will give you the best experience, but costs more.
 
 ## Mouse & Keyboard
 
@@ -974,7 +975,7 @@ Personally, I prefer checking the overclock on the host using something that wil
 Graphics driver updates are scary due to their unique ability to hose a perfectly working system. My current approach with my AMD card is as follows:
 
 1. Download the updated graphics driver from AMD's website.
-2. Use the AMD clean uninstall tool.
+2. Use the AMD clean un-install tool.
 3. Reboot
 4. Install the new driver from the previously download driver package.
 5. Reboot and check stability.
@@ -997,7 +998,7 @@ Libvirt is most likely going to complain about ptrace problems. Check that your 
 
 ### Snap Apps
 
-Snap has oustanding issues with AppArmor on newer kernels. The _easiest_ solution is to upgrade snap core to the Beta channel which fixes ptrace issues with AppArmor.
+Snap has outstanding issues with AppArmor on newer kernels. The _easiest_ solution is to upgrade snap core to the Beta channel which fixes ptrace issues with AppArmor.
 
 ```
 sudo snap refresh core --beta
