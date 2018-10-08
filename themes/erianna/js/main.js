@@ -33,7 +33,7 @@ class Erianna {
         hljs.initHighlightingOnLoad();
 
         new LazyLoad({
-            "elements_selector": ".lazy"
+            elements_selector: ".lazy"
         });
     }
 }
