@@ -5,7 +5,7 @@ date: 2016-12-01T00:00:00-00:00
 Lastmod: 2018-05-09T16:43:34+00:00
 slug: "alpine-linux"
 draft: false
-image: https://s3-us-west-2.amazonaws.com/cdn.ciims.io/erianna.ciims.io/alpine.svg
+image: https://assets.erianna.com/alpine.svg
 description: "Software packages for Alpinx Linux"
 ---
 

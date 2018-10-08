@@ -4,7 +4,7 @@ type: "repository"
 date: 2016-12-01T00:00:00-00:00
 slug: "redhat"
 draft: false
-image: https://s3-us-west-2.amazonaws.com/cdn.ciims.io/erianna.ciims.io/redhat.svg
+image: https://assets.erianna.com/redhat.svg
 description: "Software packages for RedHat Enterprise Linux"
 ---
 

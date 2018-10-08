@@ -1,0 +1,127 @@
+<domain type='kvm'>
+  <name>Windows10</name>
+  <uuid>5b98ae37-713d-4038-8e48-275cf2c3a24e</uuid>
+  <memory unit='KiB'>8388608</memory>
+  <currentMemory unit='KiB'>8388608</currentMemory>
+  <memoryBacking>
+    <hugepages/>
+  </memoryBacking>
+  <vcpu placement='static'>12</vcpu>
+  <iothreads>6</iothreads>
+  <cputune>
+    <vcpupin vcpu='0' cpuset='0'/>
+    <vcpupin vcpu='1' cpuset='1'/>
+    <vcpupin vcpu='2' cpuset='2'/>
+    <vcpupin vcpu='3' cpuset='3'/>
+    <vcpupin vcpu='4' cpuset='4'/>
+    <vcpupin vcpu='5' cpuset='5'/>
+    <vcpupin vcpu='6' cpuset='6'/>
+    <vcpupin vcpu='7' cpuset='7'/>
+    <vcpupin vcpu='8' cpuset='8'/>
+    <vcpupin vcpu='9' cpuset='9'/>
+    <vcpupin vcpu='10' cpuset='10'/>
+    <vcpupin vcpu='11' cpuset='11'/>
+    <iothreadpin iothread='1' cpuset='0-1'/>
+    <iothreadpin iothread='2' cpuset='2-3'/>
+    <iothreadpin iothread='3' cpuset='4-5'/>
+    <iothreadpin iothread='4' cpuset='6-7'/>
+    <iothreadpin iothread='5' cpuset='8-9'/>
+    <iothreadpin iothread='6' cpuset='10-11'/>
+  </cputune>
+  <os>
+    <type arch='x86_64' machine='pc-i440fx-bionic'>hvm</type>
+    <loader readonly='yes' type='pflash'>/usr/share/OVMF/OVMF_CODE.fd</loader>
+    <nvram>/var/lib/libvirt/qemu/nvram/Windows10_VARS.fd</nvram>
+  </os>
+  <features>
+    <acpi/>
+    <apic/>
+    <hyperv>
+      <relaxed state='on'/>
+      <vapic state='on'/>
+      <spinlocks state='on' retries='8191'/>
+    </hyperv>
+    <kvm>
+      <hidden state='on'/>
+    </kvm>
+    <vmport state='off'/>
+  </features>
+  <cpu mode='custom' match='exact' check='partial'>
+    <model fallback='allow'>host-passthrough</model>
+    <topology sockets='1' cores='6' threads='2'/>
+  </cpu>
+  <clock offset='localtime'>
+    <timer name='rtc' tickpolicy='catchup'/>
+    <timer name='pit' tickpolicy='delay'/>
+    <timer name='hpet' present='no'/>
+    <timer name='hypervclock' present='yes'/>
+  </clock>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>destroy</on_crash>
+  <pm>
+    <suspend-to-mem enabled='no'/>
+    <suspend-to-disk enabled='no'/>
+  </pm>
+  <devices>
+    <emulator>/usr/bin/qemu-system-x86_64</emulator>
+    <disk type='block' device='disk'>
+      <driver name='qemu' type='raw' cache='none' io='threads'/>
+      <source dev='/dev/disk/by-id/ata-WDC_WDS500G2B0B-00YS70_181595801796'/>
+      <target dev='vda' bus='virtio'/>
+      <boot order='1'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x0c' function='0x0'/>
+    </disk>
+    <disk type='file' device='cdrom'>
+      <driver name='qemu' type='raw'/>
+      <source file='/path/to/virtio-win-0.1.141.iso'/>
+      <target dev='hda' bus='ide'/>
+      <readonly/>
+      <address type='drive' controller='0' bus='0' target='0' unit='0'/>
+    </disk>
+    <disk type='file' device='cdrom'>
+      <driver name='qemu' type='raw'/>
+      <source file='/path/to/Win10_1803_English_x64.iso'/>
+      <target dev='hdb' bus='ide'/>
+      <readonly/>
+      <boot order='2'/>
+      <address type='drive' controller='0' bus='0' target='0' unit='1'/>
+    </disk>
+    <controller type='pci' index='0' model='pci-root'/>
+    <controller type='ide' index='0'>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x01' function='0x1'/>
+    </controller>
+    <controller type='usb' index='0' model='nec-xhci'>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x04' function='0x0'/>
+    </controller>
+    <interface type='bridge'>
+      <mac address='52:54:00:c0:18:81'/>
+      <source bridge='br0'/>
+      <model type='virtio'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x03' function='0x0'/>
+    </interface>
+    <input type='mouse' bus='ps2'/>
+    <input type='keyboard' bus='ps2'/>
+    <hostdev mode='subsystem' type='pci' managed='yes'>
+      <source>
+        <address domain='0x0000' bus='0x09' slot='0x00' function='0x0'/>
+      </source>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x02' function='0x0'/>
+    </hostdev>
+    <hostdev mode='subsystem' type='pci' managed='yes'>
+      <source>
+        <address domain='0x0000' bus='0x09' slot='0x00' function='0x1'/>
+      </source>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x08' function='0x0'/>
+    </hostdev>
+    <hostdev mode='subsystem' type='pci' managed='yes'>
+      <source>
+        <address domain='0x0000' bus='0x0a' slot='0x00' function='0x3'/>
+      </source>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x06' function='0x0'/>
+    </hostdev>
+    <memballoon model='virtio'>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x07' function='0x0'/>
+    </memballoon>
+  </devices>
+</domain>

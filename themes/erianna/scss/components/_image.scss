@@ -15,6 +15,20 @@
 			display: block;
 		}
 
+		&.lazy {
+
+			min-height: 300px;
+			&.loaded {
+				opacity: 1;
+				transition: 2s opacity;
+			}
+
+			&.loading {
+				opacity: 0;
+				transition: none;
+			}
+		}
+
 		&.left,
 		&.right {
 			max-width: 40%;

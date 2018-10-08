@@ -11,10 +11,12 @@ import { Menu } from './utils/menu';
 // Import just the Highlight.js elements we want
 import hljs from 'highlight.js/lib/highlight';
 import 'highlight.js/styles/railscasts.css';
-['bash', 'php', 'dockerfile', 'css', 'nginx', 'makefile', 'javascript', 'yaml'].forEach((langName) => {
+['bash', 'php', 'dockerfile', 'css', 'nginx', 'makefile', 'javascript', 'yaml', 'xml'].forEach((langName) => {
     const langModule = require(`highlight.js/lib/languages/${langName}`);
     hljs.registerLanguage(langName, langModule);
 });
+
+import LazyLoad from "vanilla-lazyload";
 
 class Erianna {
     constructor() {
@@ -29,6 +31,10 @@ class Erianna {
         }
 
         hljs.initHighlightingOnLoad();
+
+        new LazyLoad({
+            elements_selector: ".lazy"
+        });
     }
 }
 

@@ -75,7 +75,7 @@ When examining your cert now (I recommend using a tool like [SSLLabs](https://ww
 
 
 <span class="image featured">
-    <img src="https://s3-us-west-2.amazonaws.com/cdn.ciims.io/erianna.ciims.io/13iyP1lFRKqZSk2hTVhtrW9tw1lcd.PNG" />
+    <img src="https://assets.erianna.com/13iyP1lFRKqZSk2hTVhtrW9tw1lcd.PNG" />
 </span>
 
 ----------------
