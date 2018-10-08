@@ -212,6 +212,7 @@ Now let's go through everything you'll need to do on the host side to get this s
 ## UEFI/BIOS Setup
 
 1. Download and install the latest BIOS from your motherboard vendor. BIOS updates fix several hardware issues, and open up better IOMMU groups, especially if you're several version behind.
+
 2. After installing your BIOS updates, you need to enable IOMMU and Virtualization in the BIOS. IOMMU will appear as AMD-Vi and virtualization will show as AMD-V. Where these options appear in your motherboard will differ per brand and BIOS revision.
 
 ## Install Ubuntu
@@ -426,13 +427,13 @@ For this guide, I'll be describing how to configure _static_ huge pages. If you'
 > Note that this configuration assumes we're running libvirt as `root`. For additional security we can restrict our hugepages to a specific group using `hugetlb_shm_group`, and configure additional limits in `/etc/security/limits.conf`.
 
 1. Check if hugepages is installed by running:
-    ```
+    ```bash
     sudo apt install hugepages
     ```
 
     Then run `hugeadm` to see your hugepage configuration.
 
-    ```
+    ```bash
     sudo hugeadm --explain
     ```
 
@@ -497,37 +498,516 @@ Later when we're configuring our guest virtual machine we'll ensure our VM has h
 
 # Windows 10 guest setup
 
+While the following process will work with nearly any operating system, in this section we'll talk specifically about getting Windows 10 working.
+
 ## Configuring KVM virtual machine
+
+Creating a new VM using the libvirt GUI is straightforward. There's only a few adjustments we need to make to our VM configuration after setting everything up with the defaults.
+
+### Disk Options
+
+The first option we need to deal with is how exactly we want our disk setup. There's three real options available here, listed in order of _my_ preference, with the pros and cons for each option listed:
+
+#### RAW Image
+
+A RAW image on a dedicated SSD is going to get you near native performance with almost no downsides.
+
+##### Pros
+1. Near native disk performance. Compared to bare metal you aren't missing out on much.
+2. On a LUKS volume you get full disk encryption without needing to deal with Bitlocker.
+3. Backups are easy. Just copy the image file.
+
+##### Cons
+1. Bare metal disk will net faster disk IO, as requests go directly to the disk instead of through the Linux VM.
+2. Can't do live-migrations. KVM offers a feature with QCOW2 images that allow you to migrate data between storage mediums while the VM is active.
+
+#### Dedicated SSD
+
+As of the time of writing my setup uses a dedicated SSD that is directly passed through, though I am seriously considering moving to a RAW image file on a LUKS volume.
+
+##### Pros
+1. Bare metal performance can't be beat.
+2. Can boot directly into Windows from host side.*
+
+##### Cons
+1. Can boot directly into Windows from host side.*
+   
+   > While you _can_ boot directly into Windows I advise you don't, as it _will_ hose your activation license. While this is great for adjusting lighting that requires direct motherboard access (like Asus Aura lighting), it's _terrible_ for just about everything else. For instance if your BIOS re-arranges your boot priority when you plug in a USB hard drive and you boot into Windows by mistake you better hope you have a recovery image in place, otherwise you're in for a fun re-install Windows 10 experience.
+
+#### QCOW2 Image
+
+#### Pros
+1. Everything for RAW image
+2. Can do live migrations.
+
+#### Cons
+1. Both RAW and a dedicated SSD are noticably faster.
+
+### Initial CPU Selection
+
+As of the time of writing, the Windows 10 installer doesn't behave well with `host-passthrough`. In my experience the CPU selection during the installation process does have a performance impact after switching to `host-passthrough`. For instance if you select `core2duo` then switch to `host-passthrough` after the installation results in weird system behavior.
+
+The best approach is to select a CPU _most similar_ to the CPU you're going to pass through later. In the case of Ryzen, the `EPYC` selection is going to be your best bet.
+
+We'll tune our CPU later on.
+
+### Graphics
+
+For the installation, you'll need the default Spice graphics attached so you can see the installer.
 
 ### PCI passthrough
 
+During the installation I recommend having all PCI devices you want to pass through selected, as Windows 10 will automatically try to grab drivers for these as soon as you get network connectivity. The _Add new hardware_ option in the libvirt UI for your VM allows you to specify PCI devices you want to pass through.
+
+Select the device ID's you previously isolated and pass them through.
+
+### Networking
+
+In the networking section of your VM configuration you'll want to specify the previously created `br0` interface.
+
+### Boot priority
+
+Remember those ISO images I told you to download earlier? We're finally going to use them. Attach the virtio ISO file and the Windows 10 installer to a VirtIO devices to your VM, then set your boot priority to be the hard drive you want Windows installer to, followed by the Windows 10 installer.
+
 ## Installing Windows 10
+
+Assuming everything works, save your changes to your VM configuration then click the play button. You should be greeted by the TianoCore UEFI loader, followed by the Windows 10 installation screen.
+
+<span class="image featured">
+    <img data-src="https://assets.erianna.com/windows10-install/Screenshot_Windows10_2018-08-17_11%3A07%3A27.png" class="lazy">
+</span>
+
+The rest of this section is screenshots with commentary. If you've done this before skip ahead.
+
+----
+
+After clicking install, you'll get the license screen. I recommend skipping adding your license until after you have Windows 10 installed just to ensure you don't burn your license on a hardware configuration you're not happy with.
+
+<span class="image featured">
+    <img data-src="https://assets.erianna.com/windows10-install/Screenshot_Windows10_2018-08-17_11%3A07%3A38.png" class="lazy">
+</span>
+
+Regardless of what version of Windows you're _ultimately_ going to install, I recommend installing Windows 10 Pro _even if you have an Education or Home license_. Windows 10 will adjust it's feature set automatically after adding your license key.
+
+<span class="image featured">
+    <img data-src="https://assets.erianna.com/windows10-install/Screenshot_Windows10_2018-08-17_11%3A07%3A52.png" class="lazy">
+</span>
+
+Windows 10 doesn't know how to access our disk until we tell it what driver to use, so we need to select a custom installation.
+
+<span class="image featured">
+    <img data-src="https://assets.erianna.com/windows10-install/Screenshot_Windows10_2018-08-17_11%3A08%3A47.png" class="lazy">
+</span>
+
+So we tell Windows to load a custom driver.
+
+<span class="image featured">
+    <img data-src="https://assets.erianna.com/windows10-install/Screenshot_Windows10_2018-08-17_11%3A08%3A55.png" class="lazy">
+</span>
+
+If your virio ISO disk was correctly added, navigate to that drive, then select `viostor\w10\amd64\viostor.inf`. If you don't see the virtio ISO disk you added, stop the VM and re-check your configuration. The correct driver will look as follows:
+
+<span class="image featured">
+    <img data-src="https://assets.erianna.com/windows10-install/Screenshot_Windows10_2018-08-17_11%3A09%3A18.png" class="lazy">
+</span>
+
+Windows 10 will now see our disk, and we can do our normal partitioning.
+
+<span class="image featured">
+    <img data-src="https://assets.erianna.com/windows10-install/Screenshot_Windows10_2018-08-17_11%3A09%3A44.png" class="lazy">
+</span>
+
+<span class="image featured">
+    <img data-src="https://assets.erianna.com/windows10-install/Screenshot_Windows10_2018-08-17_11%3A10%3A09.png" class="lazy">
+</span>
+
+And finally we're installing Windows 10.
+
+<span class="image featured">
+    <img data-src="https://assets.erianna.com/windows10-install/Screenshot_Windows10_2018-08-17_11%3A10%3A32.png" class="lazy">
+</span>
+
+The VM will reboot, then we have to deal with the rest of the installer.
+
+<span class="image featured">
+    <img data-src="https://assets.erianna.com/windows10-install/Screenshot_Windows10_2018-08-17_11%3A16%3A30.png" class="lazy">
+</span>
+
+You won't have network connectivity _quite_ yet, so we need to skip this for now.
+
+<span class="image featured">
+    <img data-src="https://assets.erianna.com/windows10-install/Screenshot_Windows10_2018-08-17_11%3A17%3A46.png" class="lazy">
+</span>
+
+Follow the rest of the guided install from here on out. Adjust your preferences as desired.
 
 # Windows 10 post installation
 
+After completing the installation we'll launch into Windows.
+
 ## Driver installation
+
+Our first step is to get the rest of the drivers installed so we have a stable system. Open up `Device Manager` to get started.
+
+### Balloon Driver
+
+The balloon driver allows for memory in the guest to be re-sized dynamically. In the `Other devices` category, you should see an option called `PCI Device`. Select the driver from the VirtIO ISO, which should be under `Balloon\w10\amd64`, then press install.
+
+<span class="image featured">
+    <img data-src="https://assets.erianna.com/windows10-install/Screenshot_Windows10_2018-08-17_11%3A43%3A55.png" class="lazy">
+</span>
+
+### Networking
+
+Next you'll want to install the network driver. Select the `Ethernet Controller` under `Other devices`. Install the `NetKVM\w10\amd64` driver.
+
+<span class="image featured">
+    <img data-src="https://assets.erianna.com/windows10-install/Screenshot_Windows10_2018-08-17_11%3A43%3A20.png" class="lazy">
+</span>
+
+Assuming your bridge adapter on the host is properly configured, Windows should automatically detect the new network interface after the driver is installed.
+
+### Graphics
+
+At this point Windows is going to try to do a bunch of things, namely install updates and grab any other drivers. At some point it'll try to install _a_ graphics drivers.
+
+Before installing an updated graphics card, I _highly_ recommend you install a few remote access tools so that you can access your VM in the event your graphics card drivers act up.
+
+After installing _and testing_ some remote access tools, find the latest graphics card driver and install it.
+
+My recommendations for installation is to do a clean install before installing or upgrading any graphics drive. Both AMD and Nvidia offer tools that allow you to completely remove their driver. After removing the driver, reboot, then install the latest driver.
+
+While this may be a pain, it does make graphics card driver updates easier.
 
 ## Remote Access
 
+In the event your graphics card acts up, you'll need a way to access your VM. There are a couple of options I recommend:
+
+1. NoMachine
+NoMachine has good cross-platform compatability, and is a good option in addition to any other remote desktop tools you plan to install.
+
+2. Remote Desktop
+The default remote desktop is a good tool, but depending upon the state of your graphics card, may not show anything more than a black screen.
+
+3. Spice Graphics Adapter
+In the worst case, you can always fall back to the spice graphics adapter that you used during installation.
+
+## Activate Windows
+
+Once you have your system in a state your happy with, activate Windows.
+
+# XML Configuration Changes
+
+After shutting down the VM we can make additional changes to your VM configuration to make it perform better.
+
+## Disable Spice
+
+In the libvirt UI, remove the Spice graphics adapter that was added.
+
+## CPU Change
+
+There's a few CPU changes we can make to improve performance.
+
+### Host-Passthrough
+
+In the libvirt UI, change the CPU type to be `host-passthrough`. Now the next time Windows it booted it should see the exact model of your CPU (though you still won't be able to use any special tools for your CPU like Ryzen Master).
+
+```xml
+<cpu mode='custom' match='exact' check='partial'>
+    <model fallback='allow'>host-passthrough</model>
+    <topology sockets='1' cores='6' threads='2'/>
+</cpu>
+```
+
+### CPU Pinning
+
+For better performance you can pin specific CPU threads for use in the guest. When using Windows I usually want as much processing power as is available dedicated to it, so on my Ryzen 2700, I pass through 12 of the 16 cores. Adjust your configuration as necessary.
+
+```xml
+<vcpu placement='static'>12</vcpu>
+<iothreads>6</iothreads>
+<cputune>
+    <vcpupin vcpu='0' cpuset='0'/>
+    <vcpupin vcpu='1' cpuset='1'/>
+    <vcpupin vcpu='2' cpuset='2'/>
+    <vcpupin vcpu='3' cpuset='3'/>
+    <vcpupin vcpu='4' cpuset='4'/>
+    <vcpupin vcpu='5' cpuset='5'/>
+    <vcpupin vcpu='6' cpuset='6'/>
+    <vcpupin vcpu='7' cpuset='7'/>
+    <vcpupin vcpu='8' cpuset='8'/>
+    <vcpupin vcpu='9' cpuset='9'/>
+    <vcpupin vcpu='10' cpuset='10'/>
+    <vcpupin vcpu='11' cpuset='11'/>
+    <iothreadpin iothread='1' cpuset='0-1'/>
+    <iothreadpin iothread='2' cpuset='2-3'/>
+    <iothreadpin iothread='3' cpuset='4-5'/>
+    <iothreadpin iothread='4' cpuset='6-7'/>
+    <iothreadpin iothread='5' cpuset='8-9'/>
+    <iothreadpin iothread='6' cpuset='10-11'/>
+</cputune>
+```
+
+## HyperV entitlements
+
+If you tell Windows 10 it's a VM, it'll behave appropriately. HyperV entitlements can be set in the `<features>` section. Setting the HyperV entitlements, KVM hidden state, and telling KVM what kind of clock it should use will improve performance.
+
+```xml
+<features>
+    <acpi/>
+    <apic/>
+    <hyperv>
+        <relaxed state='on'/>
+        <vapic state='on'/>
+        <spinlocks state='on' retries='8191'/>
+    </hyperv>
+
+    <kvm>
+        <hidden state='on'/>
+    </kvm>
+
+    <clock offset='localtime'>
+        <timer name='rtc' tickpolicy='catchup'/>
+        <timer name='pit' tickpolicy='delay'/>
+        <timer name='hpet' present='no'/>
+        <timer name='hypervclock' present='yes'/>
+    </clock>
+</features>
+```
+
+## Disk IO threads
+
+Performance issues outside of the graphics card are most likely caused by the physical disk itself. Disk IO can be moved to a dedicated thread by setting the `io=threads` option on your disk device. The relevant configuration is listed below.
+
+```xml
+<disk type='block' device='disk'>
+    <driver name='qemu' type='raw' cache='none' io='threads'/>
+    <source dev='/dev/disk/by-id/<device_id>'/>
+    <target dev='vda' bus='virtio'/>
+</disk>
+```
 # Periphials
+
+There's a dozen different ways you can setup your periphials to work with this setup. I've listed a few of the options, and what my recommended approach is for each one. In general, there's almost always two options: hardware and software. Software is sometimes free and usually works well enough to get by on. Dedicated hardware will give you the best experience, but costs more.
 
 ## Mouse & Keyboard
 
+You have a few options for how you may want to connect your mouse and keyboard.
+
+##### PCI Passthrough
+
+PCI passthrough of a USB controller will get you the best performance, and allow you to use hardware features such as custom profiles and lighting effects via iCue or similar software. In short, plug your mouse and keyboard into a USB device that you're passing to the guest via PCI passthrough.
+
+If you're running short on PCI devices you can pass in a dedicated IOMMU group like I am, the best approach is to get plug your mouse and keyboard into a USB 2.0 switch, then plug that switch into a USB 3.0 hub, connected to your USB controller.
+
+In my setup I have my mouse and keyboard plugged into a cheap USB 2.0 hub, which is connected to the input of a UGREEN USB 2.0 switch. The USB switch connects two inputs to the computer. The first goes to any USB 2.0 port on the motherboard, and the second goes to a PCI device I'm passing through. Because my passed through USB options were rather limited, I hooked the UGREEN Switch into a Anker USB 3.0 hub so I didn't lose my only 2 USB ports on my mouse and keyboard.
+
+- [UGREEN USB 2.0 Switch](https://www.amazon.com/gp/product/B01CU4QD1I)
+- [USB 2.0 Hub](https://www.amazon.com/gp/product/B00J9R1QCQ)
+- [Anker USB 3.0 Hub](https://www.amazon.com/gp/product/B00O0KISQE)
+
+Of course, your other option is to simply switch the mouse and keyboard USB cable each time, but the solution I have lets me press a single button and switch through all my periphials at once.
+
+With PCI passthrough you're going to have full access to your mouse and keyboard hardware (including lighting controls), while having seamless performance.
+
+##### EDEV
+
+For those not-interested in spending more money on hardware, you can pass through your mouse and keyboard entirely in software. The performance on this for _most_ things is going to be pretty good. In the two weeks I used this method before my USB switch arrived I only had a few issues, mainly with key-rollover in games messing up input across the guest. I would recommend this if you're needing a Windows 10 guest for typing (programming and text editing). For gaming a simple USB switch will net you much less headaches.
+
+1. Adding yourself to the `input` group. Logout and log back in.
+
+    ```bash
+    sudo usermod -a -G input <your_username>
+    ```
+
+2. Update AppArmor. Near the top of `/etc/apparmor.d/abstractions/libvirt-qemu` add the following line, then restart the AppArmor service.
+
+    ```
+    /dev/input/* rw,
+    ```
+
+3. Identify your mouse and keyboard in `/dev/input/by-id`. Your device should be easily identifiable.
+
+    If you have more than 1 device per group run `cat /dev/input/by-id/[input device id]` on each device until you find the device that outputs garbled text when you move your mouse or type on your keyboard.
+
+    > Note that some devices are split into multiple device ids, and you'll need to pass through all of them in the next step. Additionally not all devices will appear here.
+
+4. Update your VM XML's file with `virsh edit <VM_NAME>`
+
+    Ensure that the XML header is defined as follows:
+    ```
+    <domain type='kvm' id='1' xmlns:qemu='http://libvirt.org/schemas/domain/qemu/1.0'>
+    ```
+
+    Then add the following at the end of the XML before the `</domain>` closing section. Adjust the `KEYBOARD_NAME` and `MOUSE_NAME` to the ID's you identified in the previously step.
+
+    ```xml
+    <qemu:commandline>
+        <qemu:arg value='-object'/>
+        <qemu:arg value='input-linux,id=mouse1,evdev=/dev/input/by-id/MOUSE_NAME'/>
+        <qemu:arg value='-object'/>
+        <qemu:arg value='input-linux,id=kbd1,evdev=/dev/input/by-id/KEYBOARD_NAME,grab_all=on,repeat=on'/>
+    </qemu:commandline>
+    ```
+
+5. VirtIO inputs work better in the VM with edev, so update your mouse and keyboard section to use the VirtIO driver.
+    ```xml
+    <input type='mouse' bus='virtio'>
+        <address type='pci' domain='0x0000' bus='0x00' slot='0x0e' function='0x0'/>
+    </input>
+    <input type='keyboard' bus='virtio'>
+        <address type='pci' domain='0x0000' bus='0x00' slot='0x0f' function='0x0'/>
+    </input>
+    <input type='mouse' bus='ps2'/>
+    <input type='keyboard' bus='ps2'/>
+    ```
+
+    Then when you boot your machine, install the `vioinput\w10\amd64` driver.
+
+Once edev is setup, you can toggle between the host and the guest by hitting both CTRL keys at the same time.
+
+For more information, a great article on edev is available at: https://passthroughpo.st/using-evdev-passthrough-seamless-vm-input/.
+
+##### Synergy
+
+[Synergy](https://symless.com/synergy) is another good software solution for sharing a mouse and keyboard between the VM and guest. You can either buy a lifetime license, or compile Synergy2 from (Seamless' github page](https://github.com/symless/synergy-core).
+
+Synergy will behave similarly to edev. It's great for typing and writing code, and functional in games to a point.
+
 ## Display
+
+Multiple options exist for displays as well.
+
+If your monitor supports multiple inputs, simply change the input each time you want to use the VM. If you want to see both monitors at the same time, simply buy another monitor.
+
+Alternatively, you can use the [Looking Glass](https://looking-glass.hostfission.com/) software. Looking glass creates a shared memory buffer between the host and the guest to transmit raw data between the guest and host graphics card, and allows you to see whatever is on the guest graphics card in a normal window on Linux.
 
 ## Audio
 
-## USB Controllers
+Each person has different requirements for their audio setup. Some people are fine with only hearing audio on the device they're working on, while others need to hear audio from both the host and the guest at the same time. Consequently there's a lot of different options available. Listed below are a few of the options _in order of my preference_.
 
-# "Gotcha's"
+### Scream
+
+[Scream](https://github.com/duncanthrax/scream) is a virtual networked soundcard that allows you to stream audio from Windows to your guest. The benefit of this is that you can mix audio from both the host and the guest on the host.
+
+Once Scream is installed on the Windows 10 guest, compile the `scream-pulse` binary from https://github.com/duncanthrax/scream/tree/master/Receivers/pulseaudio, and run it on the br0 interface.
+
+```
+./scream-pulse -i br0
+```
+
+For my purposes, I have Scream setup as a user systemd unit which spawns when I login. This allows for a seamless setup.
+
+```
+[Unit]
+Description = Scream Audio Pulse Audio Server
+After=network.target local-fs.target
+
+[Timer]
+OnBootSec=60
+
+[Service]
+Type=simple
+RemainAfterExit=true
+StandardOutput=journal
+ExecStart=/path/to/scream-pulse -i br0
+Restart=on-failure
+PrivateTmp=true
+NoNewPrivileges=true
+
+[Install]
+WantedBy=default.target
+```
+
+The reason I prefer this setup is that it's free, doesn't require any additional hardware, and work pretty much flawlessly (audio wise). I do have a few minor nitpicks with it however.
+
+1. Scream broadcasts audio everywhere. Ideally I'd like to target scream on the the Windows 10 side so it only broadcasts audio to a device of my choosing rather than broadcasting audio to the entire network. On a 1GB network this is fine, I imagine on a 100mb network however this could cause some problems. You could probably re-compile Scream to do this.
+2. Audio isn't encrypted. Ideally I'd want audio sent to a device to use a secure connection so that others couldn't intercept the traffic and listed to what I'm listening to.
+3. Audio is limited to CD quality. I'm by no means an audiophile, however if you are, know that you're limited to CD quality in Windows.
+
+### PCI passthrough
+
+There are several options for PCI passthrough.
+
+#### HDMI audio
+
+Any modern graphics card has a dedicated audio device. Your monitor most likely supports audio, and if it doesn't probably gives you the option to pass audio through to a 3.5mm device. The audio quality will be native, but you won't be able to mix it.
+
+#### USB audio
+
+As an alternative to audio sent along with the HDMI display, you can buy a cheap USB sound card and plug it in to the USB device you're passing through. Mixing audio from 2 3.5mm sources is pretty simple, assuming you have the hardware. Otherwise just plug in the audio device you want to listen to when switching inputs.
+
+#### PCI passthrough of dedicated sound card
+
+If you have available PCI slots in a dedicated IOMMU group you can add a dedicated sound card. Sound quality will be superb on your output device. If you need mixing buy additional hardware to mix multiple sources.
+
+#### PCI passthrough of motherboard sound card
+
+If you don't care about what's on the host, just pass through your motherboard's built in audio device (along with every other device in that IOMMU group). The audio on this will be great, bit passing through that much of your motherboard may give you problems.
+
+# Tips and tricks
+
+Listed below are a few tips and tricks I've learned in the 6 months since I've been using this setup full time.
+
+## System image & backup
+
+Take a full backup of your disk image. If you're using a RAW image, copy it to an external hard drive, or use Window's built in System Image tool. Re-installing Windows and all the software you installed is not a productive use of your time. In the event your configuration gets screwed up, recovering from a full system image backup is relatively painless process if you're using it.
+
+My advice for Windows System Images is to store them on an external hard drive, and take a full backup as often as you deem necessary. In my case I like to take a full backup after each major software installation, and before and after each graphics card update.
+
+1. Boot into your Windows 10 installer ISO, then launch recovery.
+2. Launch Command Prompt, then load your VirtIO storage driver:
+
+    ```
+    drvload D:\viostor\w10\amd64\viostor.inf
+    ```
+3. Close Command Prompt, then choose the option to recover Windows from a backup. Select the backup you previously made then wait for the restore to finish.
 
 ## Overclocking
 
-## Driver installation
+Windows 10 will inherit whatever CPU clockspeed you set in your BIOS. Test using Cinebench or other tools to ensure you have a stable overclock.
+
+Personally, I prefer checking the overclock on the host using something that will take a while to compile and that will consume all threads. The best non-benchmarking tool I've found is to simply compile Swift4. If I can compile Swift 3 times in a row from a clean slate without a crash then the overclock is stable.
+
+## Graphics driver installation
+
+Graphics driver updates are scary due to their unique ability to hose a perfectly working system. My current approach with my AMD card is as follows:
+
+1. Download the updated graphics driver from AMD's website.
+2. Use the AMD clean uninstall tool.
+3. Reboot
+4. Install the new driver from the previously download driver package.
+5. Reboot and check stability.
+
+If you encounter instability, rollback to the previously driver. If you lose graphics ever after rolling back to the previous driver, restore from a full system image.
 
 ## Fixing AppArmor after kernel upgrade
 
+Unlike everything else in the Linux ecosystem, AppArmor is still as obnoxious as the day it was introduced. Upgrading your kernel will almost certainly break something either with libvirt itself, or with other parts of your system.
+
+If you do encounter issues booting your VM (or anything else), reading the logs and running `dmesg -w` will help you identify what the problem is. If AppArmor is throwing `DENIED` errors, you have a permissions problem _somewhere_ in AppArmor.
+
+AppArmor's error messages _aren't_ the best, so you may need to do some hunting before you find out the real culprit of your problems.
+
+The two problems I encountered are listed below:
+
+### Libvirt
+
+Libvirt is most likely going to complain about ptrace problems. Check that your `/etc/apparmor/abstractions/libvirt-qemu` has `ptrace (readby, tracedby) peer=/usr/sbin/libvirtd,` somewhere in the file, then restart AppArmor.
+
+### Snap Apps
+
+Snap has oustanding issues with AppArmor on newer kernels. The _easiest_ solution is to upgrade snap core to the Beta channel which fixes ptrace issues with AppArmor.
+
+```
+sudo snap refresh core --beta
+```
+
+> See: https://forum.snapcraft.io/t/custom-kernel-error-on-readlinkat-in-mount-namespace/6097/33
+
 # Useful scripts & tools
+
+Listed below are a few useful tools and scripts I used during this process.
 
 ## Determining IOMMU groupings
 
@@ -653,3 +1133,7 @@ Bus 8 --> 0000:0a:00.3 (IOMMU group 20)
 Bus 008 Device 002: ID 2109:0813 VIA Labs, Inc.
 Bus 008 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
 ```
+
+# XML
+
+For reference, my current XML is available at [windows10-vfio.xml](/windows10-vfio.xml)
