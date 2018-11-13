@@ -5,10 +5,10 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <link rel="stylesheet"
     {{ if eq (getenv "HUGO_ENV") "production" }}
-        href="{{ .Site.Data.assets.main.assets.main.css }}" integrity="sha384-{{ .Site.Data.assets.main.sri.css }}" 
+        href="{{ .Site.Data.assets.main.assets.main.css }}" integrity="sha384-{{ .Site.Data.assets.main.sri.css }}"
     {{ else }}
         href="http://127.0.0.1:8080{{ .Site.Data.assets.main.assets.main.css }}"
-    {{ end }} 
+    {{ end }}
     nonce="__CSP_NONCE__" />
 
 
@@ -21,8 +21,8 @@
         (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
         m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
         })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-        
+
         ga('create', 'UA-21577234-3', 'auto');
         ga('send', 'pageview');
     </script>
-{{ end }} 
+{{ end }}

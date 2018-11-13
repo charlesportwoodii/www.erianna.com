@@ -16,8 +16,6 @@ import 'highlight.js/styles/railscasts.css';
     hljs.registerLanguage(langName, langModule);
 });
 
-import LazyLoad from "vanilla-lazyload";
-
 class Erianna {
     constructor() {
         document.addEventListener('DOMContentLoaded', this.domReady.bind(this));
@@ -31,10 +29,6 @@ class Erianna {
         }
 
         hljs.initHighlightingOnLoad();
-
-        new LazyLoad({
-            elements_selector: ".lazy"
-        });
     }
 }
 

@@ -21,7 +21,7 @@ On Linux, the standard set of tools of performing full disk encryption is called
 On Ubuntu 12.10 and later, encrypting your primary hard disk is as simple as selecting the "Encrypt the new Ubuntu installation for security when the installer runs.
 
 <center>
-![Ubuntu Full Disk Encryption](https://assets.erianna.com/ac8717444f85d57c67f5c4e8e0d1ff76.png)
+![Ubuntu Full Disk Encryption](https://assets.erianna.com/ac8717444f85d57c67f5c4e8e0d1ff76.webp)
 </center>
 
 Secondary or external disks however, require some more manual work to get setup.
@@ -69,7 +69,7 @@ After encrypting the drive, we'll need to open it to start setting up our LVM an
 # cryptsetup luksOpen /dev/sd?X sd?X_crypt
 ```
 
-Next, we'll setup LVM and EXT4 on the drive. For this we'll be using the standard LVM tools. 
+Next, we'll setup LVM and EXT4 on the drive. For this we'll be using the standard LVM tools.
 
 First we'll create our physical volume and volume group, then we'll tell LVM to use the entire disk for LVM, then we'll format the newly created volume to EXT4.
 
