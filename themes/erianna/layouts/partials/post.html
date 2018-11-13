@@ -7,7 +7,7 @@
     </header>
     {{ if isset .Params "image" }}
         <a href="{{ .Permalink }}" class="image featured">
-            <img src="{{ .Params.image }}" alt="" />
+            <img src="{{ .Params.image }}" alt="" crossorigin="anonymous"/>
         </a>
     {{ end }}
     <div id="content"  itemprop="articleBody">
@@ -17,6 +17,6 @@
         <ul class="stats">
             <li>{{ .WordCount }} Words</li>
             <li>{{ .ReadingTime }} minutes</li>
-        </ul>        
+        </ul>
     </footer>
 </article>

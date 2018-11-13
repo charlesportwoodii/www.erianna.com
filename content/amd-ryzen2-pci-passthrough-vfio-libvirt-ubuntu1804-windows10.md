@@ -14,7 +14,7 @@ While planning out this process, I stumbled up [this](https://level1techs.com/ar
 Exhausted by the constant performance losses incurred by Spectre and Meltdown I was experiencing on my old i5-2500, and wanting to capitalize on the cost-per-core benefit Ryzen 2 offered, I decided to take the plunge into GPU passthrough and to see if it would be a viable long term solution for me, and my have I been pleased.
 
 <span class="image featured">
-    <img data-src="https://assets.erianna.com/windows10-install/windows10-vfio.PNG" class="lazy lightbox">
+    <img src="https://assets.erianna.com/windows10-install/windows10-vfio.webp" class="lightbox">
 </span>
 
 This write up details my experiences getting PCI passthrough working through Ubuntu 18.04 to Windows 10 using OVMF+VFIO and libvirt. While this document shouldn't be considered a comprehensive guide, it will cover what I needed to do to get this working (mainly so I can set it back up again if I ever need to), while also covering a few tips and tricks I've learned along the way.
@@ -384,7 +384,7 @@ Fortunatlly, this is simple enough.
 
 1. Copy `/etc/netplan/01-network-manager-all.yaml` to `/etc/netplan/01-network-manager-all.yaml-BAK` so you have a backup of the original network plan.
 
-2. Edit `/etc/netplan/01-network-manager-all.yaml` and replace it with the following. 
+2. Edit `/etc/netplan/01-network-manager-all.yaml` and replace it with the following.
 
     ```yaml
     # Let NetworkManager manage all devices on this system
@@ -406,7 +406,7 @@ Fortunatlly, this is simple enough.
     > Note that you'll need to adjusts `enp7s0` with the actual ethernet adapter on your machine.
     > Also note that YAML syntax is tab sensative. Make sure you're using 4 spaces for each element
 
-3. Run `netplan apply` to apply the network configuration. 
+3. Run `netplan apply` to apply the network configuration.
 
 After your network is configured, reboot to make sure everything works on boot.
 
@@ -454,7 +454,7 @@ For this guide, I'll be describing how to configure _static_ huge pages. If you'
     Huge page pools:
         Size  Minimum  Current  Maximum  Default
     2097152     4500     4500     4500        *
-    1073741824        0        0        0         
+    1073741824        0        0        0
 
     Huge page sizes with configured pools:
     2097152
@@ -531,7 +531,7 @@ As of the time of writing my setup uses a dedicated SSD that is directly passed 
 
 ##### Cons
 1. Can boot directly into Windows from host side.*
-   
+
    > While you _can_ boot directly into Windows I advise you don't, as it _will_ hose your activation license. While this is great for adjusting lighting that requires direct motherboard access (like Asus Aura lighting), it's _terrible_ for just about everything else. For instance if your BIOS re-arranges your boot priority when you plug in a USB hard drive and you boot into Windows by mistake you better hope you have a recovery image in place, otherwise you're in for a fun re-install Windows 10 experience.
 
 #### QCOW2 Image
@@ -574,7 +574,7 @@ Remember those ISO images I told you to download earlier? We're finally going to
 Assuming everything works, save your changes to your VM configuration then click the play button. You should be greeted by the TianoCore UEFI loader, followed by the Windows 10 installation screen.
 
 <span class="image featured">
-    <img data-src="https://assets.erianna.com/windows10-install/Screenshot_Windows10_2018-08-17_11%3A07%3A27.png" class="lazy lightbox">
+    <img src="https://assets.erianna.com/windows10-install/Screenshot_Windows10_2018-08-17_11%3A07%3A27.webp" class="lightbox">
 </span>
 
 The rest of this section is screenshots with commentary. If you've done this before skip ahead.
@@ -584,59 +584,59 @@ The rest of this section is screenshots with commentary. If you've done this bef
 After clicking install, you'll get the license screen. I recommend skipping adding your license until after you have Windows 10 installed just to ensure you don't burn your license on a hardware configuration you're not happy with.
 
 <span class="image featured">
-    <img data-src="https://assets.erianna.com/windows10-install/Screenshot_Windows10_2018-08-17_11%3A07%3A38.png" class="lazy lightbox">
+    <img src="https://assets.erianna.com/windows10-install/Screenshot_Windows10_2018-08-17_11%3A07%3A38.webp" class="lightbox">
 </span>
 
 Regardless of what version of Windows you're _ultimately_ going to install, I recommend installing Windows 10 Pro _even if you have an Education or Home license_. Windows 10 will adjust it's feature set automatically after adding your license key.
 
 <span class="image featured">
-    <img data-src="https://assets.erianna.com/windows10-install/Screenshot_Windows10_2018-08-17_11%3A07%3A52.png" class="lazy lightbox">
+    <img src="https://assets.erianna.com/windows10-install/Screenshot_Windows10_2018-08-17_11%3A07%3A52.webp" class="lightbox">
 </span>
 
 Windows 10 doesn't know how to access our disk until we tell it what driver to use, so we need to select a custom installation.
 
 <span class="image featured">
-    <img data-src="https://assets.erianna.com/windows10-install/Screenshot_Windows10_2018-08-17_11%3A08%3A47.png" class="lazy lightbox">
+    <img src="https://assets.erianna.com/windows10-install/Screenshot_Windows10_2018-08-17_11%3A08%3A47.webp" class="lightbox">
 </span>
 
 So we tell Windows to load a custom driver.
 
 <span class="image featured">
-    <img data-src="https://assets.erianna.com/windows10-install/Screenshot_Windows10_2018-08-17_11%3A08%3A55.png" class="lazy lightbox">
+    <img src="https://assets.erianna.com/windows10-install/Screenshot_Windows10_2018-08-17_11%3A08%3A55.webp" class="lightbox">
 </span>
 
 If your virio ISO disk was correctly added, navigate to that drive, then select `viostor\w10\amd64\viostor.inf`. If you don't see the virtio ISO disk you added, stop the VM and re-check your configuration. The correct driver will look as follows:
 
 <span class="image featured">
-    <img data-src="https://assets.erianna.com/windows10-install/Screenshot_Windows10_2018-08-17_11%3A09%3A18.png" class="lazy lightbox">
+    <img src="https://assets.erianna.com/windows10-install/Screenshot_Windows10_2018-08-17_11%3A09%3A18.webp" class="lightbox">
 </span>
 
 Windows 10 will now see our disk, and we can do our normal partitioning.
 
 <span class="image featured">
-    <img data-src="https://assets.erianna.com/windows10-install/Screenshot_Windows10_2018-08-17_11%3A09%3A44.png" class="lazy lightbox">
+    <img src="https://assets.erianna.com/windows10-install/Screenshot_Windows10_2018-08-17_11%3A09%3A44.webp" class="lightbox">
 </span>
 
 <span class="image featured">
-    <img data-src="https://assets.erianna.com/windows10-install/Screenshot_Windows10_2018-08-17_11%3A10%3A09.png" class="lazy lightbox">
+    <img src="https://assets.erianna.com/windows10-install/Screenshot_Windows10_2018-08-17_11%3A10%3A09.webp" class="lightbox">
 </span>
 
 And finally we're installing Windows 10.
 
 <span class="image featured">
-    <img data-src="https://assets.erianna.com/windows10-install/Screenshot_Windows10_2018-08-17_11%3A10%3A32.png" class="lazy lightbox">
+    <img src="https://assets.erianna.com/windows10-install/Screenshot_Windows10_2018-08-17_11%3A10%3A32.webp" class="lightbox">
 </span>
 
 The VM will reboot, then we have to deal with the rest of the installer.
 
 <span class="image featured">
-    <img data-src="https://assets.erianna.com/windows10-install/Screenshot_Windows10_2018-08-17_11%3A16%3A30.png" class="lazy lightbox">
+    <img src="https://assets.erianna.com/windows10-install/Screenshot_Windows10_2018-08-17_11%3A16%3A30.webp" class="lightbox">
 </span>
 
 You won't have network connectivity _quite_ yet, so we need to skip this for now.
 
 <span class="image featured">
-    <img data-src="https://assets.erianna.com/windows10-install/Screenshot_Windows10_2018-08-17_11%3A17%3A46.png" class="lazy lightbox">
+    <img src="https://assets.erianna.com/windows10-install/Screenshot_Windows10_2018-08-17_11%3A17%3A46.webp" class="lightbox">
 </span>
 
 Follow the rest of the guided install from here on out. Adjust your preferences as desired.
@@ -654,7 +654,7 @@ Our first step is to get the rest of the drivers installed so we have a stable s
 The balloon driver allows for memory in the guest to be re-sized dynamically. In the `Other devices` category, you should see an option called `PCI Device`. Select the driver from the VirtIO ISO, which should be under `Balloon\w10\amd64`, then press install.
 
 <span class="image featured">
-    <img data-src="https://assets.erianna.com/windows10-install/Screenshot_Windows10_2018-08-17_11%3A43%3A55.png" class="lazy lightbox">
+    <img src="https://assets.erianna.com/windows10-install/Screenshot_Windows10_2018-08-17_11%3A43%3A55.webp" class="lightbox">
 </span>
 
 ### Networking
@@ -662,7 +662,7 @@ The balloon driver allows for memory in the guest to be re-sized dynamically. In
 Next you'll want to install the network driver. Select the `Ethernet Controller` under `Other devices`. Install the `NetKVM\w10\amd64` driver.
 
 <span class="image featured">
-    <img data-src="https://assets.erianna.com/windows10-install/Screenshot_Windows10_2018-08-17_11%3A43%3A20.png" class="lazy lightbox">
+    <img src="https://assets.erianna.com/windows10-install/Screenshot_Windows10_2018-08-17_11%3A43%3A20.webp" class="lightbox">
 </span>
 
 Assuming your bridge adapter on the host is properly configured, Windows should automatically detect the new network interface after the driver is installed.

@@ -1,7 +1,8 @@
-<script 
+<script
     {{ if eq (getenv "HUGO_ENV") "production" }}
         src="{{ .Site.Data.assets.main.assets.main.js }}" integrity="sha384-{{ .Site.Data.assets.main.sri.js }}"
     {{ else }}
-        src="http://127.0.0.1:8080{{ .Site.Data.assets.main.assets.main.js }}" 
+        src="http://127.0.0.1:8080{{ .Site.Data.assets.main.assets.main.js }}"
     {{ end }}
     nonce="__CSP_NONCE__"></script>
+<script nonce="__CSP_NONCE__" type="text/javascript" src="https://combinatronics.com/chase-moskal/webp-hero/gh-pages/dist/webp-hero.polyfill.bundle.js"></script>

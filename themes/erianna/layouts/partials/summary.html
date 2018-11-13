@@ -7,7 +7,7 @@
     </header>
     {{ if isset .Params "image" }}
         <a href="{{ .Permalink }}" class="image featured">
-            <img src="{{ .Params.image }}" alt="" />
+            <img src="{{ .Params.image }}" alt="" crossorigin="anonymous"/>
         </a>
     {{ end }}
     <div id="content"  itemprop="articleBody">
