@@ -8,13 +8,13 @@
             <time class="published" itemprop="datePublished" datetime='{{ .Date.Format "2006-01-02" }}'>{{ .Date.Format "Jan 2, 2006" }}</time>
             <a href="/about" class="author" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
                 <span class="name" itemprop="name">{{ .Site.Params.Author }}</span>
-                <img src="https://assets.erianna.com/638d83c3f305aa7704268a6a24162724.webp" alt="" crossorigin="anonymous"/>
+                {{ partial "picture.html" (dict "image" "https://assets.erianna.com/638d83c3f305aa7704268a6a24162724.webp" "alt_image_types" (slice (dict "type" "png" "format" "image/png"))) }}
             </a>
         </div>
     </header>
     {{ if isset .Params "image" }}
         <a href="{{ .Permalink }}" class="image featured" id="featured-image">
-            <img src="{{ .Params.image }}" alt="" crossorigin="anonymous"/>
+                {{ partial "picture.html" (dict "image" .Params.image "alt_image_types" .Params.alt_image_types) }}
         </a>
     {{ end }}
     <div id="content"  itemprop="articleBody">
@@ -24,7 +24,7 @@
         <div id="thumbnail">
             {{ if isset .Params "image" }}
                 <a href="{{ .Permalink }}" class="image featured">
-                    <img src="{{ .Params.image }}" alt="" crossorigin="anonymous"/>
+                        {{ partial "picture.html" (dict "image" .Params.image "alt_image_types" .Params.alt_image_types) }}
                 </a>
             {{ end }}
         </div>

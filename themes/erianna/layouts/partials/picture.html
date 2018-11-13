@@ -1,0 +1,10 @@
+<picture>
+    <source srcset="{{ .image }}" crossorigin="anonymous" type="image/webp">
+    {{ $image := .image }}
+    {{ range $i, $img := .alt_image_types }}
+        <source srcset="{{ replace $image "webp" $img.type }}" crossorigin="anonymous" type="{{ $img.format }}">
+            {{ if eq $i 0 }}
+                <img src="{{ replace $image "webp" $img.type }}" crossorigin="anonymous">
+            {{ end }}
+    {{ end }}
+</picture>

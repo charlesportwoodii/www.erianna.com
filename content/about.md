@@ -11,7 +11,10 @@ My name is Charles R. Portwood II. I am a multi-diciplinary software developer a
 ## Behind the name "Erianna"
 
 <span class="image featured">
-    <img src="https://assets.erianna.com/upload-31b8519b9e308409f3cfbe864e2bf375.webp" />
+    <picture>
+        <source srcset="https://assets.erianna.com/upload-31b8519b9e308409f3cfbe864e2bf375.webp" crossorigin="anonymous" type="image/webp">
+        <img src="https://assets.erianna.com/upload-31b8519b9e308409f3cfbe864e2bf375.jpg" />
+    </picture>
 </span>
 
 In the fictional universe of [Terah Lai Shorehn](terah-lai-shorehn) (TLS) that I am authoring, Erianna is the name of the planet and super-continent that the majority of the stories and events take place on. TLS is an attempt to redefine the fantasy genre by mixing elements of both hard science ficture and Tolkien-esq high fantasy in a way that enables both elements to co-exist with one another.

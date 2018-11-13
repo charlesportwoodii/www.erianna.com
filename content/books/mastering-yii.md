@@ -16,6 +16,9 @@ pages: 380
 amazon: https://www.amazon.com/Mastering-Yii-Charles-R-Portwood/dp/1785882422
 packt: https://www.packtpub.com/web-development/mastering-yii
 image: https://assets.erianna.com/mastering_yii_cover.webp
+alt_image_types:
+    - type: jpg
+      format: image/jpeg
 ---
 ## About this book
 - Learn to work with the key aspects of Yii Framework 2
