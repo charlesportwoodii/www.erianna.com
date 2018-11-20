@@ -2,6 +2,7 @@
 title: "AMD Ryzen 2 PCI Passthrough with OVMF+VFIO and libvirt on Ubuntu 18.04 to Windows 10"
 description: "Information for getting PCI passthrough working between Ubuntu 18.04 and Windows 10 using OVMF, VFIO, and Libvirt"
 date: 2018-09-07T09:00:00-05:00
+lastmod: 2018-11-20T13:00:00-05:00
 slug: "amd-ryzen2-pci-passthrough-vfio-libvirt-ubuntu1804-windows10"
 draft: false
 type: "blog"
@@ -524,9 +525,9 @@ A RAW image on a dedicated SSD is going to get you near native performance with 
 1. Bare metal disk will net faster disk IO, as requests go directly to the disk instead of through the Linux VM.
 2. Can't do live-migrations. KVM offers a feature with QCOW2 images that allow you to migrate data between storage mediums while the VM is active.
 
-#### Dedicated SSD
+> As of November 2018 I am now using a raw image on an encrypted LUKS volume instead of a dedicated SSD.
 
-As of the time of writing my setup uses a dedicated SSD that is directly passed through, though I am seriously considering moving to a RAW image file on a LUKS volume.
+#### Dedicated SSD
 
 ##### Pros
 1. Bare metal performance can't be beat.
@@ -536,6 +537,8 @@ As of the time of writing my setup uses a dedicated SSD that is directly passed 
 1. Can boot directly into Windows from host side.*
 
    > While you _can_ boot directly into Windows I advise you don't, as it _will_ hose your activation license. While this is great for adjusting lighting that requires direct motherboard access (like Asus Aura lighting), it's _terrible_ for just about everything else. For instance if your BIOS re-arranges your boot priority when you plug in a USB hard drive and you boot into Windows by mistake you better hope you have a recovery image in place, otherwise you're in for a fun re-install Windows 10 experience.
+
+> Before November 2018 I was using a physical SSD.
 
 #### QCOW2 Image
 

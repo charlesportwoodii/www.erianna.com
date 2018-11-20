@@ -28,7 +28,6 @@ ln -s /var/lib/bind /etc/bind/zones
 
 After doing this, you’ll need to update `/etc/bind/named.conf.local` so that your zone files point to `/var/lib/bind`.
 
-
 The reason we need to do this, is because when nsupdate tries to run, AppArmor will prevent the bind journal file from being created. By moving our zones files outside of /etc/bind, the system will allow our journal files to be created.
 
 ## Creating our Secure DNS Keys
@@ -39,6 +38,8 @@ Run the following command to generate your TSIG keys. Be sure to replace example
 dnssec-keygen -a HMAC-SHA256 -b 128 -n HOST example.com.
 ```
 
+> The period `.` at the end of the `dnssec-keygen` command is not a type. You must include this period for the TSIG key to be properly generated.
+
 This will generate two files:
 
 ```bash
@@ -46,9 +47,10 @@ This will generate two files:
 -rw-r--r-- 1 root bind 229 Mar  6 21:56 Kexample.com.+127+24536.private
 ```
 
-I recommend immediately altering the permissions to ensure they are readable by both Bind and root.
+These keys should be readable only by the root user and the bind group. Update the permissions as follows:
 
 ```bash
+chown root:bind Kexample.com*
 chmod -R 640 Kexample.com*
 ```
 
@@ -58,7 +60,7 @@ Feel free to look through both files. What we really care about is the contents 
 cat Kexample.com.+127+24536.key
 ```
 
-The part that we care about is the long string at the end. This is our key.
+The part that we care about is the base64 encoded string at the end. This is our key.
 
 ```bash
 example.com. IN KEY 512 3 157 z4PhNX7vuL3xVChQ1m2AB9Yg5AULVxXcg/SpIdNs6c5H0NE8XYXysP+DGNKHfuwvY7kxvUdBeoGlODJ6+SfaPg==
@@ -68,7 +70,7 @@ Open up` /etc/bind/named.conf.local` and add the following section. Be secure to
 
 ```bash
 key "example.com." {
-  algorithm hmac-md5;
+  algorithm hmac-sha256;
   secret "z4PhNX7vuL3xVChQ1m2AB9Yg5AULVxXcg/SpIdNs6c5H0NE8XYXysP+DGNKHfuwvY7kxvUdBeoGlODJ6+SfaPg==";
 };
 ```
@@ -86,7 +88,7 @@ zone "example.com" {
 Save and close the files, then restart bind service.
 
 ```bash
-service bind9 restart
+systemctl restart bind9
 ```
 
 Assuming everything went well and you have no typos, bind should restart without a problem. Just a precaution, make sure that you check your bind log (`/var/log/syslog`) to make sure there weren’t any errors.
@@ -104,9 +106,9 @@ nsupdate -k Kexample.com.+127+24536.key
 You’ll then be dropped to an nsupdate prompt where you can type nsupdate commands directly. Be sure to replace your items appropriately. Here is a brief explaination of the important items:
 
 ```bash
-    server ns1.example.com                   # This is your DNS server hostname or IP address.
-    zone example.com.                          # This is the zone we want to update. Be mindful of the period at the end. It's important
-#  update [add|delete] fqdn                               TTL Record Type  Record       
+    server ns1.example.com                      # This is your DNS server hostname or IP address.
+    zone example.com.                           # This is the zone we want to update. Be mindful of the period at the end. It's important
+#   update [add|delete] fqdn                    # TTL Record Type  Record
     update add            subdomain.example.com 60   A                  127.0.0.1
 ```
 
@@ -116,7 +118,7 @@ The update command can take a variety of forms and work with any type of record 
     server ns1.example.com
     debug yes
     zone example.com.
-    update add subdomain.example.com 60 A 127.0.0.1 
+    update add subdomain.example.com 60 A 127.0.0.1
     show
     send
 ```
@@ -165,15 +167,14 @@ $NSUPDATE -k /var/lib/bindKexample.com.+127+24536.key -v /tmp/nsupdate 2>&1
 The reason I made this post is to hopefully eliminate most of the troubleshooting. The biggest issues that you’ll run into are either issued with AppArmor preventing the journal file being create, or TSIG errors.
 
 1. If you run into issues with AppArmor, see the very first section of this guide.
-2. If you get TSIG errors
-
+2. If `nsupdate` returns a TSIG transfer error like the following:
     ```bash
     request has invalid signature: TSIG transfer: tsig verify failure (BADSIG)
     ```
 
-    Then you’re key is messed up. I recommend starting this guide over and carefully re-reading all of the instructions and notes. The biggest issue I had when getting this setup was that I wasn’t adding a (.) period to the end of my dnssec-keygen command, which was messing things up. Other things you may want to check are
+    Then the generated key isn't valid. I recommend starting this guide over and carefully re-reading all of the instructions and notes. The biggest issue I had when getting this setup was that I wasn’t adding a (.) period to the end of my `dnssec-keygen` command, which resulted in an incorrectly generated key. Other things to check are:
 
-    - Verifying the key was copied correctly to your key section of /etc/bind/named.conf.local
-    - Verify your allow-update section specifies the right key
+    - Verifying the key was copied correctly to your key section of `/etc/bind/named.conf.local`.
+    - Verify your allow-update section specifies the right key.
 
-If this guide helped your out at all, or your have any questions or comments I’d love to hear from you. Be sure to sign up and leave a comment below!
+If this guide helped your out at all, or your have any questions or comments I’d love to hear from you.

@@ -6,7 +6,7 @@ slug: "about"
 draft: false
 type: "page"
 ---
-My name is Charles R. Portwood II. I am a multi-diciplinary software developer and systems engineer with an experience in several programming languages, hosting services, and development methodologies. With my expertise I provide consultation on API, native (mobile), and web development.
+My name is Charles R. Portwood II. I am a multi-diciplinary software developer and systems engineer with an experience in several programming languages, hosting services, embedded software, and development methodologies. I provide consultation with specializations in architecture design and implementation; API, mobile, and web development; security; and cryptography.
 
 ## Behind the name "Erianna"
 
@@ -17,14 +17,11 @@ My name is Charles R. Portwood II. I am a multi-diciplinary software developer a
     </picture>
 </span>
 
-In the fictional universe of [Terah Lai Shorehn](terah-lai-shorehn) (TLS) that I am authoring, Erianna is the name of the planet and super-continent that the majority of the stories and events take place on. TLS is an attempt to redefine the fantasy genre by mixing elements of both hard science ficture and Tolkien-esq high fantasy in a way that enables both elements to co-exist with one another.
-
+In the fictional universe of [Terah Lai Shorehn](/terah-lai-shorehn) (TLS) that I am authoring, Erianna is the name of the planet and super-continent that the majority of the stories and events take place on. TLS is an attempt to redefine the fantasy genre by mixing elements of both hard science ficture and Tolkien-esq high fantasy in a way that enables both elements to co-exist with one another.
 
 ## Let's get in touch!
 
-If you're like to connect with me, or are just interested in chatting - use the social icons to your left (or below if you are on a mobile device).
-
-I look forward to connecting with you.
+If you're like to connect with me, or are just interested in chatting - use the social icons to your left (or below if you are on a mobile device). I look forward to connecting with you.
 
 ### I need to contact you securely
 
