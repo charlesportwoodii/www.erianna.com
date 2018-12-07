@@ -20,6 +20,30 @@ curl -qs https://gist.githubusercontent.com/charlesportwoodii/2253f1e82b60c7334b
 
 This RSA key is signed using my primary Ed25519 key. It's authenticity can be verified in the following Github Gist: https://gist.github.com/charlesportwoodii/2253f1e82b60c7334b78a012c2d2beea.
 
+### Alpine 3.8
+
+The Alpine 3.8 repository is broken into a `main` and `test` repository.
+
+### Main
+
+After the RSA key has been added, the `main` repository can be installed by running the following commands:
+
+```bash
+sh -c 'echo "https://apk.erianna.com/v3.8/main" | tee -a /etc/apk/repositories'
+apk update
+```
+
+### Test
+
+After the RSA key has been added, the `test` repository can be installed by running the following commands:
+
+```bash
+sh -c 'echo "https://apk.erianna.com/v3.8/test" | tee -a /etc/apk/repositories'
+apk update
+```
+
+> Note that the `test` repository contains packages that are not suitable for production usage.
+
 ### Alpine 3.7
 
 The Alpine 3.7 repository is broken into a `main` and `test` repository.
