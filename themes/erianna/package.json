@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack-dev-server --color --config ./webpack.config.js",
     "build": "webpack -p --verbose --profile --config ./webpack.config.js --color --display-error-details; yarn run sri;",
-    "sri": "echo \"---\njs: $(shasum -b -a 256 ./static/js/*.js | xxd -r -p | base64)\ncss: $(shasum -b -a 256 ./static/css/*.css | xxd -r -p | base64)\n\" > ./data/assets/main/sri.yml"
+    "sri": "echo \"---\njs: $(echo  ./static/js/*.js | openssl dgst -sha384 -binary | openssl base64 -A)\ncss: $(echo ./static/css/*.css | openssl dgst -sha384 -binary | openssl base64 -A)\n\" > ./data/assets/main/sri.yml"
   },
   "author": "Charles R. Portwood II <charlesportwoodii@erianna.com>",
   "devDependencies": {

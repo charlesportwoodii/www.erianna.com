@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <link rel="stylesheet"
     {{ if eq (getenv "HUGO_ENV") "production" }}
-        href="{{ .Site.Data.assets.main.assets.main.css }}" integrity="sha256-{{ .Site.Data.assets.main.sri.css }}"
+        href="{{ .Site.Data.assets.main.assets.main.css }}" integrity="sha384-{{ .Site.Data.assets.main.sri.css }}"
     {{ else }}
         href="http://127.0.0.1:8080{{ .Site.Data.assets.main.assets.main.css }}"
     {{ end }}
