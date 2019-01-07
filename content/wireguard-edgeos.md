@@ -22,11 +22,13 @@ Once you can SSH into your router, download the appropriate DEB package from htt
 cd /tmp
 
 # Download the appropriate version
-curl https://github.com/Lochnair/vyatta-wireguard/releases/download/0.0.20180802-1/wireguard-e50-0.0.20180802-1.deb -o wireguard.deb
+curl -qLs https://github.com/Lochnair/vyatta-wireguard/releases/download/0.0.20180802-1/wireguard-e50-0.0.20180802-1.deb -o wireguard.deb
 sudo dpkg -i wireguard.deb
 ```
 
 Once Wireguard is installed on your router it can be configured via the standard Vyatta interface.
+
+> Note that since Wireguard is not software bundled with the EdgeOS firmware, firmware upgrades necessitate re-installing the Wireguard debian package. Once the wireguard package is re-installed re-applying the existing Vyatta config file, or rebooting will restore your interfaces.
 
 Your first step is to generate a private key for your router, and to generate a public key which you can distribute to clients.
 
