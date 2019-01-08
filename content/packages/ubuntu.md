@@ -26,7 +26,7 @@ Pin: origin apt.erianna.com
 Pin-Priority: 600
 ```
 
-## Bionic 
+## Bionic
 
 The `Bionic` repository can be added to your system by running the following commands:
 
@@ -45,7 +45,7 @@ curl -qs https://www.erianna.com/key.asc | apt-key add -;
 apt update;
 ```
 
-## Xenial 
+## Xenial
 
 The `Xenial` repository can be added to your system by running the following commands:
 
@@ -70,7 +70,7 @@ curl -qs https://www.erianna.com/key.asc | apt-key add -;
 apt-get update;
 ```
 
-## Trusty 
+## Trusty
 
 The `Trusty` repository can be added to your system by running the following commands:
 
