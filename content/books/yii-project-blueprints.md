@@ -3,6 +3,7 @@ title: "Yii Project Blueprints"
 date: 2014-09-25T00:00:00-00:00
 slug: "yii-project-blueprints"
 description: From conception to production, learn how to develop real-world applications with the Yii framework
+keywords: "Yii Project Blueprints,Book,Packt,Amazon"
 inline: |
     The Yii framework is a high-performance, fast, open source, and a rapid development PHP framework that can be used to develop modern web applications. It provides the toolkit for developing both personal projects and enterprise applications. Yii’s component-based architecture lets developers build modules so that they aren’t customizing the underlying code base and so that anything they build is easy to use in different projects.
 

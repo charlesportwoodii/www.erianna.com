@@ -7,6 +7,7 @@ slug: "github"
 draft: false
 image: https://assets.erianna.com/github.svg
 description: "Source repositories for supported software packages"
+keywords: "Github,Gitlab,Repositories"
 package_list:
     - { name: "php-fpm-build" , display_name: "PHP FPM", versions: "5.6, 7.0, 7.1, 7.2, 7.3" }
     - { name: "nginx-build" , display_name: "Nginx", versions: "stable, mainline" }

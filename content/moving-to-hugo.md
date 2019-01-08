@@ -1,6 +1,7 @@
 ---
 title: "Moving to Hugo"
 description: "Migrating my personal blog from CiiMS to Hugo"
+keywords: ""
 date: 2017-09-04T10:59:40-05:00
 slug: "moving-to-hugo"
 draft: false

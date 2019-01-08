@@ -1,6 +1,7 @@
 ---
 title: "AMD Ryzen 2 PCI Passthrough with OVMF+VFIO and libvirt on Ubuntu 18.04 to Windows 10"
 description: "Information for getting PCI passthrough working between Ubuntu 18.04 and Windows 10 using OVMF, VFIO, and Libvirt"
+keywords: "VFIO,PCI passthrough,GPU passthrough,OVMF,Libvirt"
 date: 2018-09-07T09:00:00-05:00
 lastmod: 2018-11-20T13:00:00-05:00
 slug: "amd-ryzen2-pci-passthrough-vfio-libvirt-ubuntu1804-windows10"

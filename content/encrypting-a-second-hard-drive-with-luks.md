@@ -1,6 +1,7 @@
 ---
 title: "Adding a Secondary Encrypted Hard Drive with LVM & LUKS on Ubuntu"
 description: "A guide to encrypting a second drive on Ubuntu with LVM"
+keywords: "LUKS,Ubuntu,Encryption,Hard Disk"
 date: 2018-07-21T13:50:00-05:00
 slug: "adding-an-secondary-encrypted-drive-with-lvm-to-ubuntu-linux"
 draft: false

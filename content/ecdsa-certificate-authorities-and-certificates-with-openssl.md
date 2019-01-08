@@ -1,6 +1,7 @@
 ---
 title: "ECDSA Certificate Authorities and Certificates With OpenSSL"
 description: "Everything you wanted to know about generating the next generation of public key ECC ECDSA certificates and certificate authorities with OpenSSL."
+keywords: "OpenSSL,ECDSA,ECC,Eliptical Curve Cryptography,Cryptography"
 date: 2015-05-07T23:00:00-05:00
 draft: false
 type: "blog"

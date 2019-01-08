@@ -1,6 +1,7 @@
 ---
 title: "Dynamic DNS with Bind9"
 description: "Correctly implementing Dynamic DNS updates with nsupdate and Bind9"
+keywords: "Dynamic DNS,Bind9,nsupdate"
 date: 2013-03-18T21:29:00-05:00
 lastmod: 2018-09-08T18:01:09-05:00
 draft: false

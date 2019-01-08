@@ -7,6 +7,7 @@ slug: "docker"
 draft: false
 image: https://assets.erianna.com/docker.svg
 description: "Docker images based on Alpine Linux"
+keywords: "Docker"
 docker_images:
   - { namespace: "charlesportwoodii", repo: "php", tag: "7.0" }
   - { namespace: "charlesportwoodii", repo: "php", tag: "7.1" }

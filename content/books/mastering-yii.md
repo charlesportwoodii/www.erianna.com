@@ -2,6 +2,7 @@
 title: "Mastering Yii"
 date: 2016-01-28T00:00:00-00:00
 description: Advance your modern web application development skills with Yii Framework 2
+keywords: "Mastering Yii,Book,Packt,Amazon"
 inline: |
     The successor of Yii Framework 1.1, Yii2 is a complete rewrite of Yii Framework, one of the most popular PHP 5 frameworks for making modern web applications. The update embraces the best practices and protocols established with newer versions of PHP, while still maintaining the simple, fast, and extendable behavior found in its predecessor.
 

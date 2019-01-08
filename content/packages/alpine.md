@@ -7,6 +7,7 @@ slug: "alpine-linux"
 draft: false
 image: https://assets.erianna.com/alpine.svg
 description: "Software packages for Alpinx Linux"
+keywords: "Alpine Linux,Alpine"
 ---
 
 ## ALpine Linux

@@ -7,6 +7,7 @@ slug: "ubuntu"
 draft: false
 image: https://assets.erianna.com/ubuntu.svg
 description: "Software Packages for Ubuntu"
+keywords: "Ubuntu"
 ---
 
 The new apt repository (apt.erianna.com) currently supports Trusty (14.04), Xenial (16.04),, and Bionic (18.04) packages across two distributions: main and test. The test distribution contains software packages that are functional but should not be used in production.

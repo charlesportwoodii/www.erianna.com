@@ -6,6 +6,7 @@ slug: "centos"
 draft: false
 image: https://assets.erianna.com/centos.svg
 description: "Software packages for CentOS"
+keywords: "CentOS"
 ---
 
 ## CentOS 7

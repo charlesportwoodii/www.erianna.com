@@ -1,6 +1,7 @@
 ---
 title: "About"
-description: "Father, author, software developer, systems engineer."
+description: "Charles Portwood - Father, author, software developer, systems engineer."
+keywords: "Erianna,Terah Lai Shorehn,Software Developer,Systems Engineer,Author"
 date: 2017-08-20T12:22:26-05:00
 slug: "about"
 draft: false

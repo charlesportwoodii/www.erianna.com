@@ -1,6 +1,7 @@
 ---
 title: "Protecting Passwords with Argon2id in PHP 7.3"
 description: "Better password security in PHP 7.3 with Argon2id"
+keywords: "Argon2id,PHP,PHP 7.3,password_hash,Password"
 date: 2018-06-12T13:30:00-05:00
 slug: "introducing-support-for-argon2id-in-php73"
 draft: false
@@ -86,7 +87,7 @@ $hash = \password_hash(
 
 ### Optimal Options
 
-Due to the variety of platforms PHP runs on, the cost factors are deliberately set low as to not accidentally exhaust system resources on shared or low resource systems when using the default cost parameters. 
+Due to the variety of platforms PHP runs on, the cost factors are deliberately set low as to not accidentally exhaust system resources on shared or low resource systems when using the default cost parameters.
 
 ```
 memory_cost = 1024 KiB
@@ -133,7 +134,7 @@ Information about Argon2id hashed can be retrieved using the `password_get_info`
 
 ```php
 var_dump(password_get_info('$argon2id$v=19$m=1024,t=2,p=2$ZUhOUVczSHpZRDBDU2ZBRA$k/vI1wKP4s0ecJIpUybRfgBeo3as1PhIV1Od6PvOEFA'));
- 
+
 array(3) {
   ["algo"]=>
   int(3)

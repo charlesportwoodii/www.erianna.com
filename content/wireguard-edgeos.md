@@ -1,6 +1,7 @@
 ---
 title: "Wireguard on EdgeOS for a faster home VPN"
 description: "Installing Wireguard on Ubiquiti routers for faster home VPN"
+keywords: "Wireguard,EdgeOS,Ubiquity,VPN"
 date: 2018-08-11T13:00:00-05:00
 slug: "wireguard-ubiquity-edgeos"
 draft: false
