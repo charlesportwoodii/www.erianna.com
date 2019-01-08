@@ -46,7 +46,7 @@ This structure makes it very easy to identify at a glance several important deta
 
 2. The second issue I encountered when building my packages was that I needed to explicitly declare the architecture when I built the package.
 
-When working with _deb_ or _rpm_ packages, I've always enjoyed the convenience of throwing packages into a dedicated folder (such as `xenial/x86_64` or `rhel/7/x86_64`) and relying `yum` or `apt` to seamlessly take care of downloading and fetching the appropriate packages. With Alpine Linux you do not have this luxury. 
+When working with _deb_ or _rpm_ packages, I've always enjoyed the convenience of throwing packages into a dedicated folder (such as `xenial/x86_64` or `rhel/7/x86_64`) and relying `yum` or `apt` to seamlessly take care of downloading and fetching the appropriate packages. With Alpine Linux you do not have this luxury.
 
 > For the curious, the `APKFILE.tar.gz` we'll build later uses information embedded in the package to indicate to the `apk` console command where the package should be fetched from, rather than relying on the directory packages are fetched from.
 
@@ -132,7 +132,7 @@ server {
 }
 ```
 
-> __Let's talk about TLS.__ 
+> __Let's talk about TLS.__
 >
 > While there's no __requirement__ that your Alpine Linux repository needs to be hosted over TLS, there's also isn't a good reason __not__ to use TLS if it's in your power. While your public key will protect __your__ packages from spoofing, hosting your repository over plain HTTP does not protect you from DNS spoofing or MITM attacks against your infrastructure. To protect both your infrastructure and any users of your repository I strongly encourage you to use TLS on your web server configuration.
 >
@@ -242,18 +242,18 @@ This will instruct `apk index` with exactly what packages you want to be include
 
 # Hosting on another platform
 
-If you're like me, you probably don't want to spin up a dedicated Alpine Linux box just for serving up packages, and would much rather use a more familiar operating systems to actually 
+If you're like me, you probably don't want to spin up a dedicated Alpine Linux box just for serving up packages, and would much rather use a more familiar operating systems to actually
 serve your packages.
 
 To deal with the fact that we need to be running these commands on an Alpine Linux box, I created the following `docker-compose.yml` file.
 
 ```yaml
 version: "3.3"
-services: 
-  package: 
+services:
+  package:
     command: sh -c "apk add gcc abuild --no-cache &&  cp /root/.abuild/$${KEYFILE}.pub /etc/apk/keys/ &&  echo \"$${REPOSITORY_URL}/$${REPOSITORY_VERSION}/$${REPOSITORY_NAME}\" | tee -a /etc/apk/repositories && apk index -vU -o APKINDEX.tar.gz $PACKAGES && abuild-sign -k /root/.abuild/$${KEYFILE} APKINDEX.tar.gz && apk update"
     image: alpine:3.6
-    volumes: 
+    volumes:
       - /mnt/apk.example.com/${REPOSITORY_VERSION}/${REPOSITORY_NAME}/${REPOSITORY_ARCH}:/data
       - /home/user/.abuild:/root/.abuild
     working_dir: /data
