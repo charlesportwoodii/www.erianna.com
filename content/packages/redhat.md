@@ -5,7 +5,7 @@ date: 2016-12-01T00:00:00-00:00
 slug: "redhat"
 draft: false
 image: https://assets.erianna.com/redhat.svg
-description: "Software packages for RedHat Enterprise Linux",
+description: "Software packages for RedHat Enterprise Linux"
 keywords: "Redhat"
 ---
 

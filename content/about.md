@@ -37,3 +37,25 @@ gpg --output message.gpg --encrypt --recipient charlesportwoodii@erianna.com <fi
 ```
 
 > Note that this is a Ed25519 key, and requires and version of GnuPG2 that supports ECC keys (2.1.6+).
+
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org/",
+  "@type": "Person",
+  "name": "Charles R. Portwood II",
+  "alternateName": "Charles Portwood",
+  "email": "charlesportwoodii@erianna.com",
+  "url": "https://www.erianna.com",
+  "image": "https://s.gravatar.com/avatar/638d83c3f305aa7704268a6a24162724",
+  "sameAs": [
+    "https://twitter.com/charlesportwood",
+    "https://www.linkedin.com/in/charlesportwoodii",
+    "http://github.com/charlesportwoodii/",
+    "https://www.packtpub.com/books/info/authors/charles-r-portwood-ii",
+    "https://stackoverflow.com/users/2016155/charles-r-portwood-ii",
+    "https://www.charlesportwood.com",
+    "https://www.charlesportwoodii.com"
+  ],
+  "jobTitle": "Lead Architect & Systems Administrator"
+}
+</script>
