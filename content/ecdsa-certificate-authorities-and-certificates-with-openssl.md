@@ -3,6 +3,7 @@ title: "ECDSA Certificate Authorities and Certificates With OpenSSL"
 description: "Everything you wanted to know about generating the next generation of public key ECC ECDSA certificates and certificate authorities with OpenSSL."
 keywords: "OpenSSL,ECDSA,ECC,Eliptical Curve Cryptography,Cryptography"
 date: 2015-05-07T23:00:00-05:00
+lastmod: 2019-04-10T10:00:00-05:00
 draft: false
 type: "blog"
 slug: "ecdsa-certificate-authorities-and-certificates-with-openssl"
@@ -64,10 +65,22 @@ Once generated, you can view the full details of the CSR you generated as follow
 openssl req -in server.csr -noout -text
 ```
 
-If you're signing the certificate yourself using the CA you created earlier, you can then run the following command:
+Modern browsers require the certificate to have the FQDN within a SAN DNS name, so you'll need to create a `v3.ext` file that contains the following:
+
+```
+authorityKeyIdentifier=keyid,issuer
+basicConstraints=CA:FALSE
+keyUsage = digitalSignature, nonRepudiation, keyEncipherment, dataEncipherment
+subjectAltName = @alt_names
+
+[alt_names]
+DNS.1 = <fqdn>
+```
+
+And finally, you can sign your certificate as follows
 
 ```bash
-openssl x509 -req -SHA384 -days 3650 -in server.csr -CA ca.crt -CAkey ca.key -CAcreateserial -out server.crt
+openssl x509 -req -SHA384 -extfile v3.ext -days 365 -in server.csr -CA ca.crt -CAkey ca.key -CAcreateserial -out server.crt
 ```
 
 Which will then generate the certificate for the domain in question.
@@ -76,7 +89,10 @@ When examining your cert now (I recommend using a tool like [SSLLabs](https://ww
 
 
 <span class="image featured">
-    <img src="https://assets.erianna.com/13iyP1lFRKqZSk2hTVhtrW9tw1lcd.PNG" />
+    <picture>
+        <source srcset="https://assets.erianna.com/13iyP1lFRKqZSk2hTVhtrW9tw1lcd.webp" crossorigin="anonymous" type="image/webp">
+        <img src="https://assets.erianna.com/13iyP1lFRKqZSk2hTVhtrW9tw1lcd.PNG" />
+    </picture>
 </span>
 
 ----------------
