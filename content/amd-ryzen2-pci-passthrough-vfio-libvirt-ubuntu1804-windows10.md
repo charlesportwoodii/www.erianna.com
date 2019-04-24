@@ -358,7 +358,7 @@ Finally, we need to tell our kernel modules to stub these devices.
 
 1. Create a file called `/etc/modprobe.d/vfio_pci.conf` and add the following:
     ```
-    options vfio_pci ids=1002:67df,1002:aaf0,1022:145f
+    options vfio_pci ids=1002:67df,1002:aaf0
     ```
 
 2. There are some issues with Windows build 1830 that _may_ require you to have MSRS ignored in KVM. Create a few filed called `/etc/modprobe.d/msrs.conf` and add the following:
@@ -385,7 +385,14 @@ Then reboot.
 
 ### Identical Graphics Cards (WIP)
 
-If you're using identical graphics cards, your setup will differ slightly.
+If you're using identical graphics cards, your setup will differ slightly. Take for instance the following 2 cards. Even though the manufacturer's are different the vendor ids are the same, so we need to find another way to split them out.
+
+```
+IOMMU Group 16 08:00.0 VGA compatible controller [0300]: Advanced Micro Devices, Inc. [AMD/ATI] Ellesmere [Radeon RX 470/480/570/570X/580/580X] [1002:67df] (rev e7)
+IOMMU Group 16 08:00.1 Audio device [0403]: Advanced Micro Devices, Inc. [AMD/ATI] Ellesmere [Radeon RX 580] [1002:aaf0]
+IOMMU Group 17 09:00.0 VGA compatible controller [0300]: Advanced Micro Devices, Inc. [AMD/ATI] Ellesmere [Radeon RX 470/480/570/570X/580/580X] [1002:67df] (rev e7)
+IOMMU Group 17 09:00.1 Audio device [0403]: Advanced Micro Devices, Inc. [AMD/ATI] Ellesmere [Radeon RX 580] [1002:aaf0]
+```
 
 < @todo >
 
