@@ -296,7 +296,9 @@ First we need to identify the PCI devices we want to pass through. As discussed 
 
 Using the IOMMU script listed below, identify both of your graphics cards. Assuming there in slot 1 and 2 on your motherboard, they should appear in neighboring groups.
 
-On my system, the RX 550 and RX 580 show as as follows:
+### Different Graphics Cards
+
+The simplest approach is to have two different graphics cards. On my system, the RX 550 and RX 580 show as as follows:
 
 ```
 16 08:00.0 VGA compatible controller [0300]: Advanced Micro Devices, Inc. [AMD/ATI] Polaris12 [1002:699f] (rev c7)
@@ -316,11 +318,11 @@ There are a couple of things to note here:
     17 09:00.1 Audio device [0403]: Advanced Micro Devices, Inc. [AMD/ATI] Ellesmere [Radeon RX 580] [1002:aaf0]
    ```
 
-    1. The first number __17__ represents the IOMMU group the device is in.
-    2. The second number __09:00.0__ represents the bus, device, and function number of the PCI device.
-    3. And finally, the last set of numbers after the device name __1002:67df__ represents the vendor-id and device-id. In order to stub the device with the VFIO driver, this is numbers we'll need.
+1. The first number __17__ represents the IOMMU group the device is in.
+2. The second number __09:00.0__ represents the bus, device, and function number of the PCI device.
+3. And finally, the last set of numbers after the device name __1002:67df__ represents the vendor-id and device-id. In order to stub the device with the VFIO driver, this is numbers we'll need.
 
-### Modules
+#### Modules
 
 To enable VFIO for these devices, we'll first need to edit `/etc/modules`, and add the following lines:
 
@@ -334,7 +336,7 @@ The `vfio_pci ids=` should be a comma separated list of all `vendor-id:device-id
 
 In this case here, I'm passthrough through both the audio and video components of the RX 580 `1002:67df` and `1002:aaf0` respectively.
 
-### Initramfs
+#### Initramfs
 
 Next, we'll need to repeat the process with our initramfs file.
 
@@ -350,7 +352,7 @@ vfio_pci ids=1002:67df,1002:aaf0
 
 Then run `sudo update-initramfs -u` to update initramfs.
 
-### Modprobe
+#### Modprobe
 
 Finally, we need to tell our kernel modules to stub these devices.
 
@@ -380,6 +382,12 @@ sudo update-initramfs -u
 ```
 
 Then reboot.
+
+### Identical Graphics Cards (WIP)
+
+If you're using identical graphics cards, your setup will differ slightly.
+
+< @todo >
 
 ## Networking setup
 
