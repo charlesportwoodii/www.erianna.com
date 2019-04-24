@@ -1067,6 +1067,41 @@ sudo snap refresh core --beta
 
 > See: https://forum.snapcraft.io/t/custom-kernel-error-on-readlinkat-in-mount-namespace/6097/33
 
+## Recovering bad initramfs.
+
+When working with initramfs it's pretty easy to break your setup by accident. If you have LUKS installed it makes recovering your system a bit more complicated. If your initramfs setup breaks your boot process will _eventually_ dump you to the following prompt.
+
+```
+BusyBox v.1.21.1 (Ubuntu 1:1.21.1-1ubuntu1) built-in shell (ash)
+Enter 'help' for list of built-in commands.
+
+(initramfs)
+```
+
+LUKS makes this a bit more complicated. Your recovery steps are as follows:
+
+1. Determine your crypt volume name from `/etc/crypttab` for your root volume. You'll need this first as this value _must_ match what initramfs expects for booting.
+2. Create a live USB and boot into it.
+3. Decrypt your drive then mount it:
+```
+# cryptsetup luksOpen /dev/nvme0n1p5 nvme0n1p5_crypt
+# vgchange -ay
+# mount /dev/mapper/ubuntu--vg-root /mnt
+# mount /dev/nvme0n1p1 /mnt/boot
+# mount -t proc proc /mnt/proc
+# mount -o bind /dev /mnt/dev
+```
+4. If you don't have networking, copy the live CD's `/etc/resolv.conf` to the mounted volume. Don't worry about any existing symlink, Ubuntu will fix it on next boot.
+5. Chroot into the volume:
+```
+# chroot /mnt
+```
+5. Fix whatever is causing your initramfs issues, then update initramfs.
+```
+update-initramfs -c -k all
+```
+6. Reboot the live CD and hopefully you'll get a LUKS prompt.
+
 # Useful scripts & tools
 
 Listed below are a few useful tools and scripts I used during this process.
