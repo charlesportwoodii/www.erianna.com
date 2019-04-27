@@ -1036,9 +1036,47 @@ Each person has different requirements for their audio setup. Some people are fi
 
 ### Scream
 
-[Scream](https://github.com/duncanthrax/scream) is a virtual networked soundcard that allows you to stream audio from Windows to your guest. The benefit of this is that you can mix audio from both the host and the guest on the host.
+[Scream](https://github.com/duncanthrax/scream) is a virtual networked soundcard that allows you to stream audio from Windows to your guest. The benefit of this is that you can mix audio from both the host and the guest on the host. Scream supports 5.1 digital over IVSHMEM (similar to how looking-glass works), allowing local, secure, and effectively latency free audio between your host and guest.
 
-Once Scream is installed on the Windows 10 guest, compile the `scream-pulse` binary from https://github.com/duncanthrax/scream/tree/master/Receivers/pulseaudio, and run it on the br0 interface.
+Short of buying dedicated audio hardware, this is the best option currently avaiable for audio between Windows and Linux.
+
+1. Update your Windows VM's XML via `virsh` (eg `virsh edit Windows10`) and add the following before your closing `</devices>` tag.
+
+    ```
+    <shmem name='scream-ivshmem'>
+      <model type='ivshmem-plain'/>
+      <size unit='M'>2</size>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x11' function='0x0'/>
+    </shmem>
+    ```
+
+    > If you're using looking glass, adjust the slot number to be +1 whatever looking glass is.
+
+2. Start the VM, and verify `/dev/shm/scream-ivshmem` is created.
+3. Download the `scream-ivshmem` pulse-audio adapter from https://github.com/duncanthrax/scream/tree/master/Receivers/pulseaudio and compile it. Then start your receiver:
+
+    ```
+    scream-ivshmem-pulse /dev/shm/scream-ivshmem
+    ```
+
+    > Since `/dev/shm/scream-ivshmem` won't exist on boot, you can configure KVM to run a script that executes `scream-ivshmem-pulse /dev/shm/scream-ivshmem` once your VM is started.
+
+4. Windows 10 won't prompt you to install the IVSHMEM driver so we'll need to install it manually. From the [looking-glass wiki]:
+
+    > Windows will not prompt for a driver for the IVSHMEM device, instead it will use a default null (do nothing) driver for the device. To install the IVSHMEM driver you will need to go into device manager and update the driver for the device "PCI standard RAM Controller" under the "System Devices" node.
+
+    > A signed Windows 10 driver can be obtained from Red Hat for this device from the below address:
+
+    > https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/upstream-virtio/
+
+5. Within your VM, download Scream 3.1+ from the Github release page and install it.
+6. Open up `regedit.exe` then add a DWORD `HKLM\SYSTEM\CurrentControlSet\Services\Scream\Options\UseIVSHMEM` and set it's value to match whatever your `<size unit='M'>2</size>` is in your XML configuration.
+    >  Note that Scream will identify the device by it's size. Note also you may need to create the `Options` key.
+7. Restart the guest and verify your audio connectivity.
+
+#### Scream over Network
+
+The IVSHMEM option is preferred as it gives latency free audio and is secure between the host and guest. If you'd still rather have networked audio you can use `scream-pulse` instead then add a user systemd script
 
 ```
 ./scream-pulse -i br0
@@ -1066,12 +1104,6 @@ NoNewPrivileges=true
 [Install]
 WantedBy=default.target
 ```
-
-The reason I prefer this setup is that it's free, doesn't require any additional hardware, and work pretty much flawlessly (audio wise). I do have a few minor nitpicks with it however.
-
-1. Scream broadcasts audio everywhere. Ideally I'd like to target scream on the the Windows 10 side so it only broadcasts audio to a device of my choosing rather than broadcasting audio to the entire network. On a 1GB network this is fine, I imagine on a 100mb network however this could cause some problems. You could probably re-compile Scream to do this.
-2. Audio isn't encrypted. Ideally I'd want audio sent to a device to use a secure connection so that others couldn't intercept the traffic and listed to what I'm listening to.
-3. Audio is limited to CD quality. I'm by no means an audiophile, however if you are, know that you're limited to CD quality in Windows.
 
 ### PCI passthrough
 
