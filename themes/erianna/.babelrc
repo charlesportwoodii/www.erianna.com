@@ -2,7 +2,18 @@
   "plugins": [
     "@babel/plugin-transform-object-assign",
     ["@babel/plugin-proposal-class-properties", { "loose": false }],
-    "@babel/plugin-proposal-object-rest-spread"
+    "@babel/plugin-proposal-object-rest-spread",
+    ["@babel/plugin-transform-runtime", {
+      "corejs": 3,
+    }],
+    /*
+    ["transform-imports", {
+      "@fortawesome/free-solid-svg-icons": {
+        "transform": "@fortawesome/free-solid-svg-icons/${member}",
+        "skipDefaultConversion": true
+      }
+    }]
+    */
   ],
   "presets": [
     [
@@ -15,7 +26,8 @@
           "last 4 Edge versions"
         ]
       },
-      "useBuiltIns": "entry"
+      "useBuiltIns": "entry",
+      "corejs": 3
     }]
   ]
 }

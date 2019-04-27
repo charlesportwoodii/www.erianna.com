@@ -385,7 +385,7 @@ Then reboot.
 
 ### Identical Graphics Cards (WIP)
 
-If you're using identical graphics cards, your setup will differ slightly. Take for instance the following 2 cards. Even though the manufacturer's are different the vendor ids are the same, so we need to find another way to split them out.
+If you're using identical graphics cards, your setup will differ slightly. Take for instance the following 2 cards. Even though the manufacturer's are different the vendor ids are the same, so we need to split them out by PCI Group
 
 ```
 IOMMU Group 16 08:00.0 VGA compatible controller [0300]: Advanced Micro Devices, Inc. [AMD/ATI] Ellesmere [Radeon RX 470/480/570/570X/580/580X] [1002:67df] (rev e7)
@@ -394,7 +394,93 @@ IOMMU Group 17 09:00.0 VGA compatible controller [0300]: Advanced Micro Devices,
 IOMMU Group 17 09:00.1 Audio device [0403]: Advanced Micro Devices, Inc. [AMD/ATI] Ellesmere [Radeon RX 580] [1002:aaf0]
 ```
 
-< @todo >
+> Note that your PCI order may change due to BIOS updates or cards changing. If you're using this method I recommend _disabing_ it in `initramfs` before performing those updates as you won't had a graphics interface to boot with. If you do run into this problem, follow the steps below to chroot via a live cd to recover.
+
+1. Follow the steps outlined in the previous section _with the exception_ of the _initramfs_ section.
+2. In our example, we're going to isolate the graphics card we _aren't_ booting from. In this case it's `09:00.0/1`. Create `/sbin/vfio-pci-override.sh` and add the following to it.
+
+    ```
+    #!/bin/sh
+
+    for i in /sys/bus/pci/devices/*/boot_vga; do
+        if [ $(cat "$i") -eq 0 ]; then
+            GPU="${i%/boot_vga}"
+            AUDIO="$(echo "$GPU" | sed -e "s/0$/1/")"
+                echo "vfio-pci" > "$GPU/driver_override"
+            if [ -d "$AUDIO" ]; then
+                echo "vfio-pci" > "$AUDIO/driver_override"
+            fi
+        fi
+    done
+
+    modprobe -i vfio-pci
+    ```
+
+    Then make it executable:
+
+    ```
+    chmox +x /sbin/vfio-pci-override.sh
+    ```
+
+    This script will iterate over our PCI devices, find any card we're not booting from, then overwrite the driver with `vfio-pci`.
+
+    > If you know the PCI slot, you can simply do `echo "vfio-pci" > /sys/bus/pci/devices/<slot>/driver_override` for the devices we're wanting to pass through. This script is a little more versatile for a single card however, as if your BIOS updates or you add a new PCI card the PCI address may change.
+
+3. Next, we need to load this script into `initramfs` so it can be run _before_ LUKS is decrypted if we have it, and before our filesystem is mounted otherwise. Create `/etc/initramfs-tools/hooks/vfio-pci-override` and add the following:
+
+    ```
+    #!/bin/sh
+    PREREQ=""
+    prereqs()
+    {
+        echo "$PREREQ"
+    }
+
+    case $1 in
+    prereqs)
+        prereqs
+        exit 0
+        ;;
+    esac
+
+    . /usr/share/initramfs-tools/hook-functions
+
+    mkdir -p ${DESTDIR}/sbin || true
+    cp -pnL /sbin/vfio-pci-override.sh ${DESTDIR}/sbin/vfio-pci-override.sh
+    chmod +x ${DESTDIR}/sbin/vfio-pci-override.sh
+    ```
+
+3. Open up `/etc/modprobe.d/vfio-pci.conf` and make the following changes:
+
+
+    - Remove the `options` line we added earlier.
+    ```
+    #options vfio_pci ids=1002:67df,1002:aaf0,1022:145f
+    ```
+
+    - Add `install vfio-pci /sbin/vfio-pci-override.sh` to run our script.
+    ```
+    options vfio_pci ids=1022:145f
+    install vfio-pci /sbin/vfio-pci-override.sh
+    ```
+
+    > If you have other PCI devices like a USB hub you're passing through you can keep the options line, just specify only the vendor:device_id slots you want.
+
+4. Run `update-initramfs -u -k all`.
+5. Reboot
+6. Run `lspci -nnk | grep vfio-pci -B2` to verify that the `vfio-pci` driver is in use for your second card. Your output should look similar to the following.
+
+    ```
+    09:00.0 VGA compatible controller [0300]: Advanced Micro Devices, Inc. [AMD/ATI] Ellesmere [Radeon RX 470/480/570/570X/580/580X] [1002:67df] (rev e7)
+            Subsystem: Micro-Star International Co., Ltd. [MSI] Ellesmere [Radeon RX 470/480/570/580] [1462:8a92]
+            Kernel driver in use: vfio-pci
+    --
+    09:00.1 Audio device [0403]: Advanced Micro Devices, Inc. [AMD/ATI] Ellesmere [Radeon RX 580] [1002:aaf0]
+            Subsystem: Micro-Star International Co., Ltd. [MSI] Ellesmere [Radeon RX 580] [1462:aaf0]
+            Kernel driver in use: vfio-pci
+    ```
+
+> If you aren't seeing both the graphics and audio being bound, verify the PCI slot is correct, and attempt to run` modprobe -i vfio-pci` to forcefully bind any drivers.
 
 ## Networking setup
 

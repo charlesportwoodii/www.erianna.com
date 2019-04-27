@@ -2,13 +2,12 @@ const webpack = require('webpack');
 const path = require('path');
 const FileSystem = require("fs");
 
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const AssetsWebpackPlugin = require('assets-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-const extractSCSS = new ExtractTextPlugin({ filename: 'css/[name].[hash].css', allChunks: true});
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+
 const Visualizer = require('webpack-visualizer-plugin');
 const configFile = path.resolve(__dirname, "../../config/config.yml");
 
@@ -76,19 +75,20 @@ module.exports = (env = { 'NODE_ENV': process.env.NODE_ENV }) => {
             loader: 'html-loader'
           },
           {
-            test:/\.(scss|css)$/,
-            use: ['css-hot-loader'].concat(extractSCSS.extract({
-              fallback: 'style-loader',
-              use: [
-                {
-                  loader: 'css-loader'
+            test: /\.(sa|sc|c)ss$/,
+            use: [
+              {
+                loader: MiniCssExtractPlugin.loader,
+                options: {
+                  hmr: process.env.DEBUG === true,
+                  reloadAll: true
                 },
-                {
-                  loader: 'sass-loader'
-                }
-              ]
-            }))
+              },
+              'css-loader',
+              'sass-loader'
+            ],
           },
+
           {
               test: /\.twig$/,
               use: [{
@@ -117,7 +117,6 @@ module.exports = (env = { 'NODE_ENV': process.env.NODE_ENV }) => {
       },
     plugins: [
       new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
-      extractSCSS,
       new webpack.HotModuleReplacementPlugin(),
       new webpack.HashedModuleIdsPlugin(),
       new webpack.DefinePlugin({
@@ -130,7 +129,15 @@ module.exports = (env = { 'NODE_ENV': process.env.NODE_ENV }) => {
             }
         }
       }),
-      new CleanWebpackPlugin(["static/js", "static/css"], {
+      new MiniCssExtractPlugin({
+        // Options similar to the same options in webpackOptions.output
+        // both options are optional
+        filename: '[name].[hash].styles.css',
+        chunkFilename: '[id].[hash].css',
+      }),
+
+      new CleanWebpackPlugin({
+        cleanAfterEveryBuildPatterns: ['static/*.*'],
         verbose: true,
         dry: false
       }),
