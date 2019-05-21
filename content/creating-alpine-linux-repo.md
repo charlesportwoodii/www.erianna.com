@@ -184,40 +184,38 @@ $arch = $arvg[3] ?? 'x86_64';
 $files = \glob("$path/v$aVersion/$directory/$arch/*.apk");
 $finalList = [];
 foreach ($files as $file) {
-        $file = str_replace("$path/v$aVersion/$directory/$arch/", '', $file);
-        $v = str_replace('-', '', strrchr($file, '-'));
-        $revision = explode('~', $v)[0];
-        $architecture = explode('~', $v)[1];
-        $name = substr(str_replace($v, '', $file), 0, -1);
-        $parts = explode('-', $name);
-        $last = array_pop($parts);
-        $parts = [implode('_', $parts), $last];
+	$file = str_replace("$path/v$aVersion/$directory/$arch/", '', $file);
+	$v = str_replace('-', '', strrchr($file, '-'));
+	$revision = explode('~', $v)[0];
+	$architecture = explode('~', $v)[1];
+	$name = substr(str_replace($v, '', $file), 0, -1);
+	$parts = explode('-', $name);
+	$last = array_pop($parts);
+	$parts = [implode('_', $parts), $last];
 
-        $packageName = $parts[0];
-        $packageVersion = $parts[1];
-        $compareVersion = str_replace('.', '', $packageVersion) . $revision;
-        if (!isset($finalList[$packageName])) {
-                $finalList[$packageName] = [
-                        'file' => $file,
-                        'version' => $compareVersion,
-                        'dVersion' => $packageVersion . '-' . $revision
-                ];
-        } else {
-                if ($compareVersion > $finalList[$packageName]['version']) {
-                        $finalList[$packageName] = [
-                                'file' => $file,
-                                'version' => $compareVersion,
-                                'dVersion' => $packageVersion . '-' . $revision
-                        ];
-                }
-        }
+	$packageName = $parts[0];
+	$packageVersion = $parts[1];
+	if (!isset($finalList[$packageName])) {
+		$finalList[$packageName] = [
+			'file' => $file,
+			'version' => $packageVersion . '-' . $revision
+		];
+	} else {
+        if (\version_compare($packageVersion, $finalList[$packageName]['version'])) {
+			$finalList[$packageName] = [
+				'file' => $file,
+				'version' => $packageVersion . '-' . $revision
+			];
+		}
+	}
 }
 
 $packageNames = array_values(array_map(function($el) {
-        return $el['file'];
+	return $el['file'];
 }, $finalList));
 
 echo implode($packageNames, ' ');
+
 ```
 
 ## Usage
