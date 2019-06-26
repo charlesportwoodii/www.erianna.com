@@ -1,13 +1,14 @@
 const webpack = require('webpack');
 const path = require('path');
+const glob = require('glob-all');
 const FileSystem = require("fs");
 
 const ManifestPlugin = require('webpack-manifest-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const AssetsWebpackPlugin = require('assets-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const PurgecssPlugin = require('purgecss-webpack-plugin')
 
 const Visualizer = require('webpack-visualizer-plugin');
 const configFile = path.resolve(__dirname, "../../config/config.yml");
@@ -32,6 +33,27 @@ module.exports = (env = { 'NODE_ENV': process.env.NODE_ENV }) => {
       path: path.resolve(__dirname, 'static/'),
       filename: 'js/[name].[hash].js',
       publicPath: '/',
+    },
+    optimization: {
+      runtimeChunk: 'single',
+      splitChunks: {
+        chunks: 'all',
+        maxInitialRequests: Infinity,
+        minSize: 0,
+        cacheGroups: {
+          vendor: {
+            test: /[\\/]node_modules[\\/]/,
+            name(module) {
+              // get the name. E.g. node_modules/packageName/not/this/part.js
+              // or node_modules/packageName
+              const packageName = module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/)[1];
+  
+              // npm package names are URL-safe, but some servers don't like @ symbols
+              return `npm.${packageName.replace('@', '')}`;
+            },
+          },
+        },
+      },
     },
     devServer: {
       public: '127.0.0.1:8080',
@@ -159,13 +181,16 @@ module.exports = (env = { 'NODE_ENV': process.env.NODE_ENV }) => {
         fileName: "data/assets/main/manifest.json",
         writeToFileEmit: true
       }),
-      new BundleAnalyzerPlugin({
-        analyzerMode: 'static',
-        openAnalyzer: false,
-        reportFilename: '../report.html'
-      }),
       new Visualizer({
         filename: '../stats.html'
+      }),
+      new PurgecssPlugin({
+        paths: glob.sync([
+          path.join(__dirname, 'layouts/*'),
+          path.join(__dirname, 'layouts/**/*'),
+          path.join(__dirname, 'js/*'),
+          path.join(__dirname, 'js/**/*')
+        ], { nodir: true })
       })
     ]
   }
