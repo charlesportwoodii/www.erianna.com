@@ -39,13 +39,15 @@ module.exports = (env = { 'NODE_ENV': process.env.NODE_ENV }) => {
       port: 8080,
       host: '0.0.0.0',
       compress: true,
-      hot: true,
+      http2: true,
+      hot: env.NODE_ENV == "development",,
       open: false,
       stats: 'normal',
       overlay: {
         errors: true,
         warnings: true,
       },
+      liveReload: env.NODE_ENV == "development",
       disableHostCheck: true,
       watchOptions: {
           aggregateTimeout: 300,

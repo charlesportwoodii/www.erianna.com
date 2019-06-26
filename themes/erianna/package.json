@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack-dev-server --color --config ./webpack.config.js",
-    "build": "webpack -p --verbose --profile --config ./webpack.config.js --color --display-error-details; yarn run sri;",
+    "build": "cross-env NODE_ENV=production webpack -p --verbose --profile --config ./webpack.config.js --color --display-error-details; yarn run sri;",
     "sri": "echo \"---\njs: $(shasum -b -a 384 ./static/js/*.js | awk '{ print $1 }' | xxd -r -p | base64)\ncss: $(shasum -b -a 384 ./static/css/*.css | awk '{ print $1 }' | xxd -r -p | base64)\n\" > ./data/assets/main/sri.yml"
   },
   "author": "Charles R. Portwood II <charlesportwoodii@erianna.com>",
