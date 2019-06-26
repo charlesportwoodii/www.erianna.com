@@ -6,14 +6,12 @@
     ["@babel/plugin-transform-runtime", {
       "corejs": 3,
     }],
-    /*
     ["transform-imports", {
       "@fortawesome/free-solid-svg-icons": {
         "transform": "@fortawesome/free-solid-svg-icons/${member}",
         "skipDefaultConversion": true
       }
     }]
-    */
   ],
   "presets": [
     [

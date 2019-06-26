@@ -1,7 +1,7 @@
 version: '3.3'
 services:
   webpack:
-    image: node:10-alpine
+    image: node:12-alpine
     volumes:
       - ${PWD-.}:/var/www
       - nodejs:/var/www/themes/erianna/node_modules

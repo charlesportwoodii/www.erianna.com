@@ -2,7 +2,8 @@ const webpack = require('webpack');
 const path = require('path');
 const FileSystem = require("fs");
 
-const CleanWebpackPlugin = require('clean-webpack-plugin');
+const ManifestPlugin = require('webpack-manifest-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const AssetsWebpackPlugin = require('assets-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
@@ -17,7 +18,7 @@ module.exports = (env = { 'NODE_ENV': process.env.NODE_ENV }) => {
   return {
     mode: env.NODE_ENV,
     entry: {
-      main: ['@babel/polyfill', path.resolve(__dirname, 'js/main.js')],
+      main: ['core-js', '@babel/polyfill', path.resolve(__dirname, 'js/main.js')],
     },
     resolve: {
         extensions: ['.js', '.scss'],
@@ -129,13 +130,16 @@ module.exports = (env = { 'NODE_ENV': process.env.NODE_ENV }) => {
             }
         }
       }),
+      new webpack.ContextReplacementPlugin(
+        /highlight\.js\/lib\/languages$/,
+        new RegExp(`^./(${['bash', 'php', 'dockerfile', 'css', 'nginx', 'makefile', 'javascript', 'yaml', 'xml'].join('|')})$`),
+      ),
       new MiniCssExtractPlugin({
         // Options similar to the same options in webpackOptions.output
         // both options are optional
         filename: '[name].[hash].styles.css',
         chunkFilename: '[id].[hash].css',
       }),
-
       new CleanWebpackPlugin({
         cleanAfterEveryBuildPatterns: ['static/*.*'],
         verbose: true,
@@ -150,6 +154,10 @@ module.exports = (env = { 'NODE_ENV': process.env.NODE_ENV }) => {
         prettyPrint: false,
         fullPath: true,
         filename: 'data/assets/main/assets.json'
+      }),
+      new ManifestPlugin({
+        fileName: "data/assets/main/manifest.json",
+        writeToFileEmit: true
       }),
       new BundleAnalyzerPlugin({
         analyzerMode: 'static',
