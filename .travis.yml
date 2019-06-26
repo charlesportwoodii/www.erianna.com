@@ -26,6 +26,7 @@ script:
   - cd ../..
   - export HUGO_ENV="production"
   - hugo
+  - export JSON_FILE_LIST=$(find ./public -maxdepth 10 -type f -not -name 't_*' | sed  "s/.\/public//g" | jq -R -s -c 'split("\n")')
 
 deploy:
   provider: gcs
