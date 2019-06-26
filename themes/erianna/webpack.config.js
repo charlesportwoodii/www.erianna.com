@@ -162,9 +162,6 @@ module.exports = (env = { 'NODE_ENV': process.env.NODE_ENV }) => {
         fileName: "data/assets/main/manifest.json",
         writeToFileEmit: true
       }),
-      new Visualizer({
-        filename: '../stats.html'
-      }),
       new PurgecssPlugin({
         paths: glob.sync([
           path.join(__dirname, 'layouts/*'),
@@ -172,7 +169,10 @@ module.exports = (env = { 'NODE_ENV': process.env.NODE_ENV }) => {
           path.join(__dirname, 'js/*'),
           path.join(__dirname, 'js/**/*')
         ], { nodir: true })
-      })
+      }),
+      new Visualizer({
+        filename: '../stats.html'
+      }),
     ]
   }
 };
