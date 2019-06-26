@@ -40,7 +40,7 @@ module.exports = (env = { 'NODE_ENV': process.env.NODE_ENV }) => {
       host: '0.0.0.0',
       compress: true,
       http2: true,
-      hot: env.NODE_ENV == "development",,
+      hot: env.NODE_ENV == "development",
       open: false,
       stats: 'normal',
       overlay: {
