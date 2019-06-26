@@ -8,7 +8,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const AssetsWebpackPlugin = require('assets-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const PurgecssPlugin = require('purgecss-webpack-plugin')
+const PurgecssPlugin = require('purgecss-webpack-plugin');
 
 const Visualizer = require('webpack-visualizer-plugin');
 const configFile = path.resolve(__dirname, "../../config/config.yml");
@@ -169,10 +169,7 @@ module.exports = (env = { 'NODE_ENV': process.env.NODE_ENV }) => {
           path.join(__dirname, 'js/*'),
           path.join(__dirname, 'js/**/*')
         ], { nodir: true })
-      }),
-      new Visualizer({
-        filename: '../stats.html'
-      }),
+      })
     ]
   }
 };

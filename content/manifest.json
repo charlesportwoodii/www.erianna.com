@@ -1,0 +1,22 @@
+{
+    "dir" : "ltr",
+    "lang" : "en",
+    "name" : "Erianna | Blog of Charles R. Portwood II",
+    "scope" : "/",
+    "display" : "browser",
+    "start_url" : "https://www.erianna.com/",
+    "short_name" : "Erianna",
+    "theme_color" : "transparent",
+    "description" : "Personal blog of Charles R. Portwood II. Topics on software development, business, writing, and more.",
+    "orientation" : "any",
+    "background_color" : "transparent",
+    "related_applications" : "",
+    "prefer_related_applications" : "false",
+    "generated" : "true",
+    "icons" : [
+        {
+            "src": "https://www.erianna.com/favicon.ico",
+            "sizes": "16x16"
+        }
+    ]
+}
