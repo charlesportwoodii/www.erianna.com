@@ -20,7 +20,7 @@
                     margin: 0 10px;
                 }
             }
-            
+
             @include breakpoint(medium) {
                 #featured-image {
                     display: block;
@@ -53,15 +53,15 @@
             justify-content: space-between;
             flex-direction: column;
         }
-        
-		@include breakpoint(medium) { 
+
+		@include breakpoint(medium) {
 			&.book {
 				width: 100%;
 				margin-bottom: 20px;
 			}
 		}
     }
-    
+
 
 	.mini-posts {
 		&.books {
@@ -76,8 +76,8 @@
                 max-width: 350px;
 			}
         }
-		
-		@include breakpoint(medium) { 
+
+		@include breakpoint(medium) {
 			&.books {
                 width: 100%;
 				> * {

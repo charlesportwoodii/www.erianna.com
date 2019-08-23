@@ -39,7 +39,7 @@ module.exports = (env = { 'NODE_ENV': process.env.NODE_ENV }) => {
       port: 8080,
       host: '0.0.0.0',
       compress: true,
-      http2: true,
+      http2: false,
       hot: env.NODE_ENV == "development",
       open: false,
       stats: 'normal',

@@ -83,8 +83,31 @@
 			}
 		}
 
-		#content p {	
-			font-size: 12pt;
+		#content {
+			pre {
+				max-width: 850px !important;
+			}
+
+			code.hljs {
+				padding: 2rem;
+				overflow:  auto;
+				max-height: 80rem;
+				white-space: pre;
+
+				&,
+				span {
+					font-size: 1.6rem;
+					font-weight: 500;
+				}
+
+				span {
+					white-space: pre;
+				}
+			}
+
+			p {
+				font-size: 12pt;
+			}
 		}
 
 		> footer {
@@ -197,7 +220,7 @@
 			left: _size(section-spacing-small) * -1;
 			margin: 0 0 _size(element-margin) 0;
 			width: calc(100% + (#{_size(section-spacing-small)} * 2));
-			
+
 			> header {
 				@include padding(_size(section-spacing-small) * 2, _size(section-spacing-small), (0, 0, -0.5em, 0));
 				left: (_size(section-spacing-small) * -1);

@@ -1,13 +1,15 @@
 ---
 title: "About"
-description: "Charles Portwood - Father, author, software developer, systems engineer."
+description: "Charles Portwood - CTO @punchkick.com; father, author, software developer, systems engineer."
 keywords: "Erianna,Terah Lai Shorehn,Software Developer,Systems Engineer,Author"
 date: 2017-08-20T12:22:26-05:00
 slug: "about"
 draft: false
 type: "page"
 ---
-My name is Charles R. Portwood II. I am a multi-diciplinary software developer and systems engineer with an experience in several programming languages, hosting services, embedded software, and development methodologies. I provide consultation with specializations in architecture design and implementation; API, mobile, and web development; security; and cryptography.
+My name is Charles R. Portwood II. Currently I am the CTO at [punchkick.com](https://www.punchkick.com).
+
+I am a multi-diciplinary software developer and systems engineer with an experience in several programming languages, hosting services, embedded software, and development methodologies. I provide consultation with specializations in architecture design and implementation; API, mobile, and web development; security; and cryptography.
 
 ## Behind the name "Erianna"
 

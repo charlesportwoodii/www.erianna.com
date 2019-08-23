@@ -16,7 +16,8 @@ The Alpine Linux repository is primarily used to provide packages for Docker, ho
 
 ```bash
 apk add curl wget --no-cache
-curl -qs https://gist.githubusercontent.com/charlesportwoodii/2253f1e82b60c7334b78a012c2d2beea/raw/477a43a4ad16b2f3b83790e45131390f943f0691/charlesportwoodii@erianna.com-59ea3c02.rsa.pub -o /etc/apk/keys/charlesportwoodii@erianna.com-59ea3c02.rsa.pub
+curl -qs https://www.erianna.com/charlesportwoodii@erianna.com-59ea3c02.rsa.pub \
+-o /etc/apk/keys/charlesportwoodii@erianna.com-59ea3c02.rsa.pub
 ```
 
 This RSA key is signed using my primary Ed25519 key. It's authenticity can be verified in the following Github Gist: https://gist.github.com/charlesportwoodii/2253f1e82b60c7334b78a012c2d2beea.

@@ -1,14 +1,14 @@
---- 
+---
 baseURL: "https://www.erianna.com"
 enableGitInfo: true
 enableRobotsTXT: true
 languageCode: en-us
 noChmod: true
 noTimes: true
-params: 
+params:
   Author: "Charles R. Portwood II"
   Email: charlesportwoodii@erianna.com
-  social: 
+  social:
       github: "https://www.github.com/charlesportwoodii"
       twitter: "https://www.twitter.com/charlesportwood"
       linkedin: "https://www.linkedin.com/in/charlesportwoodii"
@@ -18,9 +18,9 @@ params:
     - { url: "/about", text: "About Me" }
     - { url: "/books", text: "Books" }
     - { url: "/packages", text: "Repositories" }
-permalinks: 
+permalinks:
   post: "/:year/:month/:title/"
-sitemap: 
+sitemap:
   changefreq: daily
   filename: sitemap.xml
   priority: 0.5
