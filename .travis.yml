@@ -33,6 +33,9 @@ deploy:
   bucket: www.erianna.com
   skip_cleanup: true
   local-dir: public
+  on:
+    branch: master
+    repo: charlesportwoodii/www.erianna.com
   secret_access_key:
     secure: AYnCm6FWsKXqB02fb7WlVXGmallOz0ATIWRIfKiYacpiR30PQ5BsXJfGLmVasl2Dep8C97FWLu2Sx0PZ5v7NArOjvWjenlTrpscqIiPo856tKy0bKWe1C6qlSeBcasQ5F8asNmq2VHGkn5ltpy1t9o1azT59gspfjqW6sNqUL7YzDKvEulACjvF2WA37PFAoN/awsagT6WGQsHZYGwSvtr6P6b7I6kOP0eDR07fxbBDjBrS2jOuI154VrAt8J1yeOd5nq4rfLHdRu+WmP2menvYcsq0lgvuhv4N9qh5B8Wti9lVpx3C3yrSHQXAVHg+bfJx6nf1sFOnbmIBPlF3cV41Fm67tC2u62T/WikETYzYZkxrt25jfOceDai5eH4CuxlhvAF//+5E11XsopjMNnGi9FD1WmDNB2gdpwxmUZpvMRQqLmu7KKAwzX7lyDgmC7XCR7iDiUN+G0u13pIwJoBQD8cFzDYAbhc95ar4Ayd5j3fBkyjqw3adrmoMNanKLWl7Z4v2aG0i8UPV4Er/W03YvoWpjDgze7eUXcAYdcslfvmnZIB8bpl7n7NIF+CAW48H8VP6zSM3PTsRFuR3OUpUlwSwcTGscm/N2+JqqJep3dPFiKTOiNgxolz1+1YJs4ggzH9b22SvR9P4k/DVshDqmNhAbYX0M/QROTMUy0Ls=
   access_key_id:
