@@ -16,8 +16,8 @@ env:
   global:
     - secure: "MvxcuT3gCpVV9eNOOhtXmw0XtNmvBnq0fTcCCjq11A2HDJlDfcLRXVAxjdZGtX1q6IJfzUOjyPH8Op6hqLtMg0fYkFuExsBRCwFp3gqlz7GZxEzCd+z+hdevBuwztBW4W52iLioKJ8RWgg22UsJ/ODv5wduGgKsFNFVkuluPqP5v8gKHWoqcxkXubIZfV0b6wtSyvUWTV+Sk7tIo7hnC2wfHJoXJytSuAtXfFuD1I/uMTqbqYxfFJZ8cfpaB1r4Vlfk2YnnrYdTvtV024MYpMw1VyObD/2KxqhkL6zKHjF1GnqaCeqmXB6tXo/t7Gs2gomms2xKovluJmheHtpZ51DV2xte1t+x+YCLSPXCHVGHifKCHyzpNMg4iY1xUTnkyAKUHejyuFLjp6GELE/C/5ef+osOD4UUyjAL8kd4hH0U00FfTZxAILH5CewyA540IbZmim1dsOS1l/8/A/xqXvCR6EFDv6S5SofJDrLVrAmhmLicMhRlltxhjtuQuA+1vbdjgjwwsH3LPDxw+RqC+zQGytOZAVdFeB8vAgbo6/JYtM/tg67a1O4DeKSvtRVsywk9nWxAzR/dIU7VF0l1tQxDXL+Khew5mpa5W0oDz2pjECQUJp+/kzZ29LkYSQ8fU/53NzDzvdmGjy+C341Ox4z6FpmNFvdnclHIk0hcPSD4="
     - AWS_ACCESS_KEY_ID=XZQSNWFHKYPQDESUJSTT
-    - AWS_HOST=sfo2.digitaloceanspaces.com
-    - AWS_BUCKET=www-erianna-com
+    - AWS_HOST=nyc3.digitaloceanspaces.com
+    - AWS_BUCKET=com-erianna-www
     - AWS_HOST_BUCKET="$AWS_BUCKET-$AWS_HOST"
 
 before_install:
