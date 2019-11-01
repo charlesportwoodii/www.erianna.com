@@ -31,7 +31,7 @@ deploy:
   bucket: www-erianna-com
   local-dir: public
   skip_cleanup: true
-  endpoint: https://nyc3.digitaloceanspaces.com
+  endpoint: https://sfo2.digitaloceanspaces.com
   on:
     repo: charlesportwoodii/www.erianna.com
     branch: master
