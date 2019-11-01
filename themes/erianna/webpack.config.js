@@ -140,8 +140,8 @@ module.exports = (env = { 'NODE_ENV': process.env.NODE_ENV }) => {
       new MiniCssExtractPlugin({
         // Options similar to the same options in webpackOptions.output
         // both options are optional
-        filename: '[name].[hash].styles.css',
-        chunkFilename: '[id].[hash].css',
+        filename: 'css/[name].[hash].styles.css',
+        chunkFilename: 'css/[id].[hash].css',
       }),
       new CleanWebpackPlugin({
         cleanAfterEveryBuildPatterns: ['static/*.*'],
