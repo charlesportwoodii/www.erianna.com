@@ -1,42 +1,37 @@
 sudo: false
 language: node_js
-
 node_js:
-  - 12.4.0
-
+- 12.4.0
 cache: yarn
-
 before_install:
-  - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version $YARN_VERSION
-  - wget https://github.com/gohugoio/hugo/releases/download/v$HUGO_VERSION/hugo_${HUGO_VERSION}_Linux-64bit.tar.gz
-  - mkdir -p ~/.bin
-  - tar -xf hugo_${HUGO_VERSION}_Linux-64bit.tar.gz -C ~/.bin
-  - export PATH="$HOME/.bin:$HOME/.yarn/bin:$PATH"
-
+- curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version $YARN_VERSION
+- wget https://github.com/gohugoio/hugo/releases/download/v$HUGO_VERSION/hugo_${HUGO_VERSION}_Linux-64bit.tar.gz
+- mkdir -p ~/.bin
+- tar -xf hugo_${HUGO_VERSION}_Linux-64bit.tar.gz -C ~/.bin
+- export PATH="$HOME/.bin:$HOME/.yarn/bin:$PATH"
 install:
-  - cd themes/erianna
-  - yarn install --no-progress
-  - cd ../..
-
+- cd themes/erianna
+- yarn install --no-progress
+- cd ../..
 script:
-  - cd themes/erianna
-  - yarn run build
-  - cat data/assets/main/assets.json
-  - cat data/assets/main/sri.yml
-  - cd ../..
-  - export HUGO_ENV="production"
-  - hugo
-  - export JSON_FILE_LIST=$(find ./public -maxdepth 10 -type f -not -name 't_*' | sed  "s/.\/public//g" | jq -R -s -c 'split("\n")')
-
+- cd themes/erianna
+- yarn run build
+- cat data/assets/main/assets.json
+- cat data/assets/main/sri.yml
+- cd ../..
+- export HUGO_ENV="production"
+- hugo
+- export JSON_FILE_LIST=$(find ./public -maxdepth 10 -type f -not -name 't_*' | sed  "s/.\/public//g"
+  | jq -R -s -c 'split("\n")')
 deploy:
-  provider: gcs
-  bucket: www.erianna.com
-  skip_cleanup: true
-  local-dir: public
-  on:
-    branch: master
-    repo: charlesportwoodii/www.erianna.com
+  provider: s3
+  access_key_id: SGQOQ723657BW75HYG7Q
   secret_access_key:
-    secure: AYnCm6FWsKXqB02fb7WlVXGmallOz0ATIWRIfKiYacpiR30PQ5BsXJfGLmVasl2Dep8C97FWLu2Sx0PZ5v7NArOjvWjenlTrpscqIiPo856tKy0bKWe1C6qlSeBcasQ5F8asNmq2VHGkn5ltpy1t9o1azT59gspfjqW6sNqUL7YzDKvEulACjvF2WA37PFAoN/awsagT6WGQsHZYGwSvtr6P6b7I6kOP0eDR07fxbBDjBrS2jOuI154VrAt8J1yeOd5nq4rfLHdRu+WmP2menvYcsq0lgvuhv4N9qh5B8Wti9lVpx3C3yrSHQXAVHg+bfJx6nf1sFOnbmIBPlF3cV41Fm67tC2u62T/WikETYzYZkxrt25jfOceDai5eH4CuxlhvAF//+5E11XsopjMNnGi9FD1WmDNB2gdpwxmUZpvMRQqLmu7KKAwzX7lyDgmC7XCR7iDiUN+G0u13pIwJoBQD8cFzDYAbhc95ar4Ayd5j3fBkyjqw3adrmoMNanKLWl7Z4v2aG0i8UPV4Er/W03YvoWpjDgze7eUXcAYdcslfvmnZIB8bpl7n7NIF+CAW48H8VP6zSM3PTsRFuR3OUpUlwSwcTGscm/N2+JqqJep3dPFiKTOiNgxolz1+1YJs4ggzH9b22SvR9P4k/DVshDqmNhAbYX0M/QROTMUy0Ls=
-  access_key_id:
-    secure: qzG6q6Q3QYdAc9oZN6to/TNq32CycKLq+j7Hqq4p2w9ZPbuLQYxk6ppeQ72uH+eN4X5BDtRfM82edQG4KPiS9/sZVtVBdAsp2Fa0cL5K2EYR3rWOf2dEIl8e79xlLhzF8pbKmJnk/jMoW9k+p1ic09yP9cBo++BAhbt0lRZItQy9/X1mqZiuuo9YGJLDThiBfCyh53Oo+GvGddKRk9gYx31NwUG+x/pD8dWg/ckDXDtpZRgyf0m8mHf6zvyiHxN/YJ15IRUB8fesrfA8+irTU7j3cOosUXVzupU3zBIeuitx54BBDvHkUUbzRvBPY6gY+OEVy1q4SjXcsxcEc8t8LrdDHKN3QHmbwRj0oIiqOvq7ynDt66rbMGUbt6mtvDDtUc05KWLCrr5wzIZtF0o9xIABl94IkOC9AO6TBgpr3q4tzvA1s1g3+QKCSY8l/+qUDd7Xn7/XbjrVC6uCjr1o+vIP7DhTkajlB7pH0nJyW+1lYWP7ryf2/wjrqNV9xm9rW++I7OONAdhJvr+hPtixNhGZ7Qk87eiaSY2M8P12AIdbgccGBVIW7O0G7ylcZcP8IagnjN/X08Hi6GbDQcv5heOIi2GNBUGi9txo8whTE4KKG7zaZFIIL4JvRntBFMhUKqR2v0fl7ktRmm2Sk9Q5QXZjOLx2sNcwu1I/z9Dx7SQ=
+    secure: uBU2Jd8XgVRl3JwTzrK1SXjyVJn83OHvWdXJoMMTm5o/MMdW059Zq7agugqjF3LbxK/T0UuN5YcxNSAWHKU5dK6Hz8FpCgubuZ5ZzpC7V6r/ZiimkUik2uh2ksb0MgUQ34hc777X9CKZiAIZJzhPXBkXSY08EiWn7IQXPZq/lnJzIPtDa3zKadz9OAgTyt/ntpxt92JiawNsQjzZ+5OpH5v2QOd0rzbyuN/8ml/HYU2lZok0JBZ1zfpK47pEpGqx/dUPGHm4yEGCXueiSzydR0ogWxKwipurMb9/ODJspT25nlNqvAfJDbBZhSVcz0KcDazm5K6ToKEcQhTcSuRiLZzAM0bjgcFmg6pbUsQxu1NIGar9CPdcPhagcQB/G/5CAvfFHpwLP7GUawXoAq2vyd3JMkPm1GplryHuS/eSxXadve0Hc3S5YqEpSAOc+Rhf2ZFyGknZBGamJ1U8Dvq2qmqsiI+AfV+JWYN0GGTB3iv/wK+8oY9YsIKnVmWa/zSc/CE3hpVceIOl0/0sM3vDEPxx7Of52mYWtJPJ7eQ5yBY3DTYZyH1cj/EISsGS1Kx9z4hmV5F4Lhit3xHN80lnBqaQ6NVXnLdgbTcQYqovps+SCxu1srNfbtUN5xciVrMD9dl/+hq4JSzlAwqJyrvozyFFN2rEOBL+l/9kJwfloF0=
+  bucket: www-erianna-com
+  local-dir: public
+  skip_cleanup: true
+  endpoint: https://nyc3.digitaloceanspaces.com
+  on:
+    repo: charlesportwoodii/www.erianna.com
+    branch: master
