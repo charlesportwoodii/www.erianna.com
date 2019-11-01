@@ -40,7 +40,7 @@ script:
   - export JSON_FILE_LIST=$(find ./public -maxdepth 10 -type f -not -name 't_*' | sed  "s/.\/public//g" | jq -R -s -c 'split("\n")')
 
 after_deploy:
-  - s3cmd  setacl s3://assets-erianna-com --acl-public --recursive --access_key=$AWS_ACCESS_KEY_ID --secret_key=$AWS_SECRET_ACCESS_KEY --host sfo2.digitaloceanspaces.com
+  - s3cmd  setacl s3://assets-erianna-com --acl-public --recursive --access_key=$AWS_ACCESS_KEY_ID --secret_key=$AWS_SECRET_ACCESS_KEY --host=sfo2.digitaloceanspaces.com
 
 deploy:
   provider: s3
