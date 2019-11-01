@@ -16,6 +16,9 @@ env:
   global:
     - secure: "MvxcuT3gCpVV9eNOOhtXmw0XtNmvBnq0fTcCCjq11A2HDJlDfcLRXVAxjdZGtX1q6IJfzUOjyPH8Op6hqLtMg0fYkFuExsBRCwFp3gqlz7GZxEzCd+z+hdevBuwztBW4W52iLioKJ8RWgg22UsJ/ODv5wduGgKsFNFVkuluPqP5v8gKHWoqcxkXubIZfV0b6wtSyvUWTV+Sk7tIo7hnC2wfHJoXJytSuAtXfFuD1I/uMTqbqYxfFJZ8cfpaB1r4Vlfk2YnnrYdTvtV024MYpMw1VyObD/2KxqhkL6zKHjF1GnqaCeqmXB6tXo/t7Gs2gomms2xKovluJmheHtpZ51DV2xte1t+x+YCLSPXCHVGHifKCHyzpNMg4iY1xUTnkyAKUHejyuFLjp6GELE/C/5ef+osOD4UUyjAL8kd4hH0U00FfTZxAILH5CewyA540IbZmim1dsOS1l/8/A/xqXvCR6EFDv6S5SofJDrLVrAmhmLicMhRlltxhjtuQuA+1vbdjgjwwsH3LPDxw+RqC+zQGytOZAVdFeB8vAgbo6/JYtM/tg67a1O4DeKSvtRVsywk9nWxAzR/dIU7VF0l1tQxDXL+Khew5mpa5W0oDz2pjECQUJp+/kzZ29LkYSQ8fU/53NzDzvdmGjy+C341Ox4z6FpmNFvdnclHIk0hcPSD4="
     - AWS_ACCESS_KEY_ID=XZQSNWFHKYPQDESUJSTT
+    - AWS_HOST=sfo2.digitaloceanspaces.com
+    - AWS_BUCKET=www-erianna-com
+    - AWS_HOST_BUCKET="$AWS_BUCKET-$AWS_HOST"
 
 before_install:
   - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version $YARN_VERSION
@@ -40,7 +43,7 @@ script:
   - export JSON_FILE_LIST=$(find ./public -maxdepth 10 -type f -not -name 't_*' | sed  "s/.\/public//g" | jq -R -s -c 'split("\n")')
 
 after_deploy:
-  - s3cmd  setacl s3://assets-erianna-com --acl-public --recursive --access_key=$AWS_ACCESS_KEY_ID --secret_key=$AWS_SECRET_ACCESS_KEY --host=sfo2.digitaloceanspaces.com
+  - s3cmd setacl s3://$AWS_BUCKET --acl-public --recursive --access_key=$AWS_ACCESS_KEY_ID --secret_key=$AWS_SECRET_ACCESS_KEY --host=$AWS_HOST --host-bucket=$AWS_HOST_BUCKET
 
 deploy:
   provider: s3
@@ -49,7 +52,7 @@ deploy:
   bucket: www-erianna-com
   local-dir: public
   skip_cleanup: true
-  endpoint: https://sfo2.digitaloceanspaces.com
+  endpoint: https://$AWS_HOST
   on:
     repo: charlesportwoodii/www.erianna.com
     branch: master
