@@ -6,6 +6,16 @@ node_js:
 
 cache: yarn
 
+addons:
+  apt:
+    update: true
+    packages:
+      - s3cmd
+
+env:
+  secure: "em28DY7NK54BAo2Z47/ZpYl3T7EYjtK5UqjtwdDQcjfIz6Dm+dRSNbK2MWZngVISvgaz/1b1XMDyG1QKaTIrlizZlxAAXGU5TmraPmgOjrBEKnR0QvgN8amJYQiXMQJbZpPe7ZcnG5kphqAz8gaoW0wWFJF+EKDzZ+1C+uKIXmLL+eVJEEzeYsi69N5oI8Gyhhwek+qXV5uC159dXsIPkel+0Vsir4anedg0l6jfy4icHBOuud736EJNVhc1yFdOOhXGRRGeYIM+G51+VdCBsUukW2US8Wv4pVZafH7MuyfKYDC+mcgwP5fLJHrwbaFdOvDakCsLeqHOZE9oLPlX5gNbLUcADd7hxgeHsIWNK54c+ioS/ghNWLhNikMMjc/5nURmTqinvpr+RcRywxLbG+lKhzBOuqBZ3e8Yi9Aum/DcqIxRLp5myiPU9Osqp2fHI3QLoIjriBTBGC4yZhYOf9goAVkBECsMMi6YSF2fOfzNEOja0GEjWeljy1sNQTLFrsPvS/3zZZGeYinNMjL2bEv46xQsS5VTlTgVZe0aPuRG34pTITypWmJYJjVe0wLP/FNSnvoryH8/MAHuTxHRWhht6PPLlHw6H6zY456UgsNckHRSDbRJejybFwLO7ZNB908DANH94KEezhuk21RrCEfuJeqbnqdnht8CyRw0uqQ="
+  - AWS_ACCESS_KEY_ID=XZQSNWFHKYPQDESUJSTT
+
 before_install:
   - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version $YARN_VERSION
   - wget https://github.com/gohugoio/hugo/releases/download/v$HUGO_VERSION/hugo_${HUGO_VERSION}_Linux-64bit.tar.gz
@@ -28,11 +38,13 @@ script:
   - hugo
   - export JSON_FILE_LIST=$(find ./public -maxdepth 10 -type f -not -name 't_*' | sed  "s/.\/public//g" | jq -R -s -c 'split("\n")')
 
+after_deploy:
+  - s3cmd -c ./s3cfg setacl s3://assets-erianna-com --acl-public --recursive
+
 deploy:
   provider: s3
-  access_key_id: XZQSNWFHKYPQDESUJSTT
-  secret_access_key:
-    secure: einv+3UKkb/jdOPwDDdTF1dvIL4ozHwwL3SzxZjlE3Hyro/r0ca2bTjxfoPwxOHdivBDULDTFg25+eTAk73agMg9866qDX4zKD3Ch3Y7zDWkgvAFTNrQ8UZM1S6V4C/3nvLT7axLfu/kIxmldIWJqmCKLrLe4uhEX9wGY4oa6pbNCZIQMW/fr5epBB2Z+1rLzVEOY0ASw7jGsy6COlKxGltBDcvSkCJ0EEp5POaUiDV7ArMtMPSjKvHciwLIwn40Oi1Ma+oCmCKYZ1Y9y/RecNBKV2SyvAqypkIgl67ZTSzvWVyD9Htzs5/PEWqmf1ddhnnS8ZAPIFhd2KIiWz5vODOBahchEQYLogXCcsxnm4hOQq2DqfITrJRQPcFq974qPUAU+kgJTm9HklL+i8UAMrjv+ieeOq9521l/R0c13HjJx1Ik1Ruw2A1HuY6C+NY3Ow4AxKHlnr/BBunwsfNz/C//t7rsaepa34nQLm2ScHsrqAI+NbK7fGrdqftM+AdeRuLHKAxCYakglS/dkddmHpVmEs3HbajzmxAW7zle0snEBqxsqkUUVdHUUEwq/y8xMPBkhSmyA4K3WrsxOzc74fpK5WFU6rXhhvO5A3mGVptnTqBw4EDr3LjVs6xkW2nnh5kgjasGGxss+nhy35KAWV4utRJBv8tjvaBc5fN2K6A=
+  access_key_id: $AWS_ACCESS_KEY_ID
+  secret_access_key: $AWS_SECRET_ACCESS_KEY
   bucket: www-erianna-com
   local-dir: public
   skip_cleanup: true
