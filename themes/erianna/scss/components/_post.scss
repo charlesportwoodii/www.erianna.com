@@ -86,17 +86,23 @@
 		#content {
 			pre {
 				max-width: 850px !important;
+				background: #232323;
+				color: #e6e1dc;
 			}
 
 			code.hljs {
-				padding: 2rem;
-				overflow:  auto;
+				padding: .9rem;
+				overflow: hidden;
 				max-height: 80rem;
-				white-space: pre;
+				white-space: pre-wrap;
+				white-space: -moz-pre-wrap;
+				white-space: -pre-wrap;
+				white-space: -o-pre-wrap;
+				word-wrap: break-word;
 
 				&,
 				span {
-					font-size: 1.6rem;
+					font-size: .9rem;
 					font-weight: 500;
 				}
 
