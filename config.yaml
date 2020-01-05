@@ -6,6 +6,8 @@ languageCode: en-us
 noChmod: true
 noTimes: true
 params:
+  googleAnalytics: "UA-21577234-3"
+  adsense: "ca-pub-4002758512930390"
   Author: "Charles R. Portwood II"
   Email: charlesportwoodii@erianna.com
   social:
@@ -26,7 +28,6 @@ sitemap:
   priority: 0.5
 theme: erianna
 title: "Erianna | Charles R. Portwood II"
-googleAnalytics: "UA-21577234-3"
 Paginate: 10
 PaginatePath: "blog"
 uglyurls: false
