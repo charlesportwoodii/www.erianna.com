@@ -7,7 +7,7 @@ slug: "about"
 draft: false
 type: "page"
 ---
-My name is Charles R. Portwood II. Currently I am the CTO at [punchkick.com](https://www.punchkick.com).
+My name is Charles R. Portwood II. Currently I am a Master Technology Consultant at [Wipfli Digital](https://digital.wipfli.com).
 
 I am a multi-diciplinary software developer and systems engineer with an experience in several programming languages, hosting services, embedded software, and development methodologies. I provide consultation with specializations in architecture design and implementation; API, mobile, and web development; security; and cryptography.
 
