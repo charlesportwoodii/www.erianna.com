@@ -16,7 +16,6 @@ steps:
     image: jojomi/hugo
     commands:
       - HUGO_ENV="production" hugo
-      - ls -laht public/*
     depends_on:
       - webpack
   - name: deploy
@@ -43,6 +42,8 @@ steps:
       acl:
         "*": public-read
   - name: nginx
+    depends_on:
+      - deploy
     image: appleboy/drone-ssh
     settings:
       host:
