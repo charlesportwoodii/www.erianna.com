@@ -8,5 +8,4 @@ My personal blog, developed with [Hugo](https://gohugo.io), deployed to www.eria
 
 ```
 docker-compose up -d
-hugo server -t erianna --bind 0.0.0.0 --enableGitInfo --noHTTPCache --log
 ```

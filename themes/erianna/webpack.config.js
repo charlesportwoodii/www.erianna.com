@@ -9,6 +9,7 @@ const AssetsWebpackPlugin = require('assets-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const PurgecssPlugin = require('purgecss-webpack-plugin');
+const PnpWebpackPlugin = require(`pnp-webpack-plugin`);
 
 const Visualizer = require('webpack-visualizer-plugin');
 const configFile = path.resolve(__dirname, "../../config/config.yml");
@@ -19,14 +20,22 @@ module.exports = (env = { 'NODE_ENV': process.env.NODE_ENV }) => {
   return {
     mode: env.NODE_ENV,
     entry: {
-      main: ['core-js', '@babel/polyfill', path.resolve(__dirname, 'js/main.js')],
+      main: ['@babel/polyfill', path.resolve(__dirname, 'js/main.js')],
     },
     resolve: {
         extensions: ['.js', '.scss'],
         alias: {
             'style': path.resolve(__dirname, 'scss/main'),
             'img': path.resolve(__dirname, 'img'),
-        }
+        },
+        plugins: [
+          PnpWebpackPlugin,
+        ],
+    },
+    resolveLoader: {
+      plugins: [
+        PnpWebpackPlugin.moduleLoader(module),
+      ],
     },
     devtool: env.NODE_ENV == 'production' ? 'cheap-module-source-map' : 'cheap-module-eval-source-map',
     output: {
@@ -68,7 +77,7 @@ module.exports = (env = { 'NODE_ENV': process.env.NODE_ENV }) => {
             test: /\.(js|jsx)$/,
             exclude: /node_modules/,
             use: {
-              loader: 'babel-loader',
+              loader: require.resolve('babel-loader'),
               options: {
                 cacheDirectory: true
               }

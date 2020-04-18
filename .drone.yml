@@ -1,0 +1,40 @@
+---
+kind: pipeline
+type: docker
+name: default
+
+steps:
+  - name: webpack
+    image: node:12-stretch
+    commands:
+      - yarn set version berry
+      - cd themes/erianna && yarn install
+      - cd themes/erianna && yarn run build
+      - cd themes/erianna && yarn run sri
+  - name: hugo
+    image: jojomi/hugo
+    commands:
+      - HUGO_ENV="production" hugo
+    depends_on:
+      - webpack
+  - name: deploy
+    image: plugins/s3-sync
+    when:
+      event:
+        - push
+    depends_on:
+      - webpack
+      - hugo
+    settings:
+      bucket:
+        from_secret: AWS_HOST
+      access_key:
+        from_secret: AWS_ACCESS_KEY_ID
+      secret_key:
+        from_secret: AWS_SECRET_ACCESS_KEY
+      source: public/*
+      path_style: true
+      target: /
+      delete: true
+      acl:
+        "*": public-read
