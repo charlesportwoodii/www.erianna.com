@@ -16,7 +16,7 @@ steps:
     image: jojomi/hugo
     commands:
       - HUGO_ENV="production" hugo
-      - ls -laht
+      - ls -laht public/*
     depends_on:
       - webpack
   - name: deploy
@@ -36,7 +36,7 @@ steps:
         from_secret: AWS_ACCESS_KEY_ID
       secret_key:
         from_secret: AWS_SECRET_ACCESS_KEY
-      source: public/*
+      source: public
       path_style: true
       target: /
       delete: true
