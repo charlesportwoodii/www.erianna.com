@@ -16,6 +16,7 @@ steps:
     image: jojomi/hugo
     commands:
       - HUGO_ENV="production" hugo
+      - ls -laht
     depends_on:
       - webpack
   - name: deploy
