@@ -42,3 +42,15 @@ steps:
       delete: true
       acl:
         "*": public-read
+  - name: nginx
+    image: appleboy/drone-ssh
+    settings:
+      host:
+        from_secret: SSH_HOST
+      username:
+        from_secret: SSH_USERNAME
+      key:
+        from_secret: SSH_KEY
+      port: 22
+      script:
+        - /bin/systemctl reload nginx
