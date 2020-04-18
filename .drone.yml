@@ -11,7 +11,7 @@ steps:
       - cd themes/erianna
       - yarn install
       - yarn run build
-      -  yarn run sri
+      - yarn run sri
   - name: hugo
     image: jojomi/hugo
     commands:
@@ -28,6 +28,8 @@ steps:
       - hugo
     settings:
       bucket:
+        from_secret: AWS_BUCKET
+      endpoint:
         from_secret: AWS_HOST
       access_key:
         from_secret: AWS_ACCESS_KEY_ID
