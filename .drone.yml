@@ -8,6 +8,7 @@ steps:
     image: node:12-stretch
     commands:
       - yarn set version berry
+      - ls -laht
       - cd themes/erianna && yarn install
       - cd themes/erianna && yarn run build
       - cd themes/erianna && yarn run sri
