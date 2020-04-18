@@ -54,4 +54,4 @@ steps:
         from_secret: SSH_KEY
       port: 22
       script:
-        - /bin/systemctl reload nginx
+        - sudo /bin/systemctl reload nginx
