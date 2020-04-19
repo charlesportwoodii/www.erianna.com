@@ -23,6 +23,9 @@ steps:
     when:
       event:
         - push
+      branch:
+        include:
+          - master
     depends_on:
       - webpack
       - hugo
@@ -57,6 +60,8 @@ steps:
         - sudo /bin/systemctl reload nginx
   - name: matrix_notify
     image: plugins/matrix
+    depends_on:
+      - hugo
     settings:
       homeserver: https://matrix.erianna.com
       roomid:
@@ -65,3 +70,16 @@ steps:
         from_secret: MATRIX_USER
       password:
         from_secret: MATRIX_PASSWORD
+  - name: matrix_notify
+    image: plugins/matrix
+    depends_on:
+      - nginx
+    settings:
+      homeserver: https://matrix.erianna.com
+      roomid:
+        from_secret: MATRIX_ROOM_ID
+      username:
+        from_secret: MATRIX_USER
+      password:
+        from_secret: MATRIX_PASSWORD
+      template: "https://www.erianna.com has been deployed"
