@@ -70,7 +70,7 @@ steps:
         from_secret: MATRIX_USER
       password:
         from_secret: MATRIX_PASSWORD
-  - name: matrix_notify
+  - name: matrix_notify_deploy
     image: plugins/matrix
     depends_on:
       - nginx
