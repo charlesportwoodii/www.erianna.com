@@ -33,3 +33,7 @@ PaginatePath: "blog"
 uglyurls: false
 canonifyURLs: false
 relativeURLs: false
+markup:
+  goldmark:
+    renderer:
+      unsafe: true

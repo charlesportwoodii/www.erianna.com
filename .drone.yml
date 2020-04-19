@@ -1,0 +1,97 @@
+---
+kind: pipeline
+type: docker
+name: default
+
+steps:
+  - name: webpack
+    image: node:12-stretch
+    commands:
+      - yarn set version berry
+      - cd themes/erianna
+      - yarn install
+      - yarn run build
+      - yarn run sri
+  - name: hugo
+    image: jojomi/hugo
+    commands:
+      - HUGO_ENV="production" hugo
+    depends_on:
+      - webpack
+  - name: deploy
+    image: plugins/s3-sync
+    when:
+      event:
+        - push
+      branch:
+        include:
+          - master
+    depends_on:
+      - webpack
+      - hugo
+    settings:
+      bucket:
+        from_secret: AWS_BUCKET
+      endpoint:
+        from_secret: AWS_HOST
+      access_key:
+        from_secret: AWS_ACCESS_KEY_ID
+      secret_key:
+        from_secret: AWS_SECRET_ACCESS_KEY
+      source: public
+      path_style: true
+      target: /
+      delete: true
+      acl:
+        "*": public-read
+  - name: nginx
+    depends_on:
+      - deploy
+    when:
+      event:
+        - push
+      branch:
+        include:
+          - master
+    image: appleboy/drone-ssh
+    settings:
+      host:
+        from_secret: SSH_HOST
+      username:
+        from_secret: SSH_USERNAME
+      key:
+        from_secret: SSH_KEY
+      port: 22
+      script:
+        - sudo /bin/systemctl reload nginx
+  - name: matrix_notify
+    image: plugins/matrix
+    depends_on:
+      - hugo
+    settings:
+      homeserver: https://matrix.erianna.com
+      roomid:
+        from_secret: MATRIX_ROOM_ID
+      username:
+        from_secret: MATRIX_USER
+      password:
+        from_secret: MATRIX_PASSWORD
+  - name: matrix_notify_deploy
+    image: plugins/matrix
+    depends_on:
+      - nginx
+    when:
+      event:
+        - push
+      branch:
+        include:
+          - master
+    settings:
+      homeserver: https://matrix.erianna.com
+      roomid:
+        from_secret: MATRIX_ROOM_ID
+      username:
+        from_secret: MATRIX_USER
+      password:
+        from_secret: MATRIX_PASSWORD
+      template: "https://www.erianna.com has been deployed"

@@ -5,14 +5,26 @@ services:
     volumes:
       - ${PWD-.}:/var/www
       - nodejs:/var/www/themes/erianna/node_modules
+      - /var/www/themes/erianna/.yarnrc.yml
     ports:
       - "8080:8080"
       - "8081:8081"
     command: |
-      sh -c "apk add --no-cache bash curl; touch ~/.bashrc; curl -o- -L https://yarnpkg.com/install.sh | bash; bash -lc \"yarn install --no-progress; yarn run dev\""
+      sh -c "yarn set version berry; yarn install; yarn run dev"
     working_dir: /var/www/themes/erianna
     environment:
       DEBUG: 1
+
+  hugo:
+    image: jojomi/hugo
+    ports:
+      - "1313:1313"
+    volumes:
+      - ${PWD-.}:/var/www
+      - nodejs:/var/www/themes/erianna/node_modules
+    working_dir: /var/www
+    command: |
+      hugo server -t erianna --bind 0.0.0.0 --enableGitInfo --noHTTPCache --log
 
 volumes:
   nodejs:

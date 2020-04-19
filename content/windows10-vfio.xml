@@ -1,37 +1,53 @@
 <domain type='kvm'>
   <name>Windows10</name>
-  <uuid>5b98ae37-713d-4038-8e48-275cf2c3a24e</uuid>
+  <uuid>00291313-4146-4bc7-bf69-a33c13e3d165</uuid>
   <memory unit='KiB'>8388608</memory>
   <currentMemory unit='KiB'>8388608</currentMemory>
   <memoryBacking>
     <hugepages/>
+    <locked/>
   </memoryBacking>
-  <vcpu placement='static'>12</vcpu>
-  <iothreads>6</iothreads>
+  <vcpu placement='static'>16</vcpu>
+  <iothreads>8</iothreads>
   <cputune>
     <vcpupin vcpu='0' cpuset='0'/>
-    <vcpupin vcpu='1' cpuset='1'/>
+    <vcpupin vcpu='1' cpuset='16'/>
     <vcpupin vcpu='2' cpuset='2'/>
-    <vcpupin vcpu='3' cpuset='3'/>
-    <vcpupin vcpu='4' cpuset='4'/>
-    <vcpupin vcpu='5' cpuset='5'/>
-    <vcpupin vcpu='6' cpuset='6'/>
-    <vcpupin vcpu='7' cpuset='7'/>
-    <vcpupin vcpu='8' cpuset='8'/>
-    <vcpupin vcpu='9' cpuset='9'/>
-    <vcpupin vcpu='10' cpuset='10'/>
-    <vcpupin vcpu='11' cpuset='11'/>
-    <iothreadpin iothread='1' cpuset='0-1'/>
-    <iothreadpin iothread='2' cpuset='2-3'/>
-    <iothreadpin iothread='3' cpuset='4-5'/>
-    <iothreadpin iothread='4' cpuset='6-7'/>
-    <iothreadpin iothread='5' cpuset='8-9'/>
-    <iothreadpin iothread='6' cpuset='10-11'/>
+    <vcpupin vcpu='3' cpuset='17'/>
+    <vcpupin vcpu='4' cpuset='3'/>
+    <vcpupin vcpu='5' cpuset='18'/>
+    <vcpupin vcpu='6' cpuset='4'/>
+    <vcpupin vcpu='7' cpuset='19'/>
+    <vcpupin vcpu='8' cpuset='12'/>
+    <vcpupin vcpu='9' cpuset='28'/>
+    <vcpupin vcpu='10' cpuset='13'/>
+    <vcpupin vcpu='11' cpuset='29'/>
+    <vcpupin vcpu='12' cpuset='14'/>
+    <vcpupin vcpu='13' cpuset='30'/>
+    <vcpupin vcpu='14' cpuset='15'/>
+    <vcpupin vcpu='15' cpuset='31'/>
+    <emulatorpin cpuset='0-1'/>
+    <iothreadpin iothread='1' cpuset='2-3'/>
+    <iothreadpin iothread='2' cpuset='4-5'/>
+    <iothreadpin iothread='3' cpuset='6-7'/>
+    <iothreadpin iothread='4' cpuset='8-9'/>
+    <iothreadpin iothread='5' cpuset='10-11'/>
+    <iothreadpin iothread='6' cpuset='12-13'/>
+    <iothreadpin iothread='7' cpuset='14-15'/>
+    <vcpusched vcpus='0' scheduler='fifo' priority='1'/>
+    <vcpusched vcpus='1' scheduler='fifo' priority='1'/>
+    <vcpusched vcpus='2' scheduler='fifo' priority='1'/>
+    <vcpusched vcpus='3' scheduler='fifo' priority='1'/>
+    <vcpusched vcpus='4' scheduler='fifo' priority='1'/>
+    <vcpusched vcpus='5' scheduler='fifo' priority='1'/>
+    <vcpusched vcpus='6' scheduler='fifo' priority='1'/>
+    <vcpusched vcpus='7' scheduler='fifo' priority='1'/>
   </cputune>
   <os>
-    <type arch='x86_64' machine='pc-i440fx-bionic'>hvm</type>
+    <type arch='x86_64' machine='pc-q35-4.2'>hvm</type>
     <loader readonly='yes' type='pflash'>/usr/share/OVMF/OVMF_CODE.fd</loader>
     <nvram>/var/lib/libvirt/qemu/nvram/Windows10_VARS.fd</nvram>
+    <boot dev='hd'/>
   </os>
   <features>
     <acpi/>
@@ -40,17 +56,20 @@
       <relaxed state='on'/>
       <vapic state='on'/>
       <spinlocks state='on' retries='8191'/>
+      <vpindex state='on'/>
+      <synic state='on'/>
+      <stimer state='on'/>
+      <vendor_id state='on' value='kvm hyperv'/>
     </hyperv>
-    <kvm>
-      <hidden state='on'/>
-    </kvm>
     <vmport state='off'/>
   </features>
   <cpu mode='custom' match='exact' check='partial'>
-    <model fallback='allow'>host-passthrough</model>
-    <topology sockets='1' cores='6' threads='2'/>
+    <model fallback='allow'>EPYC</model>
+    <topology sockets='1' cores='8' threads='2'/>
+    <feature policy='require' name='topoext'/>
   </cpu>
   <clock offset='localtime'>
+    <timer name='tsc' present='yes' mode='native'/>
     <timer name='rtc' tickpolicy='catchup'/>
     <timer name='pit' tickpolicy='delay'/>
     <timer name='hpet' present='no'/>
@@ -64,64 +83,127 @@
     <suspend-to-disk enabled='no'/>
   </pm>
   <devices>
-    <emulator>/usr/bin/qemu-system-x86_64</emulator>
-    <disk type='block' device='disk'>
-      <driver name='qemu' type='raw' cache='none' io='threads'/>
-      <source dev='/dev/disk/by-id/ata-WDC_WDS500G2B0B-00YS70_181595801796'/>
+    <emulator>/usr/local/bin/qemu4.2-system-x86_64</emulator>
+    <disk type='file' device='disk'>
+      <driver name='qemu' type='qcow2' cache='none' io='native'/>
+      <source file='/mnt/vms/Windows10/OS/windows10.qcow2'/>
       <target dev='vda' bus='virtio'/>
-      <boot order='1'/>
-      <address type='pci' domain='0x0000' bus='0x00' slot='0x0c' function='0x0'/>
+      <address type='pci' domain='0x0000' bus='0x03' slot='0x00' function='0x0'/>
+    </disk>
+    <disk type='file' device='disk'>
+      <driver name='qemu' type='qcow2' cache='none' io='native'/>
+      <source file='/mnt/vms/Windows10/Games/games.qcow2'/>
+      <target dev='vdb' bus='virtio'/>
+      <address type='pci' domain='0x0000' bus='0x05' slot='0x00' function='0x0'/>
     </disk>
     <disk type='file' device='cdrom'>
       <driver name='qemu' type='raw'/>
-      <source file='/path/to/virtio-win-0.1.141.iso'/>
-      <target dev='hda' bus='ide'/>
+      <source file='/mnt/storage/ISO/Win10_1909_English_x64.iso'/>
+      <target dev='sda' bus='sata'/>
       <readonly/>
       <address type='drive' controller='0' bus='0' target='0' unit='0'/>
     </disk>
     <disk type='file' device='cdrom'>
       <driver name='qemu' type='raw'/>
-      <source file='/path/to/Win10_1803_English_x64.iso'/>
-      <target dev='hdb' bus='ide'/>
+      <source file='/mnt/storage/ISO/virtio-win-0.1.171.iso'/>
+      <target dev='sdb' bus='sata'/>
       <readonly/>
-      <boot order='2'/>
       <address type='drive' controller='0' bus='0' target='0' unit='1'/>
     </disk>
-    <controller type='pci' index='0' model='pci-root'/>
-    <controller type='ide' index='0'>
-      <address type='pci' domain='0x0000' bus='0x00' slot='0x01' function='0x1'/>
+    <controller type='sata' index='0'>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x1f' function='0x2'/>
+    </controller>
+    <controller type='pci' index='0' model='pcie-root'/>
+    <controller type='pci' index='1' model='dmi-to-pci-bridge'>
+      <model name='i82801b11-bridge'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x1e' function='0x0'/>
+    </controller>
+    <controller type='pci' index='2' model='pci-bridge'>
+      <model name='pci-bridge'/>
+      <target chassisNr='2'/>
+      <address type='pci' domain='0x0000' bus='0x01' slot='0x00' function='0x0'/>
+    </controller>
+    <controller type='pci' index='3' model='pcie-root-port'>
+      <model name='pcie-root-port'/>
+      <target chassis='3' port='0x10'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x02' function='0x0' multifunction='on'/>
+    </controller>
+    <controller type='pci' index='4' model='pcie-root-port'>
+      <model name='pcie-root-port'/>
+      <target chassis='4' port='0x11'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x02' function='0x1'/>
+    </controller>
+    <controller type='pci' index='5' model='pcie-root-port'>
+      <model name='pcie-root-port'/>
+      <target chassis='5' port='0x12'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x02' function='0x2'/>
+    </controller>
+    <controller type='pci' index='6' model='pcie-root-port'>
+      <model name='pcie-root-port'/>
+      <target chassis='6' port='0x13'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x02' function='0x3'/>
+    </controller>
+    <controller type='pci' index='7' model='pcie-root-port'>
+      <model name='pcie-root-port'/>
+      <target chassis='7' port='0x14'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x02' function='0x4'/>
+    </controller>
+    <controller type='pci' index='8' model='pcie-root-port'>
+      <model name='pcie-root-port'/>
+      <target chassis='8' port='0x15'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x02' function='0x5'/>
+    </controller>
+    <controller type='pci' index='9' model='pcie-root-port'>
+      <model name='pcie-root-port'/>
+      <target chassis='9' port='0x16'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x02' function='0x6'/>
+    </controller>
+    <controller type='pci' index='10' model='pcie-root-port'>
+      <model name='pcie-root-port'/>
+      <target chassis='10' port='0x17'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x02' function='0x7'/>
     </controller>
     <controller type='usb' index='0' model='nec-xhci'>
-      <address type='pci' domain='0x0000' bus='0x00' slot='0x04' function='0x0'/>
+      <address type='pci' domain='0x0000' bus='0x06' slot='0x00' function='0x0'/>
     </controller>
     <interface type='bridge'>
       <mac address='52:54:00:c0:18:81'/>
-      <source bridge='br0'/>
+      <source bridge='br1'/>
       <model type='virtio'/>
-      <address type='pci' domain='0x0000' bus='0x00' slot='0x03' function='0x0'/>
+      <driver name='qemu'/>
+      <address type='pci' domain='0x0000' bus='0x02' slot='0x01' function='0x0'/>
     </interface>
+    <input type='tablet' bus='usb'>
+      <address type='usb' bus='0' port='1'/>
+    </input>
     <input type='mouse' bus='ps2'/>
     <input type='keyboard' bus='ps2'/>
     <hostdev mode='subsystem' type='pci' managed='yes'>
       <source>
         <address domain='0x0000' bus='0x09' slot='0x00' function='0x0'/>
       </source>
-      <address type='pci' domain='0x0000' bus='0x00' slot='0x02' function='0x0'/>
+      <address type='pci' domain='0x0000' bus='0x07' slot='0x00' function='0x0'/>
     </hostdev>
     <hostdev mode='subsystem' type='pci' managed='yes'>
       <source>
         <address domain='0x0000' bus='0x09' slot='0x00' function='0x1'/>
       </source>
-      <address type='pci' domain='0x0000' bus='0x00' slot='0x08' function='0x0'/>
+      <address type='pci' domain='0x0000' bus='0x08' slot='0x00' function='0x0'/>
     </hostdev>
     <hostdev mode='subsystem' type='pci' managed='yes'>
       <source>
-        <address domain='0x0000' bus='0x0a' slot='0x00' function='0x3'/>
+        <address domain='0x0000' bus='0x0b' slot='0x00' function='0x3'/>
       </source>
-      <address type='pci' domain='0x0000' bus='0x00' slot='0x06' function='0x0'/>
+      <address type='pci' domain='0x0000' bus='0x04' slot='0x00' function='0x0'/>
     </hostdev>
     <memballoon model='virtio'>
-      <address type='pci' domain='0x0000' bus='0x00' slot='0x07' function='0x0'/>
+      <address type='pci' domain='0x0000' bus='0x09' slot='0x00' function='0x0'/>
     </memballoon>
+    <shmem name='looking-glass'>
+      <model type='ivshmem-plain'/>
+      <size unit='M'>64</size>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x10' function='0x0'/>
+    </shmem>
   </devices>
 </domain>
+
