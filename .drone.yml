@@ -63,7 +63,7 @@ steps:
         from_secret: SSH_KEY
       port: 22
       script:
-        - sudo /bin/systemctl reload nginx
+        - sudo /bin/systemctl restart nginx
   - name: matrix_notify
     image: plugins/matrix
     depends_on:
