@@ -334,99 +334,13 @@ Should you ever need to restore, the [Restic documentation](https://restic.readt
 
 ### Backuping up your backups
 
-At this point you'll have a working local or off-site backup system in place. If you just have local backups however your vulnerable to local destructive elements, such as a hammer weilding child or a house fire.
+At this point you'll have a working local or off-site backup system in place. If you just have local backups however your vulnerable to local destructive elements, such as a hammer weilding child or a house fire. As Backblaze now supports an S3 compatible API, you can use a variety of different S3 tools to sync your backups to Backblaze:
 
 Minio fortunately makes it very easy to backup your backups using it's own command line tool to Backblaze B2, which at the time of writing offers the cheapest storage and bandwidth costs = for less than a cup of coffee at your local barista you can get about 1TB of storage, so let's talk about what needs to be done to get that backed up.
 
-Minio has a built in B2 gateway which makes it easy to sync data to and from containers.
-
-Using this strategy, we're going to backup the raw Restic data, so if we ever lose our local backup, we can point Restic directly to B2 and recover that way. Refer to the restic documentation for how to connect to a repo.
-
 1. Create a Backblaze B2 account at https://www.backblaze.com/b2, then create a dedicated Application Key for Minio to use. While you're here, create a private backup to backup to.
 
-2. Update your Minio `docker-compose` file with the following service:
-
-    ```
-    minio_b2gw:
-        image: minio/minio:latest
-        volumes:
-        - /backups:/data
-        command: gateway b2
-        environment:
-        MINIO_ACCESS_KEY: <B2_ACCESS_KEY>
-        MINIO_SECRET_KEY: <B2_SECRET_KEY>
-        healthcheck:
-        test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
-        interval: 30s
-        timeout: 20s
-        retries: 3
-        networks:
-        main:
-            aliases:
-            - minio_b2gw
-    ```
-
-    Additionally under the `nginx` section expose port `9001:9001`
-
-3. Update your `nginx.conf`:
-
-    ```
-    server {
-        listen 9001 ssl http2 deferred;
-        listen [::]:9001 ssl http2 deferred;
-
-        ssl_certificate /etc/nginx/conf/ssl/server.crt;
-        ssl_certificate_key /etc/nginx/conf/ssl/server.key;
-
-        include /etc/nginx/conf/ssl.conf;
-        include /etc/nginx/conf/security-headers.conf;
-
-        server_name _;
-        root /etc/nginx/minio;
-
-        ignore_invalid_headers off;
-        client_max_body_size 0;
-        proxy_buffering off;
-
-        location / {
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-            proxy_set_header X-Forwarded-Proto $scheme;
-            proxy_set_header Host $http_host;
-
-            proxy_connect_timeout 300;
-            proxy_http_version 1.1;
-            proxy_set_header Connection "";
-            chunked_transfer_encoding off;
-
-            proxy_pass http://minio_b2gw:9000;
-        }
-    }
-    ```
-
-4. Restart docker, `docker-compose restart` then verify that https://<ip>:9001 loads and that you can see the contents and buckets in B2.
-
-5. Download the Minio client from https://docs.minio.io/docs/minio-client-complete-guide on the server where your backups are at, and configure it.
-
-    ```
-    $ mc  config host add local https://<ip>:9000 <ACCESS_KEY> <SECRET_KEY>
-    ```
-
-    Additionally, configure a B2 host pointed to your newly created Minio B2 Gateway
-
-    ```
-    $ mc config host add b2 https://<ip>:9001 <B2_ACCESS_KEY> <B2_SECRET_KEY>
-    ```
-
-6. Mirror your repository:
-
-    ```
-    mc mirror local/<repo> b2/<bucket>
-    ```
-
-    Depending upon your bandwidth this could take a while.
-
-And with that you now have offsite backups. Automating mirroring with systemd is left as an exercise to the reader.
+2. Use s3cmd, or the minio client mc to mirror your repositories. Feel free to use any S3 compatible tool!
 
 ### Extras
 
