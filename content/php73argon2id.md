@@ -124,7 +124,7 @@ Argon2id hashes can be verified using the `password_verify` function.
 ```php
 $password = 'test';
 $hash = '$argon2id$v=19$m=1024,t=2,p=2$WS90MHJhd3AwSC5xTDJpZg$8tn2DaIJR2/UX4Cjcy2t3EZaLDL/qh+NbLQAOvTmdAg'
-var_dump(password_verify($password, $test));
+var_dump(password_verify($password, $hash));
 // => true
 ```
 
