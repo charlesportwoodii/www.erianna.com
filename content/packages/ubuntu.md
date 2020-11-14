@@ -2,7 +2,7 @@
 title: "Ubuntu"
 type: "repository"
 date: 2016-12-01T00:00:00-00:00
-lastmod: 2018-09-20T00:00:00-00:00
+lastmod: 2020-11-14T00:00:00-00:00
 slug: "ubuntu"
 draft: false
 image: https://assets.erianna.com/ubuntu.svg
@@ -26,13 +26,32 @@ Pin: origin apt.erianna.com
 Pin-Priority: 600
 ```
 
+## Focal
+
+The `Focal` repository can be added to your system by running the following commands:
+
+```bash
+# Install dependencies
+apt update;
+apt install gnupg2 curl wget apt-transport-https -y;
+
+# Add the repository to sources.list.d
+sh -c 'echo "deb https://apt.erianna.com/focal/ focal main" > /etc/apt/sources.list.d/apt.erianna.com.list';
+
+# Import the repository GPG key
+curl -qs https://www.erianna.com/key.asc | apt-key add -;
+
+# Update the repository
+apt update;
+```
+
 ## Bionic
 
 The `Bionic` repository can be added to your system by running the following commands:
 
 ```bash
 # Install dependencies
-apt updat;
+apt update;
 apt install gnupg2 curl wget apt-transport-https -y;
 
 # Add the repository to sources.list.d
@@ -56,31 +75,6 @@ apt-get install apt-transport-https -y;
 
 # Add the repository to sources.list.d
 sh -c 'echo "deb https://apt.erianna.com/xenial/ xenial main" > /etc/apt/sources.list.d/apt.erianna.com.list';
-
-# Install GnuPG2 and GnuTLS3 from the archive to allow the Ed25519 key to be authenticated
-# This is only necessary if you do not have GnuPG2 installed
-apt-get --allow-unauthenticated update;
-apt-get --allow-unauthenticated install gnupg2 gnutls3 -y;
-ldconfig;
-
-# Import the repository GPG key
-curl -qs https://www.erianna.com/key.asc | apt-key add -;
-
-# Update the repository
-apt-get update;
-```
-
-## Trusty
-
-The `Trusty` repository can be added to your system by running the following commands:
-
-```bash
-# Install apt-transport-https
-apt-get update;
-apt-get install apt-transport-https -y;
-
-# Add the repository to sources.list.d
-sh -c 'echo "deb https://apt.erianna.com/trusty/ trusty main" > /etc/apt/sources.list.d/apt.erianna.com.list';
 
 # Install GnuPG2 and GnuTLS3 from the archive to allow the Ed25519 key to be authenticated
 # This is only necessary if you do not have GnuPG2 installed
