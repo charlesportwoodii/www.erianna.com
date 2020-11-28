@@ -5,8 +5,9 @@ name: default
 
 steps:
   - name: webpack
-    image: node:12-stretch
+    image: node:12-alpine
     commands:
+      - apk add --no-cache xxd perl-utils
       - yarn set version berry
       - cd themes/erianna
       - yarn install

@@ -1,7 +1,7 @@
 {
   "name": "hugo-erianna-theme",
   "version": "1.0.0",
-  "license": "MIT",
+  "license": "private",
   "description": "Hugo theme for www.erianna.com",
   "private": true,
   "scripts": {
