@@ -22,14 +22,9 @@ steps:
     image: plugins/s3-sync
     when:
       event:
-        - push
-        - cron
+        - promote
       target:
-        include:
-          - daily-site-refresh
-      branch:
-        include:
-          - master
+        - prod
     depends_on:
       - webpack
       - hugo
@@ -53,14 +48,9 @@ steps:
       - deploy
     when:
       event:
-        - push
-        - cron
+        - promote
       target:
-        include:
-          - daily-site-refresh
-      branch:
-        include:
-          - master
+        - prod
     image: appleboy/drone-ssh
     settings:
       host:
@@ -90,14 +80,9 @@ steps:
       - nginx
     when:
       event:
-        - push
-        - cron
+        - promote
       target:
-        include:
-          - daily-site-refresh
-      branch:
-        include:
-          - master
+        - prod
     settings:
       homeserver: https://matrix.erianna.com
       roomid:
