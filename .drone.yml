@@ -24,7 +24,7 @@ steps:
       event:
         - push
         - cron
-      cron:
+      target:
         include:
           - daily-site-refresh
       branch:
@@ -55,7 +55,7 @@ steps:
       event:
         - push
         - cron
-      cron:
+      target:
         include:
           - daily-site-refresh
       branch:
@@ -92,7 +92,7 @@ steps:
       event:
         - push
         - cron
-      cron:
+      target:
         include:
           - daily-site-refresh
       branch:
