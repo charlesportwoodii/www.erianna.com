@@ -176,10 +176,10 @@ To get around this problem, I created a very simple PHP script that parses the p
 #!/usr/bin/env php
 <?php
 
-$path = '/mnt/apk.example.com';
+$path = '/mnt/apk.erianna.com';
 $directory = $argv[1] ?? 'main';
-$aVersion = $argv[2] ?? '3.6';
-$arch = $arvg[3] ?? 'x86_64';
+$aVersion = $argv[2] ?? '3.10';
+$arch = $argv[3] ?? 'x86_64';
 
 $files = \glob("$path/v$aVersion/$directory/$arch/*.apk");
 $finalList = [];
@@ -195,13 +195,14 @@ foreach ($files as $file) {
 
 	$packageName = $parts[0];
 	$packageVersion = $parts[1];
+
 	if (!isset($finalList[$packageName])) {
 		$finalList[$packageName] = [
 			'file' => $file,
 			'version' => $packageVersion . '-' . $revision
 		];
 	} else {
-        if (\version_compare($packageVersion, $finalList[$packageName]['version'])) {
+        	if (\version_compare($packageVersion . "." . $revision, \str_replace('-', '.', $finalList[$packageName]['version']), ">=")) {
 			$finalList[$packageName] = [
 				'file' => $file,
 				'version' => $packageVersion . '-' . $revision
@@ -215,7 +216,6 @@ $packageNames = array_values(array_map(function($el) {
 }, $finalList));
 
 echo implode($packageNames, ' ');
-
 ```
 
 ## Usage
