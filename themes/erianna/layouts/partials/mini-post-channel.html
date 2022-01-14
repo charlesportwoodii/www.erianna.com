@@ -1,0 +1,11 @@
+<article class="mini-post channel">
+    <a href="{{ .Params.youtube }}" class="image">
+        {{ partial "picture.html" (dict "image" .Params.banner "alt_image_types" .Params.alt_image_types) }}
+    <header>
+        <h3><a href="{{ .Permalink }}">{{ .Title }}</a></h3>
+        <p>{{ .Params.description }}</p>
+        <a href="{{ .Params.youtube }}" class="author" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            {{ partial "picture.html" (dict "image" .Params.logo "alt_image_types" (slice (dict "type" "webp" "format" "image/webp"))) }}
+        </a>
+    </header>
+</article>

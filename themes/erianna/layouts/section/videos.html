@@ -1,0 +1,25 @@
+<!DOCTYPE html lang="en">
+<html>
+  <head>
+    {{ partial "head" . }}
+  </head>
+  <body>
+    {{ partial "header.html" . }}
+    {{ partial "menu.html" . }}
+
+    <div id="wrapper">
+        <div id="main">
+          <div class="mini-posts channels">
+            {{ range first 10 (where .Site.Pages "Type" "channel") }}
+              {{ partial "mini-post-channel" . }}
+            {{ end }}
+          </div>
+        </div>
+    </div>
+    <section id="footer">
+        {{ partial "social.html" . }}
+        {{ partial "footer.html" . }}
+    </section>
+    </body>
+    {{ partial "scripts.html" . }}
+</html>

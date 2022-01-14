@@ -1,0 +1,92 @@
+#main {
+    &.channel {
+        margin: 0 auto;
+    }
+
+    .post {
+		&.channel {
+            #featured-image {
+                display: none;
+                visibility: hidden;
+                opacity: 0;
+            }
+
+            #content {
+                #thumbnail,
+                #channel-content {
+                    width: calc(50% - (#{_size(section-spacing-small)} * 2));
+                    display:inline-block;
+                    vertical-align: text-top;
+                    margin: 0 10px;
+                }
+            }
+
+            @include breakpoint(medium) {
+                #featured-image {
+                    display: block;
+                    visibility: visible;
+                    opacity: 1;
+                }
+                #content {
+                    #thumbnail {
+                        display: none;
+                        visibility: hidden;
+                        opacity: 0;
+                    }
+                    #channel-content {
+                        width: auto;
+                    }
+                }
+            }
+        }
+        @include breakpoint(small) {
+			&.channel {
+				width: calc(100% + (#{_size(section-spacing-small)} * 2));
+            }
+        }
+    }
+
+    .mini-post {
+		&.channel {
+			flex: 1;
+            display: flex;
+            justify-content: space-between;
+            flex-direction: column;
+        }
+
+		@include breakpoint(medium) {
+			&.channel {
+				width: 100%;
+				margin-bottom: 20px;
+			}
+		}
+    }
+
+	.mini-posts {
+		&.channels {
+            display: flex;
+            justify-content: center;
+            align-items: left;
+            flex-direction: column;
+            width: 100%;
+			> * {
+				margin: _size(element-margin) _size(element-margin) 0 0;
+                width: calc(50% - #{_size(element-margin)});
+                min-width: 350px;
+			}
+        }
+
+		@include breakpoint(medium) {
+			&.channels {
+                width: 100%;
+				> * {
+					width: 100%;
+                    min-width: 100%;
+                    max-width:100%;
+					margin: 0 auto;
+					margin-bottom: 20px;
+				}
+			}
+        }
+    }
+}

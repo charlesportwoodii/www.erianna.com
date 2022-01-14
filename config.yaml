@@ -10,16 +10,20 @@ params:
   adsense: "ca-pub-4002758512930390"
   Author: "Charles R. Portwood II"
   Email: charlesportwoodii@erianna.com
+  AuthorPicture: "https://assets.erianna.com/ea366664a9035c9d6cd623740e37c5d8.webp"
   social:
       github: "https://www.github.com/charlesportwoodii"
       twitter: "https://www.twitter.com/charlesportwood"
       linkedin: "https://www.linkedin.com/in/charlesportwoodii"
+      youtube: "https://www.youtube.com/c/CharlesPortwood"
+      alaydriem_youtube: "https://www.youtube.com/channel/UCXgqRZv7bHsKzwYBrtA9DFA"
       gpg: "https://keybase.io/charlesportwood/key.asc"
   intro: "Topics on software development, business, and writing."
   nav:
     - { url: "/about", text: "About Me" }
     - { url: "/books", text: "Books" }
     - { url: "/packages", text: "Repositories" }
+    #- { url: "/videos", text: "Youtube Channels" }
 permalinks:
   post: "/:year/:month/:title/"
 sitemap:
