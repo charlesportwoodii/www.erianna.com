@@ -7,6 +7,7 @@ noChmod: true
 noTimes: true
 params:
   googleAnalytics: "UA-21577234-3"
+  googleAnalytics4PropertyID: 'G-QW1K6GL7VR'
   adsense: "ca-pub-4002758512930390"
   Author: "Charles R. Portwood II"
   Email: charlesportwoodii@erianna.com

@@ -35,4 +35,12 @@
         ga('create', '{{ .Site.Params.googleAnalytics }}', 'auto');
         ga('send', 'pageview');
     </script>
+    <script nonce="__CSP_NONCE__" async src="https://www.googletagmanager.com/gtag/js?id=G-QW1K6GL7VR"></script>
+    <script nonce="__CSP_NONCE__">
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', '{{ .Site.Params.googleAnalytics4PropertyID }}');
+    </script>
 {{ end }}
