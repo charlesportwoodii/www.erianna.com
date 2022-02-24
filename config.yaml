@@ -16,7 +16,7 @@ params:
       github: "https://www.github.com/charlesportwoodii"
       twitter: "https://www.twitter.com/charlesportwood"
       linkedin: "https://www.linkedin.com/in/charlesportwoodii"
-      youtube: "https://www.youtube.com/c/CharlesPortwood"
+      youtube: "https://www.youtube.com/channel/UCqKsBKdXeZdBVAQoANeCTDQ"
       alaydriem_youtube: "https://www.youtube.com/channel/UCXgqRZv7bHsKzwYBrtA9DFA"
       gpg: "https://keybase.io/charlesportwood/key.asc"
   intro: "Topics on software development, business, and writing."
@@ -24,7 +24,7 @@ params:
     - { url: "/about", text: "About Me" }
     - { url: "/books", text: "Books" }
     - { url: "/packages", text: "Repositories" }
-    #- { url: "/videos", text: "Youtube Channels" }
+    - { url: "/videos", text: "Youtube Channels" }
 permalinks:
   post: "/:year/:month/:title/"
 sitemap:
