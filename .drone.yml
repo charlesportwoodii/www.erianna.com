@@ -22,10 +22,7 @@ steps:
     image: plugins/s3-sync
     when:
       event:
-        - promote
         - cron
-      target:
-        - prod
       cron:
         - daily-site-refresh
     depends_on:
@@ -51,10 +48,7 @@ steps:
       - deploy
     when:
       event:
-        - promote
         - cron
-      target:
-        - prod
       cron:
         - daily-site-refresh
     image: appleboy/drone-ssh
@@ -74,10 +68,7 @@ steps:
       - nginx
     when:
       event:
-        - promote
         - cron
-      target:
-        - prod
       cron:
         - daily-site-refresh
     settings:
