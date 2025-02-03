@@ -1,7 +1,6 @@
-version: '3.3'
 services:
   webpack:
-    image: node:12-alpine
+    image: node:22-alpine
     volumes:
       - ${PWD-.}:/var/www
       - nodejs:/var/www/themes/erianna/node_modules
@@ -14,6 +13,7 @@ services:
     working_dir: /var/www/themes/erianna
     environment:
       DEBUG: 1
+      NODE_OPTIONS: --openssl-legacy-provider
 
   hugo:
     image: jojomi/hugo

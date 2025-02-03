@@ -2,7 +2,7 @@
 title: "Ubuntu"
 type: "repository"
 date: 2016-12-01T00:00:00-00:00
-lastmod: 2020-11-14T00:00:00-00:00
+lastmod: 2024-02-02T00:00:00-00:00
 slug: "ubuntu"
 draft: false
 image: https://assets.erianna.com/ubuntu.svg
@@ -24,6 +24,43 @@ As package names may conflict with existing package names provided by Ubuntu, it
 Package: *
 Pin: origin apt.erianna.com
 Pin-Priority: 600
+```
+## Noble
+
+The `Noble` repository can be added to your system by running the following commands:
+
+```bash
+# Install dependencies
+apt update;
+apt install gnupg2 curl wget apt-transport-https -y;
+
+# Add the repository to sources.list.d
+sh -c 'echo "deb https://apt.erianna.com/noble/ noble main" > /etc/apt/sources.list.d/apt.erianna.com.list';
+
+# Import the repository GPG key
+curl -qs https://www.erianna.com/key.asc | apt-key add -;
+
+# Update the repository
+apt update;
+```
+
+## Jammy
+
+The `Jammy` repository can be added to your system by running the following commands:
+
+```bash
+# Install dependencies
+apt update;
+apt install gnupg2 curl wget apt-transport-https -y;
+
+# Add the repository to sources.list.d
+sh -c 'echo "deb https://apt.erianna.com/jammy/ jammy main" > /etc/apt/sources.list.d/apt.erianna.com.list';
+
+# Import the repository GPG key
+curl -qs https://www.erianna.com/key.asc | apt-key add -;
+
+# Update the repository
+apt update;
 ```
 
 ## Focal
