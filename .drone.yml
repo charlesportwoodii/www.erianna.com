@@ -5,7 +5,7 @@ name: default
 
 steps:
   - name: webpack
-    image: node:12-alpine
+    image: node:14-alpine
     commands:
       - apk add --no-cache xxd perl-utils
       - cd themes/erianna
